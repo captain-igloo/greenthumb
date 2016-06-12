@@ -1,0 +1,35 @@
+#ifndef WORKER_REPLACEORDERS_H
+#define WORKER_REPLACEORDERS_H
+
+#include <greentop/betting/ReplaceExecutionReport.h>
+#include <greentop/Exchange.h>
+#include <string>
+#include <wx/event.h>
+#include <wx/thread.h>
+
+#include "worker/Worker.h"
+
+namespace greenthumb {
+namespace worker {
+
+wxDECLARE_EVENT(REPLACE_ORDERS, wxThreadEvent);
+
+class ReplaceOrders : public Worker {
+    public:
+        ReplaceOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
+            const std::string& marketId, const std::string& betId, const double newPrice);
+    protected:
+        virtual ExitCode Entry();
+    private:
+        greentop::Exchange exchange;
+        std::string marketId;
+        std::string betId;
+        double newPrice;
+
+        greentop::ReplaceExecutionReport DoReplaceOrders();
+};
+
+}
+}
+
+#endif // WORKER_REPLACEORDERS_H
