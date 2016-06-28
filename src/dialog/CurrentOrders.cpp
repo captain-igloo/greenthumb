@@ -1,8 +1,9 @@
+/**
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/stattext.h>
 #include <wx/sizer.h>
-
 #include "dialog/CurrentOrders.h"
-
 #include "worker/ListCurrentOrders.h"
 #include "worker/ReplaceOrders.h"
 
@@ -11,8 +12,8 @@
 namespace greenthumb {
 namespace dialog {
 
-CurrentOrders::CurrentOrders(wxWindow *parent, wxWindowID id, const wxString &title,
-    const wxPoint &pos, const wxSize &size, long style, const wxString &name) :
+CurrentOrders::CurrentOrders(wxWindow* parent, wxWindowID id, const wxString& title,
+    const wxPoint& pos, const wxSize& size, long style, const wxString& name) :
     wxDialog(parent, id, title, pos, size, style, name), workerManager(this) {
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);

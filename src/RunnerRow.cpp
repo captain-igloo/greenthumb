@@ -130,7 +130,9 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
 
 void RunnerRow::RefreshPrices() {
 
-    lastPriceTraded = runner.getLastPriceTraded();
+    if (runner.getLastPriceTraded().isValid()) {
+        lastPriceTraded = runner.getLastPriceTraded().getValue();
+    }
 
     bool marketOpen = marketBook.getStatus() == greentop::MarketStatus::OPEN;
 

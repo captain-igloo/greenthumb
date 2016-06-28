@@ -63,9 +63,9 @@ bool ListMarketBook::DoListMarketBook() {
             betfairMarketBook = lmbResp.getMarketBooks()[i];
             break;
         }
+        return true;
     }
-
-    return true;
+    return false;
 }
 
 

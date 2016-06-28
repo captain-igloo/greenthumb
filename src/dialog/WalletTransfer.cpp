@@ -23,10 +23,6 @@ WalletTransfer::WalletTransfer(wxWindow *parent, wxWindowID id, const wxString &
 
     wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
 
-    /* wxString wallets[] = {
-        wxT("UK"), wxT("Australian")
-    }; */
-
     wxStaticText* heading = new wxStaticText(this, wxID_ANY, "Transfer Funds between your Main and Australian Licence Wallets");
     vbox->Add(heading, 0, wxEXPAND | borderFlags, border);
 
@@ -67,9 +63,6 @@ WalletTransfer::WalletTransfer(wxWindow *parent, wxWindowID id, const wxString &
     hbox->Add(destinationWalletText);
     vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
-    // wxChoice* dest = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 2, wallets);
-    // vbox->Add(dest, 0, wxEXPAND | borderFlags, border);
-
     wxSizer* buttonSizer = CreateButtonSizer(wxOK | wxCANCEL);
     if (buttonSizer) {
         vbox->Add(buttonSizer, 0, wxBOTTOM | wxALIGN_RIGHT, border);
@@ -77,7 +70,6 @@ WalletTransfer::WalletTransfer(wxWindow *parent, wxWindowID id, const wxString &
         okButton = FindWindow(wxID_OK);
         okButton->Disable();
         cancelButton = FindWindow(wxID_CANCEL);
-        // wxWindow* cancelButton = FindWindow(wxID_CANCEL);
     }
 
     SetSizer(vbox);
@@ -123,20 +115,15 @@ void WalletTransfer::OnGetAccountFunds(const wxThreadEvent& event, wxStaticText*
     greentop::AccountFundsResponse afr = event.GetPayload<greentop::AccountFundsResponse>();
 
     if (afr.isSuccess()) {
-        balance->SetLabel(wxCurrencySymbol + wxString::Format(wxT("%.2f"), afr.getAvailableToBetBalance()));
+        greentop::Optional<double> optionalBalance = afr.getAvailableToBetBalance();
+        double availableBalance = 0;
+        if (optionalBalance.isValid()) {
+            availableBalance = optionalBalance.getValue();
+        }
+        balance->SetLabel(wxCurrencySymbol + wxString::Format(wxT("%.2f"), availableBalance));
     }
 
 }
-
-/* bool WalletTransfer::IsValid() {
-
-    if (okButton != NULL) {
-
-        amount->GetValue();
-
-    }
-    return true;
-} */
 
 void WalletTransfer::OnOk(wxCommandEvent& event) {
 

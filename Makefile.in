@@ -8,9 +8,10 @@ LIBS=@LIBS@
 SRC := src
 OBJ := obj
 ART := art
+BIN := bin
 SUBDIRS := dialog entity worker
 OBJ_DIRS := $(addprefix $(OBJ)/,$(SUBDIRS)) $(OBJ)
-EXE := bin/greenthumb
+EXE := $(BIN)/greenthumb
 LIBS := $(LIBS) -lsoci_core -lsoci_sqlite3 -lgreentop -lcurl -ljsoncpp
 ARTS := $(wildcard $(ART)/*.png)
 OBJS := $(patsubst %.cpp,%.o,$(subst $(SRC),$(OBJ),$(wildcard $(SRC)/*.cpp) $(wildcard $(SRC)/*/*.cpp)))
@@ -22,7 +23,7 @@ $1/%.o: $(subst $(OBJ),$(SRC),$1)/%.cpp | $1
 endef
 
 .PHONY: all
-all: $(OBJS)
+all: $(OBJS) $(BIN)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -Wall -fexceptions  -std=c++11 -g -I./include $(OBJS) $(LIBS) main.cpp -o $(EXE)
 
 .PHONY: clean
@@ -38,6 +39,8 @@ install: all
 	install -d $(DESTDIR)$(PREFIX)/share/greenthumb
 	$(foreach var,$(ARTS),install $(var) $(DESTDIR)$(PREFIX)/share/greenthumb/$(notdir $(var));)
 
+$(BIN):
+	mkdir $(BIN)
 
 $(OBJ_DIRS):
 	mkdir -p $@

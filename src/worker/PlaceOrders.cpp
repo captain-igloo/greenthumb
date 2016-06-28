@@ -20,8 +20,12 @@ wxThread::ExitCode PlaceOrders::Entry() {
     wxLogStatus("Place orders ...");
 
     try {
-        DoPlaceOrder();
-        wxLogStatus("Place orders ... Success");
+        if (DoPlaceOrder()) {
+            wxLogStatus("Place orders ... Success");
+        } else {
+            wxLogStatus("Place orders ... Failed");
+        }
+
     } catch (std::exception const& e) {
         wxLogError("Failed to place orders: " + _(e.what()));
     }

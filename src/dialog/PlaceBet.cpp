@@ -197,7 +197,7 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
         greentop::OrderType orderType(greentop::OrderType::LIMIT);
         greentop::PersistenceType persistenceType(greentop::PersistenceType::LAPSE);
         greentop::LimitOrder limitOrder(stake, oddsSpin->GetValue(), persistenceType);
-        greentop::PlaceInstruction placeInstruction(orderType, selectionId, -1, side, limitOrder);
+        greentop::PlaceInstruction placeInstruction(orderType, selectionId, greentop::Optional<double>(), side, limitOrder);
         std::vector<greentop::PlaceInstruction> instructions;
         instructions.push_back(placeInstruction);
 

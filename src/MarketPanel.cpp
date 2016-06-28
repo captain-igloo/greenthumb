@@ -1,3 +1,6 @@
+/**
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <greentop/ExchangeApi.h>
 
 #include <wx/button.h>
@@ -90,54 +93,64 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 
 void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 
-    marketBook = event.GetPayload<greentop::MarketBook>();
+    greentop::MarketBook tempMarketBook = event.GetPayload<greentop::MarketBook>();
 
-    SyncRunnerRows();
+    if (tempMarketBook.isValid()) {
+        marketBook = tempMarketBook;
 
-    currentOrdersDialog->Refresh();
+        SyncRunnerRows();
 
-    if (marketBook.getStatus() == greentop::MarketStatus::OPEN ||
-        marketBook.getStatus() == greentop::MarketStatus::SUSPENDED) {
-        refreshTimer.Start();
-    } else {
-        refreshTimer.Stop();
+        currentOrdersDialog->Refresh();
+
+        if (marketBook.getStatus() == greentop::MarketStatus::OPEN ||
+            marketBook.getStatus() == greentop::MarketStatus::SUSPENDED) {
+            refreshTimer.Start();
+        } else {
+            refreshTimer.Stop();
+        }
+
+        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
+            new worker::ListMarketProfitAndLoss(&workerManager, market.GetExchange(),
+                market.GetMarketCatalogue().getMarketId());
+        workerManager.RunWorker(listMarketProfitAndLossWorker);
+
+        UpdateToolBar();
+        UpdateMarketStatus();
     }
-
-    worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
-        new worker::ListMarketProfitAndLoss(&workerManager, market.GetExchange(),
-            market.GetMarketCatalogue().getMarketId());
-    workerManager.RunWorker(listMarketProfitAndLossWorker);
-
-    UpdateToolBar();
-    UpdateMarketStatus();
-
 }
 
 void MarketPanel::OnListMarketProfitAndLoss(const wxThreadEvent& event) {
     greentop::ListMarketProfitAndLossResponse lmpalr = event.GetPayload<greentop::ListMarketProfitAndLossResponse>();
 
-    std::vector<greentop::MarketProfitAndLoss> marketProfitAndLosses = lmpalr.getMarketProfitAndLosses();
+    if (lmpalr.isSuccess()) {
+        std::vector<greentop::MarketProfitAndLoss> marketProfitAndLosses = lmpalr.getMarketProfitAndLosses();
 
-    std::vector<greentop::MarketProfitAndLoss>::iterator it1;
-    for (it1 = marketProfitAndLosses.begin(); it1 != marketProfitAndLosses.end(); ++it1) {
+        std::vector<greentop::MarketProfitAndLoss>::iterator it1;
+        for (it1 = marketProfitAndLosses.begin(); it1 != marketProfitAndLosses.end(); ++it1) {
 
-        greentop::MarketProfitAndLoss marketProfitAndLoss = *it1;
+            greentop::MarketProfitAndLoss marketProfitAndLoss = *it1;
 
-        if (marketProfitAndLoss.getMarketId() == market.GetMarketCatalogue().getMarketId()) {
+            if (marketProfitAndLoss.getMarketId() == market.GetMarketCatalogue().getMarketId()) {
 
-            std::vector<greentop::RunnerProfitAndLoss> profitAndLosses = marketProfitAndLoss.getProfitAndLosses();
+                std::vector<greentop::RunnerProfitAndLoss> profitAndLosses = marketProfitAndLoss.getProfitAndLosses();
 
-            std::vector<greentop::RunnerProfitAndLoss>::iterator it2;
-            for (it2 = profitAndLosses.begin(); it2 != profitAndLosses.end(); ++it2) {
-                greentop::RunnerProfitAndLoss runnerProfitAndLoss = *it2;
-                if (runnerRows.find(runnerProfitAndLoss.getSelectionId()) != runnerRows.end()) {
-                    runnerRows[runnerProfitAndLoss.getSelectionId()]->SetProfit(runnerProfitAndLoss.getIfWin());
+                std::vector<greentop::RunnerProfitAndLoss>::iterator it2;
+                for (it2 = profitAndLosses.begin(); it2 != profitAndLosses.end(); ++it2) {
+                    greentop::RunnerProfitAndLoss runnerProfitAndLoss = *it2;
+                    if (runnerRows.find(runnerProfitAndLoss.getSelectionId()) != runnerRows.end()) {
+                        greentop::Optional<double> optionalIfWin = runnerProfitAndLoss.getIfWin();
+                        double ifWin = 0;
+                        if (optionalIfWin.isValid()) {
+                            ifWin = optionalIfWin.getValue();
+                        }
+                        runnerRows[runnerProfitAndLoss.getSelectionId()]->SetProfit(ifWin);
+                    }
                 }
             }
         }
-    }
 
-    GetParent()->Layout();
+        GetParent()->Layout();
+    }
 }
 
 void MarketPanel::RefreshPrices() {
@@ -163,6 +176,7 @@ void MarketPanel::SetMarket(const greentop::menu::Node& node) {
         std::string title = fullMarketName + " / " + formattedStartTime;
         wxString label(title.c_str(), wxConvUTF8);
         marketName->SetLabel(label);
+        currentOrdersDialog->SetTitle(fullMarketName);
     }
 
 }
@@ -197,7 +211,7 @@ void MarketPanel::UpdateMarketStatus() {
 
 void MarketPanel::UpdateToolBar() {
     if (market.GetMarketCatalogue().getDescription().getTurnInPlayEnabled()) {
-        if (marketBook.getInplay()) {
+        if (marketBook.getInplay().isValid() && marketBook.getInplay().getValue()) {
             toolbar->DeleteTool(inPlayToolId);
             wxBitmap inPlayGreenBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREEN);
             wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, inPlayToolId, wxT(""), inPlayGreenBitmap);

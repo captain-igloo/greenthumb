@@ -111,15 +111,15 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
             }
             asi.SetRefId(items[i].getRefId());
             asi.SetItemDate(items[i].getItemDate());
-            asi.SetAmount(items[i].getAmount());
-            asi.SetBalance(items[i].getBalance());
-            asi.SetAvgPrice(data.getAvgPrice());
-            asi.SetBetSize(data.getBetSize());
+            asi.SetAmount(items[i].getAmount().isValid() ? items[i].getAmount().getValue() : 0);
+            asi.SetBalance(items[i].getBalance().isValid() ? items[i].getBalance().getValue() : 0);
+            asi.SetAvgPrice(data.getAvgPrice().isValid() ? data.getAvgPrice().getValue() : 0);
+            asi.SetBetSize(data.getBetSize().isValid() ? data.getBetSize().getValue() : 0);
             asi.SetBetType(data.getBetType());
             asi.SetEventId(data.getEventId());
             asi.SetEventTypeId(data.getEventTypeId());
             asi.SetFullMarketName(data.getFullMarketName());
-            asi.SetGrossBetAmount(data.getGrossBetAmount());
+            asi.SetGrossBetAmount(data.getGrossBetAmount().isValid() ? data.getGrossBetAmount().getValue() : 0);
             asi.SetMarketName(data.getMarketName());
             asi.SetPlacedDate(data.getPlacedDate());
             asi.SetSelectionId(data.getSelectionId());
@@ -138,7 +138,7 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
         return false;
     }
 
-    return asr.getMoreAvailable();
+    return asr.getMoreAvailable().isValid() && asr.getMoreAvailable().getValue();
 
 }
 

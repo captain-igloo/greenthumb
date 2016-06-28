@@ -46,13 +46,11 @@ bool GreenThumb::OnExceptionInMainLoop() {
 }
 
 void GreenThumb::OnUnhandledException() {
-
     try {
         throw;
     } catch (std::exception const& e) {
         std::cout << "Unhandled exception :: " << e.what() << std::endl;
     }
-
 }
 
 

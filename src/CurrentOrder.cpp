@@ -23,6 +23,7 @@ CurrentOrder::CurrentOrder(wxWindow* parent, const wxWindowID id, const wxPoint&
     SetSizer(sizer);
 
     runnerName = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize);
+    runnerName->SetMinSize(wxSize(150, -1));
 
     sizer->Add(runnerName, 0, wxALIGN_CENTRE_VERTICAL);
 
@@ -35,6 +36,7 @@ CurrentOrder::CurrentOrder(wxWindow* parent, const wxWindowID id, const wxPoint&
     sizer->Add(stake, 0, wxALIGN_CENTRE_VERTICAL);
 
     profitOrLiabilityLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    profitOrLiabilityLabel->SetMinSize(wxSize(75, -1));
     sizer->Add(profitOrLiabilityLabel, 0, wxALIGN_CENTRE_VERTICAL);
     profitOrLiability = new wxStaticText(this, wxID_ANY, wxEmptyString);
     sizer->Add(profitOrLiability, 0, wxALIGN_CENTRE_VERTICAL);
@@ -74,14 +76,20 @@ void CurrentOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
         greentop::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
 
         wxString label(runner.getRunnerName().c_str(), wxConvUTF8);
-        runnerName->SetLabel(label);
+        runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " + label);
 
         oddsSpin->SetValue(currentOrderSummary.getPriceSize().getPrice());
 
         std::string currencySymbol = GreenThumb::GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
 
         std::ostringstream stakeLabelStream;
-        stakeLabelStream << currencySymbol << std::fixed << std::setprecision(2) << currentOrderSummary.getSizeRemaining();
+        double sizeRemaining = 0;
+        greentop::Optional<double> optionalSizeRemaining = currentOrderSummary.getSizeRemaining();
+        if (optionalSizeRemaining.isValid()) {
+            sizeRemaining = optionalSizeRemaining.getValue();
+        }
+        stakeLabelStream << currencySymbol << std::fixed << std::setprecision(2)
+            << sizeRemaining;
         wxString stakeLabel(stakeLabelStream.str().c_str(), wxConvUTF8);
 
         stake->SetLabel(stakeLabel);
@@ -116,10 +124,16 @@ void CurrentOrder::UpdateProfitOrLiability() {
 
     double profit;
 
+    double sizeRemaining = 0;
+    greentop::Optional<double> optionalSizeRemaining = currentOrderSummary.getSizeRemaining();
+    if (optionalSizeRemaining.isValid()) {
+        sizeRemaining = optionalSizeRemaining.getValue();
+    }
+
     if (currentOrderSummary.getSide() == greentop::Side::BACK) {
-        profit = currentOrderSummary.getSizeRemaining() * (oddsSpin->GetValue() - 1);
+        profit = sizeRemaining * (oddsSpin->GetValue() - 1);
     } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {
-        profit = currentOrderSummary.getSizeRemaining() * (oddsSpin->GetValue() - 1);
+        profit = sizeRemaining * (oddsSpin->GetValue() - 1);
     }
 
     profitOrLiabilityStream << currencySymbol << std::fixed << std::setprecision(2) << profit;

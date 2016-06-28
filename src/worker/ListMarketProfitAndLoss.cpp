@@ -28,7 +28,7 @@ wxThread::ExitCode ListMarketProfitAndLoss:: Entry() {
             wxLogStatus("List market profit and loss ... Failed");
         }
 
-    } catch (std::exception const& e) {
+    } catch (const std::exception& e) {
         wxLogStatus("List market profit and loss ... Failed: " + _(e.what()));
     }
 
