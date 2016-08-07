@@ -1,5 +1,10 @@
-#include <vector>
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+#include <wx/wx.h>
 #include <wx/log.h>
+#include <vector>
+
 
 #include "worker/ListCurrentOrders.h"
 #include "GreenThumb.h"

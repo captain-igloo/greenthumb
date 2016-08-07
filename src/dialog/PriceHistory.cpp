@@ -2,8 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <greentop/ExchangeApi.h>
-
+#include <wx/wx.h>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 #include <wx/file.h>
@@ -13,6 +12,8 @@
 #include <wx/stattext.h>
 #include <wx/wfstream.h>
 #include <wx/url.h>
+
+#include <greentop/ExchangeApi.h>
 
 #include "dialog/PriceHistory.h"
 

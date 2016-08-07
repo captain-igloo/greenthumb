@@ -1,8 +1,12 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+#include <wx/wx.h>
+#include <wx/button.h>
+#include <wx/textctrl.h>
 #include <greentop/ExchangeApi.h>
 #include <iomanip>
 #include <iostream>
-#include <wx/button.h>
-#include <wx/textctrl.h>
 
 #include "entity/Config.h"
 
@@ -12,6 +16,7 @@
 #include "ArtProvider.h"
 #include "CurrentOrder.h"
 #include "GreenThumb.h"
+#include "Util.h"
 
 namespace greenthumb {
 
@@ -80,7 +85,7 @@ void CurrentOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
 
         oddsSpin->SetValue(currentOrderSummary.getPriceSize().getPrice());
 
-        std::string currencySymbol = GreenThumb::GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
 
         std::ostringstream stakeLabelStream;
         double sizeRemaining = 0;
@@ -118,7 +123,7 @@ greentop::CurrentOrderSummary CurrentOrder::GetCurrentOrderSummary() {
 
 void CurrentOrder::UpdateProfitOrLiability() {
 
-    std::string currencySymbol = GreenThumb::GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+    std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
 
     std::ostringstream profitOrLiabilityStream;
 

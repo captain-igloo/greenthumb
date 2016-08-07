@@ -1,10 +1,12 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #ifndef PAGINATEDGRID_H
 #define PAGINATEDGRID_H
 
 #include <wx/grid.h>
 #include <wx/panel.h>
 #include <wx/toolbar.h>
-
 #include "worker/WorkerManager.h"
 
 namespace greenthumb {

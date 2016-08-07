@@ -1,9 +1,12 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #ifndef GREENTOP_H
 #define GREENTOP_H
 
+#include <wx/wx.h>
 #include <greentop/ExchangeApi.h>
 #include <string>
-#include <wx/wx.h>
 
 #include "GreenThumbFrame.h"
 #include "Logger.h"
@@ -12,8 +15,6 @@ class GreenThumb : public wxApp {
     public:
 
         static greentop::ExchangeApi& GetBetfairApi();
-
-        static std::string GetCurrencySymbol(const std::string& currencyCode);
 
         GreenThumb() {}
 

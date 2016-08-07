@@ -1,13 +1,15 @@
+#include <wx/wx.h>
+#include <wx/filename.h>
+#include <wx/log.h>
+#include <wx/sizer.h>
+#include <wx/stdpaths.h>
+
 #include <exception>
 #include <time.h>
 
 #include <greentop/ExchangeApi.h>
 #include <set>
 #include <vector>
-#include <wx/filename.h>
-#include <wx/log.h>
-#include <wx/sizer.h>
-#include <wx/stdpaths.h>
 
 #include "worker/ListMarketCatalogue.h"
 #include "worker/RefreshMenu.h"
@@ -154,7 +156,7 @@ void EventTree::ReadMenuCache() {
 
     std::string line;
     std::string fileContents;
-    std::ifstream fs(menuCacheFilename);
+    std::ifstream fs(menuCacheFilename.mb_str());
 
     if (fs.is_open()) {
         while (getline(fs, line)) {

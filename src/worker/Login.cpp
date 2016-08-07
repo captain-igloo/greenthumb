@@ -1,3 +1,6 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #include "worker/Login.h"
 
 #include "GreenThumb.h"

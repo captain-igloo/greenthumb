@@ -15,6 +15,7 @@
 #include "GreenThumb.h"
 #include "GreenThumbFrame.h"
 #include "MarketPanel.h"
+#include "Util.h"
 
 namespace greenthumb {
 
@@ -94,7 +95,7 @@ void GreenThumbFrame::Login() {
         eventTree->SyncMenu(false);
 
         // get account currency if we don't already have it.
-        std::string currencySymbol = GreenThumb::GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
         if (currencySymbol == "?") {
             workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));
         }

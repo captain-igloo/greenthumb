@@ -4,13 +4,11 @@
 #ifndef WORKER_GETACCOUNTSTATEMENT_H
 #define WORKER_GETACCOUNTSTATEMENT_H
 
-#include <greentop/account/AccountStatementReport.h>
-
 #include <wx/event.h>
 #include <wx/thread.h>
+#include <greentop/account/AccountStatementReport.h>
 
 #include "worker/Worker.h"
-
 #include "GreenThumb.h"
 
 namespace greenthumb {

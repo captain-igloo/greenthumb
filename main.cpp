@@ -1,6 +1,9 @@
-#include <greentop/ExchangeApi.h>
-#include <wx/evtloop.h>
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #include <wx/wx.h>
+#include <wx/evtloop.h>
+#include <greentop/ExchangeApi.h>
 
 #include "GreenThumb.h"
 #include "GreenThumbFrame.h"
@@ -57,19 +60,5 @@ void GreenThumb::OnUnhandledException() {
 greentop::ExchangeApi& GreenThumb::GetBetfairApi() {
     static greentop::ExchangeApi betfairApi;
     return betfairApi;
-}
-
-std::string GreenThumb::GetCurrencySymbol(const std::string& currencyCode) {
-
-    if (currencyCode == "EUR") {
-        return "€";
-    } else if (currencyCode == "GBP") {
-        return "£";
-    } else if (currencyCode == "USD" || currencyCode == "AUD" || currencyCode == "CAD" ||
-        currencyCode == "HKD" || currencyCode == "SGD") {
-        return "$";
-    }
-
-    return currencyCode;
 }
 

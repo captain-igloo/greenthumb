@@ -1,5 +1,7 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #include "worker/TransferFunds.h"
-
 #include "GreenThumb.h"
 
 namespace greenthumb {

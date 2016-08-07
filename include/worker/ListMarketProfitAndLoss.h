@@ -1,11 +1,11 @@
 #ifndef WORKER_LISTMARKETPROFITANDLOSS_H
 #define WORKER_LISTMARKETPROFITANDLOSS_H
 
-#include <greentop/ExchangeApi.h>
-#include <string>
-
 #include <wx/event.h>
 #include <wx/thread.h>
+
+#include <greentop/ExchangeApi.h>
+#include <string>
 
 #include "worker/Worker.h"
 

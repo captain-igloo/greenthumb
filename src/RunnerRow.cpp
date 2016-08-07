@@ -1,22 +1,23 @@
-#include <cmath>
-#include <iomanip>
-#include <string>
-#include <sstream>
-
-#include <greentop/betting/RunnerCatalog.h>
-
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #include <wx/button.h>
 #include <wx/colour.h>
 #include <wx/event.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <cmath>
+#include <iomanip>
+#include <string>
+#include <sstream>
+#include <greentop/betting/RunnerCatalog.h>
 
 #include "dialog/PriceHistory.h"
 #include "entity/Config.h"
-
 #include "ArtProvider.h"
 #include "GreenThumb.h"
 #include "RunnerRow.h"
+#include "Util.h"
 
 namespace greenthumb {
 
@@ -25,7 +26,7 @@ RunnerRow::RunnerRow() : lastPriceTraded(-1), profitAndLossIfWin(0) {
 
 RunnerRow::RunnerRow(wxWindow* parent) : lastPriceTraded(-1), profitAndLossIfWin(0) {
 
-    currencySymbol = GreenThumb::GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+    currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
 
     wxSizer* sizer = parent->GetSizer();
 

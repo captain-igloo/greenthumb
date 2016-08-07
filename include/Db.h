@@ -1,11 +1,11 @@
 #ifndef DB_H
 #define DB_H
 
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 #include <iostream>
 #include <soci.h>
 #include <sqlite3/soci-sqlite3.h>
-#include <wx/filename.h>
-#include <wx/stdpaths.h>
 
 namespace greenthumb {
 

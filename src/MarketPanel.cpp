@@ -1,17 +1,15 @@
 /**
  * Copyright 2016 Colin Doig.  Distributed under the MIT license.
  */
-#include <greentop/ExchangeApi.h>
-
+#include <wx/wx.h>
 #include <wx/button.h>
 #include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
+#include <greentop/ExchangeApi.h>
 
 #include "dialog/PlaceBet.h"
-
 #include "entity/Config.h"
-
 #include "worker/CancelOrders.h"
 #include "worker/ListCurrentOrders.h"
 #include "worker/PlaceOrders.h"
@@ -20,6 +18,7 @@
 #include "ArtProvider.h"
 #include "MarketPanel.h"
 #include "RunnerRow.h"
+#include "Util.h"
 
 namespace greenthumb {
 
@@ -214,12 +213,12 @@ void MarketPanel::UpdateToolBar() {
         if (marketBook.getInplay().isValid() && marketBook.getInplay().getValue()) {
             toolbar->DeleteTool(inPlayToolId);
             wxBitmap inPlayGreenBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREEN);
-            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, inPlayToolId, wxT(""), inPlayGreenBitmap);
+            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, wxID_ANY, wxT(""), inPlayGreenBitmap);
             inPlayToolId = inPlayTool->GetId();
         } else {
             toolbar->DeleteTool(inPlayToolId);
             wxBitmap inPlayGreyBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREY);
-            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, inPlayToolId, wxT(""), inPlayGreyBitmap);
+            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, wxID_ANY, wxT(""), inPlayGreyBitmap);
             inPlayToolId = inPlayTool->GetId();
 
         }

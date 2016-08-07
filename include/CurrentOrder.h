@@ -1,16 +1,16 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #ifndef CURRENTORDER_H
 #define CURRENTORDER_H
-
-#include <greentop/betting/CurrentOrderSummary.h>
 
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <greentop/betting/CurrentOrderSummary.h>
 
 #include "entity/Market.h"
-
 #include "worker/WorkerManager.h"
-
 #include "OddsSpinCtrl.h"
 #include "StakeSpinCtrl.h"
 

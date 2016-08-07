@@ -79,7 +79,7 @@ std::string Config::GetConfigValue(const std::string& configKey, const std::stri
 
     try {
         return GetConfigValue(configKey);
-    } catch (std::runtime_error const& e) {
+    } catch (const std::out_of_range& e) {
 
         Config config;
         config.configKey = configKey;

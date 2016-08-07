@@ -1,10 +1,10 @@
 #ifndef WORKER_TRANSFERFUNDS_H
 #define WORKER_TRANSFERFUNDS_H
 
-#include <greentop/ExchangeApi.h>
-
 #include <wx/event.h>
 #include <wx/thread.h>
+
+#include <greentop/ExchangeApi.h>
 
 #include "Worker.h"
 

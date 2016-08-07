@@ -1,15 +1,20 @@
-#include <iomanip>
-#include <sstream>
-
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+#include <wx/wx.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/valnum.h>
+
+#include <iomanip>
+#include <sstream>
 
 #include "dialog/PlaceBet.h"
 #include "entity/Config.h"
 #include "worker/PlaceOrders.h"
 
 #include "GreenThumb.h"
+#include "Util.h"
 
 namespace greenthumb {
 namespace dialog {
@@ -24,7 +29,7 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
     int borderFlags = wxTOP | wxRIGHT | wxLEFT;
     int columnOneWidth = 100;
     int columnTwoWidth = 200;
-    std::string currencySymbol = GreenThumb::GetCurrencySymbol(
+    std::string currencySymbol = GetCurrencySymbol(
         entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
 
     wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
@@ -115,7 +120,6 @@ void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop
     selection->SetLabel(runner);
 
     UpdateProfitAndLiability();
-
 }
 
 void PlaceBet::SetMarket(const entity::Market& market, const std::string& fullMarketName) {
@@ -184,7 +188,9 @@ void PlaceBet::PlaceOrderPending(const double stake, const double odds) {
 
 
 void PlaceBet::OnSpinChange(const wxEvent& spinEvent) {
-    UpdateProfitAndLiability();
+    if (backLayButton->IsEnabled()) {
+        UpdateProfitAndLiability();
+    }
 }
 
 void PlaceBet::OnSubmit(const wxCommandEvent& event) {

@@ -1,12 +1,14 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+#include <wx/wx.h>
+#include <wx/sizer.h>
 #include <greentop/ExchangeApi.h>
-
 #include <math.h>
 
-#include <wx/sizer.h>
-
-#include "AccountStatementFull.h"
-
 #include "entity/AccountStatementItem.h"
+#include "AccountStatementFull.h"
+#include "Util.h"
 
 namespace greenthumb {
 

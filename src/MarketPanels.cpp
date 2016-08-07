@@ -1,3 +1,8 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+#include <wx/wx.h>
+
 #include "MarketPanels.h"
 
 namespace greenthumb {

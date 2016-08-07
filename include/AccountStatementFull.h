@@ -1,3 +1,6 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #ifndef ACCOUNTSTATEMENTFULL_H
 #define ACCOUNTSTATEMENTFULL_H
 

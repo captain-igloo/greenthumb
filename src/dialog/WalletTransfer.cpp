@@ -9,6 +9,7 @@
 #include "entity/Config.h"
 #include "worker/GetAccountFunds.h"
 #include "GreenThumb.h"
+#include "Util.h"
 
 namespace greenthumb {
 namespace dialog {
@@ -108,7 +109,7 @@ void WalletTransfer::OnGetAccountFundsAus(const wxThreadEvent& event) {
 
 void WalletTransfer::OnGetAccountFunds(const wxThreadEvent& event, wxStaticText* balance) {
 
-    std::string currencySymbol = GreenThumb::GetCurrencySymbol(
+    std::string currencySymbol = GetCurrencySymbol(
         entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
     wxString wxCurrencySymbol(currencySymbol.c_str(), wxConvUTF8);
 

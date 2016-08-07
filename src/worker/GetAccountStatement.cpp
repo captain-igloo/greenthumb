@@ -1,8 +1,9 @@
 /**
  * Copyright 2016 Colin Doig.  Distributed under the MIT license.
  */
-#include <greentop/ExchangeApi.h>
+#include <wx/wx.h>
 #include <wx/log.h>
+#include <greentop/ExchangeApi.h>
 
 #include "entity/AccountStatementMarket.h"
 #include "entity/AccountStatementItem.h"
