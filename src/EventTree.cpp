@@ -96,8 +96,6 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
             nodeIdsFound.insert(childData->node.getId());
             if (nodeIds.find(childData->node.getId()) == nodeIds.end()) {
                 itemIdsToDelete.insert(childId);
-            } else {
-                // SyncNode(childId, childData->node);
             }
         } else {
             itemIdsToDelete.insert(childId);
@@ -129,12 +127,13 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     }
 
     for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
-        for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {
+        for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
             if (betfairMarkets->exists(*it2)) {
-                it1->second.erase(*it2);
+                it1->second.erase(it2++);
+            } else {
+                ++it2;
             }
         }
-
         if (it1->second.size() > 0) {
             workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, it1->first, it1->second));
         }
@@ -147,8 +146,9 @@ void EventTree::OnItemExpanded(wxTreeEvent& treeEvent) {
         wxTreeItemId itemId = treeEvent.GetItem();
         MenuTreeData* data = static_cast<MenuTreeData*>(GetItemData(itemId));
         SyncNode(itemId, data->node);
-    } catch (const std::exception& e) {
-        wxLogStatus(e.what());
+    } catch (const std::out_of_range& e) {
+        // attempt to expand a node that has been removed from the tree?
+        wxLogStatus("Failed to expand node");
     }
 }
 
