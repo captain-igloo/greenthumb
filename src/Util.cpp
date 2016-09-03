@@ -19,10 +19,10 @@ time_t timegm(tm* time) {
 std::string GetCurrencySymbol(const std::string& currencyCode) {
 
 	if (currencyCode == "EUR") {
-		return "€";
+		return "â‚¬";
 	}
 	else if (currencyCode == "GBP") {
-		return "£";
+		return "Â£";
 	}
 	else if (currencyCode == "USD" || currencyCode == "AUD" || currencyCode == "CAD" ||
 		currencyCode == "HKD" || currencyCode == "SGD") {
