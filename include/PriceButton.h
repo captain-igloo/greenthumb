@@ -1,7 +1,7 @@
 #ifndef PRICEBUTTON_H
 #define PRICEBUTTON_H
 
-#include <greentop/betting/PlaceInstruction.h>
+#include <greentop/sport/PlaceInstruction.h>
 
 #include <wx/button.h>
 

@@ -1,10 +1,10 @@
 #ifndef RUNNERROW_H
 #define RUNNERROW_H
 
-#include <greentop/betting/MarketBook.h>
-#include <greentop/betting/Runner.h>
-#include <greentop/betting/PlaceInstruction.h>
-#include <greentop/enum/Side.h>
+#include <greentop/sport/MarketBook.h>
+#include <greentop/sport/Runner.h>
+#include <greentop/sport/PlaceInstruction.h>
+#include <greentop/sport/enum/Side.h>
 
 #include <wx/button.h>
 #include <wx/panel.h>

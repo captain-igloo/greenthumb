@@ -4,7 +4,7 @@
 #ifndef WORKER_LISTMARKETBOOK_H
 #define WORKER_LISTMARKETBOOK_H
 
-#include <greentop/betting/MarketCatalogue.h>
+#include <greentop/sport/MarketCatalogue.h>
 #include <wx/event.h>
 #include <wx/thread.h>
 

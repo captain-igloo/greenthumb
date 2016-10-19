@@ -99,7 +99,7 @@ void CurrentOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
 
         stake->SetLabel(stakeLabel);
 
-        if (currentOrderSummary.getSide().getValue() == greentop::Side::BACK) {
+        if (currentOrderSummary.getSide() == greentop::Side::BACK) {
             profitOrLiabilityLabel->SetLabel(_("Profit: "));
             SetBackgroundColour(wxColour(227, 235, 255));
         } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {

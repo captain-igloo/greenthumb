@@ -7,7 +7,7 @@
 #include <wx/event.h>
 #include <wx/thread.h>
 
-#include "greentop/betting/MarketCatalogue.h"
+#include "greentop/sport/MarketCatalogue.h"
 #include "worker/Worker.h"
 #include "GreenThumbFrame.h"
 

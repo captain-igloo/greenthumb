@@ -4,7 +4,7 @@
 #ifndef DIALOG_PRICEHISTORY_H
 #define DIALOG_PRICEHISTORY_H
 
-#include <greentop/betting/Runner.h>
+#include <greentop/sport/Runner.h>
 
 #include <wx/dialog.h>
 #include <wx/panel.h>

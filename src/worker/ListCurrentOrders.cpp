@@ -44,11 +44,11 @@ wxThread::ExitCode ListCurrentOrders::Entry() {
 
 greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
 
-    std::vector<std::string> marketIds;
-    marketIds.push_back(market.GetMarketCatalogue().getMarketId());
+    std::set<std::string> marketIds;
+    marketIds.insert(market.GetMarketCatalogue().getMarketId());
     greentop::OrderProjection op(greentop::OrderProjection::EXECUTABLE);
 
-    greentop::ListCurrentOrdersRequest lcor(std::vector<std::string>(), marketIds, op);
+    greentop::ListCurrentOrdersRequest lcor(std::set<std::string>(), marketIds, op);
 
     // greentop::ExchangeApi::Exchange exchange =
        //  entity::Exchange::GetExchange(static_cast<entity::Exchange::ExchangeId>(market.GetExchangeId()));

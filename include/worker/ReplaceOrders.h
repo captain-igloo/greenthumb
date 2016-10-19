@@ -1,7 +1,7 @@
 #ifndef WORKER_REPLACEORDERS_H
 #define WORKER_REPLACEORDERS_H
 
-#include <greentop/betting/ReplaceExecutionReport.h>
+#include <greentop/sport/ReplaceExecutionReport.h>
 #include <greentop/Exchange.h>
 #include <string>
 #include <wx/event.h>

@@ -1,9 +1,9 @@
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
 
-#include <greentop/betting/MarketBook.h>
-#include <greentop/betting/ListMarketBookRequest.h>
-#include <greentop/betting/ListMarketBookResponse.h>
+#include <greentop/sport/MarketBook.h>
+#include <greentop/sport/ListMarketBookRequest.h>
+#include <greentop/sport/ListMarketBookResponse.h>
 
 #include <wx/panel.h>
 #include <wx/timer.h>

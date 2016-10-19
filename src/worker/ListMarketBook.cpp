@@ -42,8 +42,8 @@ wxThread::ExitCode ListMarketBook::Entry() {
 
 bool ListMarketBook::DoListMarketBook() {
 
-    std::set<std::string> marketIds;
-    marketIds.insert(market.GetMarketCatalogue().getMarketId());
+    std::vector<std::string> marketIds;
+    marketIds.push_back(market.GetMarketCatalogue().getMarketId());
     std::set<greentop::PriceData> priceData;
     priceData.insert(greentop::PriceData(greentop::PriceData::EX_BEST_OFFERS));
     greentop::PriceProjection priceProjection(priceData);

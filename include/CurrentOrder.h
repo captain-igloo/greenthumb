@@ -7,7 +7,7 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
-#include <greentop/betting/CurrentOrderSummary.h>
+#include <greentop/sport/CurrentOrderSummary.h>
 
 #include "entity/Market.h"
 #include "worker/WorkerManager.h"

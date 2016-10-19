@@ -5,7 +5,7 @@
 #define WORKER_CANCELORDERS_H
 
 #include <greentop/Exchange.h>
-#include <greentop/betting/CancelExecutionReport.h>
+#include <greentop/sport/CancelExecutionReport.h>
 #include <string>
 #include <wx/event.h>
 #include <wx/thread.h>

@@ -139,7 +139,8 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
         return false;
     }
 
-    return asr.getMoreAvailable().isValid() && asr.getMoreAvailable().getValue();
+    return asr.getMoreAvailable();
+    // return asr.getMoreAvailable().isValid() && asr.getMoreAvailable().getValue();
 
 }
 

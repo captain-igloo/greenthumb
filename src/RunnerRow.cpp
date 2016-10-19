@@ -10,7 +10,8 @@
 #include <iomanip>
 #include <string>
 #include <sstream>
-#include <greentop/betting/RunnerCatalog.h>
+#include <greentop/sport/enum/MarketStatus.h>
+#include <greentop/sport/RunnerCatalog.h>
 
 #include "dialog/PriceHistory.h"
 #include "entity/Config.h"

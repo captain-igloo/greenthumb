@@ -7,6 +7,7 @@
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include <greentop/ExchangeApi.h>
+#include <greentop/sport/enum/MarketStatus.h>
 
 #include "dialog/PlaceBet.h"
 #include "entity/Config.h"
