@@ -69,18 +69,13 @@ void EventTree::SyncMenu(bool force) {
 
 void EventTree::Refresh(const wxThreadEvent& event) {
     try {
-        SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode());
+        SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode(), true);
     } catch (const std::exception& e) {
-        wxLogStatus(e.what());
+        wxLogStatus("Failed to refresh menu");
     }
 }
 
-void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node) {
-
-    std::set<std::string> nodeIds;
-    for (auto it = node.getChildren().begin(); it != node.getChildren().end(); ++it) {
-        nodeIds.insert(it->getId());
-    }
+void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse) {
 
     std::set<std::string> nodeIdsFound;
     std::set<wxTreeItemId> itemIdsToDelete;
@@ -94,7 +89,11 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
 
         if (childData->valid) {
             nodeIdsFound.insert(childData->node.getId());
-            if (nodeIds.find(childData->node.getId()) == nodeIds.end()) {
+            if (node.hasChild(childData->node)) {
+                if (recurse) {
+                    SyncNode(childId, childData->node, recurse);
+                }
+            } else {
                 itemIdsToDelete.insert(childId);
             }
         } else {
@@ -126,26 +125,27 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
         }
     }
 
-    for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
-        for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
-            if (betfairMarkets->exists(*it2)) {
-                it1->second.erase(it2++);
-            } else {
-                ++it2;
+    if (!recurse) {
+        for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
+            for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
+                if (betfairMarkets->exists(*it2)) {
+                    it1->second.erase(it2++);
+                } else {
+                    ++it2;
+                }
+            }
+            if (it1->second.size() > 0) {
+                workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, it1->first, it1->second));
             }
         }
-        if (it1->second.size() > 0) {
-            workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, it1->first, it1->second));
-        }
     }
-
 }
 
 void EventTree::OnItemExpanded(wxTreeEvent& treeEvent) {
     try {
         wxTreeItemId itemId = treeEvent.GetItem();
         MenuTreeData* data = static_cast<MenuTreeData*>(GetItemData(itemId));
-        SyncNode(itemId, data->node);
+        SyncNode(itemId, data->node, false);
     } catch (const std::out_of_range& e) {
         // attempt to expand a node that has been removed from the tree?
         wxLogStatus("Failed to expand node");
@@ -169,7 +169,7 @@ void EventTree::ReadMenuCache() {
 
 }
 
-void EventTree::SetBetfairMarketsCache(LRUCache<std::string, entity::Market>* betfairMarkets) {
+void EventTree::SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets) {
     this->betfairMarkets = betfairMarkets;
 }
 

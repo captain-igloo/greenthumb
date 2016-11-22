@@ -1,6 +1,7 @@
 #ifndef GREENTOPFRAME_H
 #define GREENTOPFRAME_H
 
+#include <greentop/LRUCache.h>
 #include <map>
 #include <string>
 
@@ -13,7 +14,6 @@
 
 #include "AccountPanel.h"
 #include "EventTree.h"
-#include "LRUCache.h"
 #include "MarketPanels.h"
 
 namespace greenthumb {
@@ -38,9 +38,7 @@ class GreenThumbFrame: public wxFrame {
         wxSplitterWindow* bettingPanel;
         std::string mainView;
         worker::WorkerManager workerManager;
-        // MarketCache marketCache;
-        // std::map<std::string, entity::Market> betfairMarkets;
-        LRUCache<std::string, entity::Market> betfairMarkets;
+        greentop::LRUCache<std::string, entity::Market> betfairMarkets;
 
 
         void CreateMenuBar();
@@ -52,8 +50,6 @@ class GreenThumbFrame: public wxFrame {
 
         void OnMenuViewAccount(wxCommandEvent& menuEvent);
         void OnMenuViewBetting(wxCommandEvent& menuEvent);
-
-        void OnMenuAccountTransfer(wxCommandEvent& menuEvent);
 
         void OnMenuHelpAbout(wxCommandEvent& menuEvent);
 

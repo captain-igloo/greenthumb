@@ -19,32 +19,30 @@ AccountStatementFull::AccountStatementFull(wxWindow* parent, wxWindowID id, cons
     GetNumberPages();
 
     grid = new wxGrid(this, wxID_ANY);
-    grid->CreateGrid(0, 10);
+    grid->CreateGrid(0, 9);
 
-    grid->SetColLabelValue(0, "Exchange");
-    grid->SetColumnWidth(0, 75);
-    grid->SetColLabelValue(1, "Date");
-    grid->SetColumnWidth(1, 150);
-    grid->SetColLabelValue(2, "Description");
-    grid->SetColumnWidth(2, 450);
-    grid->SetColLabelValue(3, "Back/Lay");
-    grid->SetColumnWidth(3, 75);
-    grid->SetColLabelValue(4, "Selection");
-    grid->SetColumnWidth(4, 100);
-    grid->SetColLabelValue(5, "Av. Odds");
+    grid->SetColLabelValue(0, "Date");
+    grid->SetColumnWidth(0, 150);
+    grid->SetColLabelValue(1, "Description");
+    grid->SetColumnWidth(1, 450);
+    grid->SetColLabelValue(2, "Back/Lay");
+    grid->SetColumnWidth(2, 75);
+    grid->SetColLabelValue(3, "Selection");
+    grid->SetColumnWidth(3, 100);
+    grid->SetColLabelValue(4, "Av. Odds");
+    grid->SetColumnWidth(4, 75);
+    grid->SetColFormatFloat(4, -1, 2);
+    grid->SetColLabelValue(5, "Stake");
     grid->SetColumnWidth(5, 75);
     grid->SetColFormatFloat(5, -1, 2);
-    grid->SetColLabelValue(6, "Stake");
+    grid->SetColLabelValue(6, "Result");
     grid->SetColumnWidth(6, 75);
-    grid->SetColFormatFloat(6, -1, 2);
-    grid->SetColLabelValue(7, "Result");
+    grid->SetColLabelValue(7, "Amount");
     grid->SetColumnWidth(7, 75);
-    grid->SetColLabelValue(8, "Amount");
-    grid->SetColumnWidth(8, 75);
+    grid->SetColFormatFloat(7, -1, 2);
+    grid->SetColLabelValue(8, "Balance");
+    grid->SetColumnWidth(8, 100);
     grid->SetColFormatFloat(8, -1, 2);
-    grid->SetColLabelValue(9, "Balance");
-    grid->SetColumnWidth(9, 100);
-    grid->SetColFormatFloat(9, -1, 2);
 
     grid->HideRowLabels();
 
@@ -78,39 +76,34 @@ void AccountStatementFull::Render() {
         time_t itemDateTime = timegm(&itemDateTm);
         std::strftime(itemDate, 20, "%F %T", std::localtime(&itemDateTime));
 
-        if (i->GetExchangeId() == static_cast<int>(greentop::Exchange::AUS)) {
-            grid->SetCellValue(count, 0, "Aus");
-        } else {
-            grid->SetCellValue(count, 0, "UK");
-        }
-        grid->SetCellValue(count, 1, itemDate);
-        grid->SetCellValue(count, 2, i->GetFullMarketName());
+        grid->SetCellValue(count, 0, itemDate);
+        grid->SetCellValue(count, 1, i->GetFullMarketName());
 
         bool wonOrLost = false;
         if (i->GetWinLose() == "RESULT_WON") {
-            grid->SetCellValue(count, 7, "Won");
+            grid->SetCellValue(count, 6, "Won");
             wonOrLost = true;
         } else if (i->GetWinLose() == "RESULT_LOST") {
-            grid->SetCellValue(count, 7, "Lost");
+            grid->SetCellValue(count, 6, "Lost");
             wonOrLost = true;
         }
 
         if (wonOrLost) {
 
             if (i->GetBetType() == "B") {
-                grid->SetCellValue(count, 3, "Back");
+                grid->SetCellValue(count, 2, "Back");
             } else if (i->GetBetType() == "L") {
-                grid->SetCellValue(count, 3, "Lay");
+                grid->SetCellValue(count, 2, "Lay");
             }
 
-            grid->SetCellValue(count, 4, i->GetSelectionName());
-            grid->SetCellValue(count, 5, wxString::Format(wxT("%f"), i->GetAvgPrice()));
-            grid->SetCellValue(count, 6, wxString::Format(wxT("%f"), i->GetBetSize()));
+            grid->SetCellValue(count, 3, i->GetSelectionName());
+            grid->SetCellValue(count, 4, wxString::Format(wxT("%f"), i->GetAvgPrice()));
+            grid->SetCellValue(count, 5, wxString::Format(wxT("%f"), i->GetBetSize()));
 
         }
 
-        grid->SetCellValue(count, 8, wxString::Format(wxT("%f"), i->GetAmount()));
-        grid->SetCellValue(count, 9, wxString::Format(wxT("%f"), i->GetTotalBalance()));
+        grid->SetCellValue(count, 7, wxString::Format(wxT("%f"), i->GetAmount()));
+        grid->SetCellValue(count, 8, wxString::Format(wxT("%f"), i->GetTotalBalance()));
         count++;
     }
 

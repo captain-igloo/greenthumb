@@ -17,22 +17,20 @@ AccountStatementSummary::AccountStatementSummary(wxWindow* parent, wxWindowID id
     GetNumberPages();
 
     grid = new wxGrid(this, wxID_ANY);
-    grid->CreateGrid(0, 5);
+    grid->CreateGrid(0, 4);
 
-    grid->SetColLabelValue(0, "Exchange");
-    grid->SetColumnWidth(0, 75);
-    grid->SetColLabelValue(1, "Date");
-    grid->SetColumnWidth(1, 150);
-    grid->SetColLabelValue(2, "Description");
-    grid->SetColumnWidth(2, 450);
+    grid->SetColLabelValue(0, "Date");
+    grid->SetColumnWidth(0, 150);
+    grid->SetColLabelValue(1, "Description");
+    grid->SetColumnWidth(1, 450);
 
-    grid->SetColLabelValue(3, "Amount");
-    grid->SetColumnWidth(3, 75);
+    grid->SetColLabelValue(2, "Amount");
+    grid->SetColumnWidth(2, 75);
+    grid->SetColFormatFloat(2, -1, 2);
+
+    grid->SetColLabelValue(3, "Balance");
+    grid->SetColumnWidth(3, 100);
     grid->SetColFormatFloat(3, -1, 2);
-
-    grid->SetColLabelValue(4, "Balance");
-    grid->SetColumnWidth(4, 100);
-    grid->SetColFormatFloat(4, -1, 2);
 
     grid->HideRowLabels();
 
@@ -66,16 +64,11 @@ void AccountStatementSummary::Render() {
         time_t itemDateTime = timegm(&itemDateTm);
         std::strftime(itemDate, 20, "%F %T", std::localtime(&itemDateTime));
 
-        if (i->GetExchangeId() == static_cast<int>(greentop::Exchange::AUS)) {
-            grid->SetCellValue(count, 0, "Aus");
-        } else {
-            grid->SetCellValue(count, 0, "UK");
-        }
-        grid->SetCellValue(count, 1, itemDate);
-        grid->SetCellValue(count, 2, i->GetFullMarketName());
+        grid->SetCellValue(count, 0, itemDate);
+        grid->SetCellValue(count, 1, i->GetFullMarketName());
 
-        grid->SetCellValue(count, 3, wxString::Format(wxT("%f"), i->GetAmount()));
-        grid->SetCellValue(count, 4, wxString::Format(wxT("%f"), i->GetTotalBalance()));
+        grid->SetCellValue(count, 2, wxString::Format(wxT("%f"), i->GetAmount()));
+        grid->SetCellValue(count, 3, wxString::Format(wxT("%f"), i->GetTotalBalance()));
         count++;
     }
 

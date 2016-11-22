@@ -1,12 +1,13 @@
 #ifndef EVENTTREE_H
 #define EVENTTREE_H
 
+#include <greentop/LRUCache.h>
 #include <map>
 #include <wx/treectrl.h>
 
 #include "entity/Market.h"
 #include "worker/WorkerManager.h"
-#include "LRUCache.h"
+// #include "LRUCache.h"
 
 namespace greenthumb {
 
@@ -18,8 +19,7 @@ class EventTree : public wxTreeCtrl {
             long style);
 
         void SyncMenu(bool force = true);
-        // void SetBetfairMarketsCache(std::map<std::string, entity::Market>* betfairMarkets);
-        void SetBetfairMarketsCache(LRUCache<std::string, entity::Market>* betfairMarkets);
+        void SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets);
 
     private:
 
@@ -28,13 +28,12 @@ class EventTree : public wxTreeCtrl {
         std::map<std::string, wxTreeItemId> eventItemIds;
         worker::WorkerManager workerManager;
         wxString menuCacheFilename;
-        // std::map<std::string, entity::Market>* betfairMarkets;
-        LRUCache<std::string, entity::Market>* betfairMarkets;
+        greentop::LRUCache<std::string, entity::Market>* betfairMarkets;
 
         EventTree();
         void Refresh(const wxThreadEvent& event = wxThreadEvent());
         void OnItemExpanded(wxTreeEvent& event);
-        void SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node);
+        void SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse = false);
         void ReadMenuCache();
 };
 

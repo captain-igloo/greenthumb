@@ -2,8 +2,6 @@
 #include <wx/sizer.h>
 #include <wx/treectrl.h>
 
-#include "dialog/WalletTransfer.h"
-
 #include "entity/Config.h"
 
 #include "worker/GetAccountDetails.h"
@@ -134,11 +132,6 @@ void GreenThumbFrame::CreateMenuBar() {
 
     menu->Append(viewMenu, _("&View"));
 
-    wxMenu* accountMenu = new wxMenu();
-    wxWindowID menuAccountTransferId = wxWindow::NewControlId();
-    wxMenuItem* walletTransferItem = accountMenu->Append(menuAccountTransferId, _("&Wallet transfer"));
-    menu->Append(accountMenu, _("&Account"));
-
     wxMenu* helpMenu = new wxMenu();
     helpMenu->Append(wxID_ABOUT, _("&About"));
     menu->Append(helpMenu, _("&Help"));
@@ -150,7 +143,6 @@ void GreenThumbFrame::CreateMenuBar() {
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileRefreshMenu, this, menuFileRefreshMenuId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewAccount, this, menuViewAccountId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewBetting, this, menuViewBettingId);
-    Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuAccountTransfer, this, menuAccountTransferId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuHelpAbout, this, wxID_ABOUT);
 
 }
@@ -183,14 +175,6 @@ void GreenThumbFrame::OnMenuViewBetting(wxCommandEvent& menuEvent) {
     bettingPanel->Show(true);
     Layout();
     entity::Config::SetConfigValue("mainView", VIEW_BETTING);
-}
-
-void GreenThumbFrame::OnMenuAccountTransfer(wxCommandEvent& menuEvent) {
-
-    dialog::WalletTransfer walletTransfer(NULL, wxID_ANY, "Wallet Transfer");
-
-    walletTransfer.ShowModal();
-
 }
 
 void GreenThumbFrame::OnMenuHelpAbout(wxCommandEvent& menuEvent) {
