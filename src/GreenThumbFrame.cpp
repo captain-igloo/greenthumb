@@ -1,3 +1,4 @@
+#include <wx/wx.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/treectrl.h>

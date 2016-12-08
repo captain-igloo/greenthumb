@@ -10,7 +10,7 @@
 namespace greenthumb {
 
 #if defined _WIN32
-time_t timegm(tm* time);
+time_t timegm(tm* t);
 #endif
 
 std::string GetCurrencySymbol(const std::string& currencyCode);
