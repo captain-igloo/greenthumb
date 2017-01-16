@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/wx.h>
 #include <wx/log.h>
 #include <vector>
@@ -23,7 +23,7 @@ wxThread::ExitCode ListCurrentOrders::Entry() {
 
     greentop::CurrentOrderSummaryReport currentOrderSummaryReport;
 
-    wxLogStatus("Retrieving orders ...");
+    wxLogStatus(_("Retrieving orders ..."));
     try {
         currentOrderSummaryReport = DoListCurrentOrders();
         if (currentOrderSummaryReport.isSuccess()) {
@@ -46,15 +46,11 @@ greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
 
     std::set<std::string> marketIds;
     marketIds.insert(market.GetMarketCatalogue().getMarketId());
-    greentop::OrderProjection op(greentop::OrderProjection::EXECUTABLE);
+    greentop::OrderProjection op(greentop::OrderProjection::ALL);
 
     greentop::ListCurrentOrdersRequest lcor(std::set<std::string>(), marketIds, op);
 
-    // greentop::ExchangeApi::Exchange exchange =
-       //  entity::Exchange::GetExchange(static_cast<entity::Exchange::ExchangeId>(market.GetExchangeId()));
-
     return GreenThumb::GetBetfairApi().listCurrentOrders(market.GetExchange(), lcor);
-
 }
 
 }

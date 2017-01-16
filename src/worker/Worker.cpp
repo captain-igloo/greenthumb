@@ -1,3 +1,6 @@
+/**
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <iostream>
 
 #include <wx/window.h>
@@ -13,8 +16,6 @@ int Worker::previousManagerId = 0;
 
 Worker::Worker(wxEvtHandler* eventHandler) : eventHandler(eventHandler) {
     managerId = ++previousManagerId;
-    // id = wxWindow::NewControlId();
-    // SetId(wxWindow::NewControlId());
 }
 
 void Worker::QueueEvent(wxThreadEvent* threadEvent) {
@@ -23,7 +24,6 @@ void Worker::QueueEvent(wxThreadEvent* threadEvent) {
 
     if (!TestDestroy()) {
         threadEvent->SetId(managerId);
-        // threadEvent->SetInt(id);
         wxQueueEvent(eventHandler, threadEvent);
     }
 

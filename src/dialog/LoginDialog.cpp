@@ -71,8 +71,6 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
     }
 
     wxBoxSizer* hbox4 = new wxBoxSizer(wxHORIZONTAL);
-    /* wxStaticText* rememberLabel = new wxStaticText(this, wxID_ANY, "Remember me:");
-    hbox3->Add(rememberLabel, 0, wxALIGN_CENTRE_VERTICAL);*/
     remember = new wxCheckBox(this, wxID_ANY, "Remember password");
     hbox4->Add(remember);
 
@@ -101,7 +99,7 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
     workerManager.Bind(worker::LOGIN);
 }
 
-void LoginDialog::OnOk(wxCommandEvent& event) {
+void LoginDialog::OnOk(const wxCommandEvent& event) {
 
     entity::Config::SetConfigValue("applicationKey", std::string(appKey->GetValue().mb_str()));
 
@@ -138,16 +136,14 @@ void LoginDialog::OnTextChange() {
     }
 }
 
-void LoginDialog::OnTextChange(wxCommandEvent& event) {
+void LoginDialog::OnTextChange(const wxCommandEvent& event) {
     OnTextChange();
 }
 
-void LoginDialog::OnLogin(wxThreadEvent& event) {
+void LoginDialog::OnLogin(const wxThreadEvent& event) {
 
     if (event.GetPayload<bool>()) {
         EndModal(wxID_OK);
-        // Close();
-        // event.ResumePropagation(wxEVENT_PROPAGATE_MAX);
     }
 
     if (okButton != NULL) {

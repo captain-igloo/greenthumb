@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/button.h>
 #include <wx/colour.h>
 #include <wx/event.h>
@@ -54,16 +54,13 @@ RunnerRow::RunnerRow(wxWindow* parent) : lastPriceTraded(-1), profitAndLossIfWin
     wxFont font = parent->GetFont();
     font.MakeSmaller();
 
-    greentop::Side sideBack(greentop::Side::BACK);
-    greentop::Side sideLay(greentop::Side::LAY);
+    bestBackPrice3 = CreateButton(parent, greentop::Side::BACK, wxColour(239, 247, 255));
+    bestBackPrice2 = CreateButton(parent, greentop::Side::BACK, wxColour(233, 241, 255));
+    bestBackPrice1 = CreateButton(parent, greentop::Side::BACK, wxColour(227, 235, 255));
 
-    bestBackPrice3 = CreateButton(parent, sideBack, wxColour(239, 247, 255));
-    bestBackPrice2 = CreateButton(parent, sideBack, wxColour(233, 241, 255));
-    bestBackPrice1 = CreateButton(parent, sideBack, wxColour(227, 235, 255));
-
-    bestLayPrice1 = CreateButton(parent, sideLay, wxColour(255, 224, 255));
-    bestLayPrice2 = CreateButton(parent, sideLay, wxColour(255, 230, 255));
-    bestLayPrice3 = CreateButton(parent, sideLay, wxColour(255, 236, 255));
+    bestLayPrice1 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 224, 255));
+    bestLayPrice2 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 230, 255));
+    bestLayPrice3 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 236, 255));
 
 }
 
@@ -77,8 +74,7 @@ PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& sid
     font.MakeSmaller();
     button->SetFont(font);
 
-    wxSizer* sizer = parent->GetSizer();
-    sizer->Add(button);
+    parent->GetSizer()->Add(button);
 
     return button;
 }
@@ -265,7 +261,6 @@ void RunnerRow::ResetButton(PriceButton* button) {
 
     button->SetLabel("");
 
-    // PlaceInstruction* pi = (PlaceInstruction*) button->GetClientData();
     double price;
     if (button->GetSide() == greentop::Side::BACK) {
         price = 100;
@@ -273,9 +268,6 @@ void RunnerRow::ResetButton(PriceButton* button) {
         price = 1.01;
     }
     button->SetPrice(price);
-    // LimitOrder limitOrder(0.0, price, PersistenceType());
-    // pi->setLimitOrder(limitOrder);
-
 }
 
 void RunnerRow::OnClickChart(wxEvent& event) {

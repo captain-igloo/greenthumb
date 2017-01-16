@@ -32,7 +32,7 @@ class LoginDialog : public wxDialog {
          */
         LoginDialog(wxWindow* parent, wxWindowID id, const wxString& title,
             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, const wxString& name = wxDialogNameStr);
+            long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
 
     protected:
     private:
@@ -56,7 +56,7 @@ class LoginDialog : public wxDialog {
          *
          * @param event The click event.
          */
-        void OnOk(wxCommandEvent& event);
+        void OnOk(const wxCommandEvent& event);
 
         /**
          * Check validity of the form and enable / disable buttons accordingly.
@@ -68,15 +68,16 @@ class LoginDialog : public wxDialog {
          *
          * @param event The text change event.
          */
-        void OnTextChange(wxCommandEvent& event);
+        void OnTextChange(const wxCommandEvent& event);
 
         /**
          * Close the dialog and disable buttons.
          *
          * @param event The worker event.
          */
-        void OnLogin(wxThreadEvent& event);
+        void OnLogin(const wxThreadEvent& event);
 
+        DECLARE_NO_COPY_CLASS(LoginDialog)
 };
 
 }

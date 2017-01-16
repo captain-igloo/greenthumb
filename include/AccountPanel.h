@@ -1,6 +1,10 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
 #ifndef ACCOUNTPANEL_H
 #define ACCOUNTPANEL_H
 
+#include <wx/wx.h>
 #include <wx/grid.h>
 #include <wx/notebook.h>
 
@@ -9,17 +13,42 @@
 
 namespace greenthumb {
 
+/**
+* Display the account statement.
+*/
 class AccountPanel : public wxNotebook {
     public:
+
+        /**
+        * Constructor.
+        *
+        * @param parent The parent window.
+        * @param id The window identifier.
+        * @param pos The window position.
+        * @param size The window size.
+        * @param style The window style.
+        * @param name The name of the control.
+        */
         AccountPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = wxNB_BOTTOM, const wxString& name=wxNotebookNameStr);
+            const wxSize& size = wxDefaultSize, long style = wxNB_BOTTOM,
+            const wxString& name=wxNotebookNameStr);
+
     protected:
     private:
 
+        /** The full account statement.  Displays details of each bet. */
         AccountStatementFull* accountStatementFull;
+        /** The account statement summary.  Displays a summary of bets grouped by event. */
         AccountStatementSummary* accountStatementSummary;
 
-        void OnGetAccountStatement(wxThreadEvent& event);
+        /**
+         * Render the account statement pages.
+         *
+         * @param event The worker event.
+         */
+        void OnGetAccountStatement(const wxThreadEvent& event);
+
+        DECLARE_NO_COPY_CLASS(AccountPanel)
 };
 
 }

@@ -4,7 +4,10 @@
 #ifndef DIALOG_CURRENTORDERS_H
 #define DIALOG_CURRENTORDERS_H
 
+#include <wx/wx.h>
 #include <wx/dialog.h>
+#include <wx/notebook.h>
+#include <wx/stattext.h>
 
 #include "entity/Market.h"
 #include "worker/WorkerManager.h"
@@ -27,8 +30,7 @@ class CurrentOrders : public wxDialog {
         * @param pos The dialog position.
         * @param size The dialog size.
         * @param style The window style.
-        * @param name Used to associate a name with the window, allowing the application
-        *                user to set Motif resource values for individual dialog boxes.
+        * @param name The dialog name.
         */
         CurrentOrders(wxWindow* parent, wxWindowID id, const wxString& title,
             const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize,
@@ -60,6 +62,16 @@ class CurrentOrders : public wxDialog {
         entity::Market market;
         /** Manages worker threads. */
         worker::WorkerManager workerManager;
+        /** Displays unmatched orders for the market */
+        wxPanel* unmatchedOrders;
+        /** Displays matched orders for the market */
+        wxPanel* matchedOrders;
+        /** Message displayed when there are no unmatched orders */
+        wxStaticText* noUnmatchedOrdersMessage;
+        /** Message displayed when there are no matched orders */
+        wxStaticText* noMatchedOrdersMessage;
+        /** A notebook with two pages - matched and unmatched orders. */
+        wxNotebook* notebook;
 
         /**
         * Synchronise orders with listCurrentOrders response from betfair.
@@ -74,6 +86,16 @@ class CurrentOrders : public wxDialog {
         * @param event The worker event.
         */
         void OnReplaceOrders(wxThreadEvent& event);
+
+        /**
+        * Update display of either matched or unmatched orders.
+        *
+        * @param orderProjection Either EXECUTABLE (unmatched) or EXECUTION_COMPLETE (matched)
+        * @param ordersPanel The panel to update
+        * @param currentOrderSummaryReport The "listCurrentOrders" response from betfair.
+        */
+        void UpdateOrders(const greentop::OrderProjection& orderProjection, wxPanel* ordersPanel,
+            const greentop::CurrentOrderSummaryReport& currentOrderSummaryReport);
 
 };
 

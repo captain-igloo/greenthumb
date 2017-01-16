@@ -24,8 +24,8 @@
 namespace greenthumb {
 
 MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style) : wxPanel(parent, id, pos, size, style),
-    refreshTimer(this, wxID_ANY), workerManager(this) {
+    const wxSize& size, long style, const wxString& name) :
+    wxPanel(parent, id, pos, size, style, name), refreshTimer(this, wxID_ANY), workerManager(this) {
 
     marketPanels = parent;
 
@@ -67,13 +67,13 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     tbSizer->Add(toolbar, 0, wxEXPAND);
     SetSizer(tbSizer);
 
-    leftPanel = new wxPanel(this);
+    pricesPanel = new wxPanel(this);
 
     wxFlexGridSizer* sizer = new wxFlexGridSizer(10);
     sizer->AddGrowableCol(1, 1);
-    leftPanel->SetSizer(sizer);
+    pricesPanel->SetSizer(sizer);
 
-    tbSizer->Add(leftPanel);
+    tbSizer->Add(pricesPanel);
 
     refreshTimer.Start(entity::Config::GetConfigValue("marketRefreshSec", 60) * 1000);
 
@@ -100,8 +100,6 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 
         SyncRunnerRows();
 
-        currentOrdersDialog->Refresh();
-
         if (marketBook.getStatus() == greentop::MarketStatus::OPEN ||
             marketBook.getStatus() == greentop::MarketStatus::SUSPENDED) {
             refreshTimer.Start();
@@ -120,6 +118,9 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 }
 
 void MarketPanel::OnListMarketProfitAndLoss(const wxThreadEvent& event) {
+
+    currentOrdersDialog->Refresh();
+
     greentop::ListMarketProfitAndLossResponse lmpalr = event.GetPayload<greentop::ListMarketProfitAndLossResponse>();
 
     if (lmpalr.isSuccess()) {
@@ -158,7 +159,7 @@ void MarketPanel::RefreshPrices() {
     workerManager.RunWorker(listMarketBookThread);
 }
 
-void MarketPanel::RefreshPrices(wxEvent& event) {
+void MarketPanel::RefreshPrices(const wxEvent& event) {
     RefreshPrices();
 }
 
@@ -192,7 +193,6 @@ void MarketPanel::SetMarket(const entity::Market& market) {
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
 
     currentOrdersDialog->SetMarket(market);
-    // currentOrdersDialog->SetRunners(runners);
 
     UpdateToolBar();
     UpdateMarketStatus();
@@ -236,7 +236,7 @@ void MarketPanel::SyncRunnerRows() {
 
         auto iter = runnerRows.find(runner.getSelectionId());
         if (iter == runnerRows.end()) {
-            RunnerRow* runnerRow = new RunnerRow(leftPanel);
+            RunnerRow* runnerRow = new RunnerRow(pricesPanel);
             runnerRows[runner.getSelectionId()] = runnerRow;
 
             double profit = 0;
@@ -249,7 +249,7 @@ void MarketPanel::SyncRunnerRows() {
     }
 
     // TODO - remove obsolete runnerrows
-    GetParent()->Layout();
+    GetParent()->FitInside();
 
 }
 
@@ -300,7 +300,7 @@ void MarketPanel::ShowCurrentOrders(const wxEvent& event) {
     currentOrdersDialog->Show();
 }
 
-void MarketPanel::OnListCurrentOrders(wxThreadEvent& event) {
+void MarketPanel::OnListCurrentOrders(const wxThreadEvent& event) {
 
     bool enabled = false;
 

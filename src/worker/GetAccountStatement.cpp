@@ -50,23 +50,12 @@ void GetAccountStatement::DoGetAccountStatement() {
     fromDate.tm_sec++;
     greentop::TimeRange timeRange(fromDate);
     gasr.setItemDateRange(timeRange);
-    gasr.setWallet(greentop::Wallet::AUSTRALIAN);
+    gasr.setWallet(greentop::Wallet::UK);
     gasr.setFromRecord(fromRecord);
     gasr.setRecordCount(PAGE_SIZE);
 
-    // AUS wallet
-    while (GetAccountStatementPage(gasr)) {
-        fromRecord += PAGE_SIZE;
-        gasr.setFromRecord(fromRecord);
-    }
-
-    if (TestDestroy()) {
-        return;
-    }
-
     fromRecord = 0;
     gasr.setFromRecord(fromRecord);
-    gasr.setWallet(greentop::Wallet::UK);
 
     // UK wallet
     while (GetAccountStatementPage(gasr)) {
@@ -140,8 +129,6 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
     }
 
     return asr.getMoreAvailable();
-    // return asr.getMoreAvailable().isValid() && asr.getMoreAvailable().getValue();
-
 }
 
 void GetAccountStatement::PopulateAccountStatementMarket() const {

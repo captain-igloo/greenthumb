@@ -1,7 +1,14 @@
+/**
+* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+*/
+
 #include <wx/wx.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/treectrl.h>
+
+#include "dialog/LoginDialog.h"
+#include "dialog/Settings.h"
 
 #include "entity/Config.h"
 
@@ -109,11 +116,13 @@ void GreenThumbFrame::CreateMenuBar() {
 
     wxMenu* fileMenu = new wxMenu();
     wxWindowID menuFileLoginId = wxWindow::NewControlId();
-    fileMenu->Append(menuFileLoginId, _("Log &in"));
+    fileMenu->Append(menuFileLoginId, _("Log &in..."));
     wxWindowID menuFileLogoutId = wxWindow::NewControlId();
     fileMenu->Append(menuFileLogoutId, _("Log &out"));
     wxWindowID menuFileRefreshMenuId = wxWindow::NewControlId();
     fileMenu->Append(menuFileRefreshMenuId, _("Refresh &menu"));
+    // wxWindowID menuFileSettingsId = wxWindow::NewControlId();
+    // fileMenu->Append(menuFileSettingsId, _("&Settings..."));
     fileMenu->Append(wxID_EXIT, _("E&xit"));
     menu->Append(fileMenu, _("&File"));
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileExit, this, wxID_EXIT);
@@ -142,43 +151,64 @@ void GreenThumbFrame::CreateMenuBar() {
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileLogin, this, menuFileLoginId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileLogout, this, menuFileLogoutId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileRefreshMenu, this, menuFileRefreshMenuId);
+    // Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileSettings, this, menuFileSettingsId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewAccount, this, menuViewAccountId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewBetting, this, menuViewBettingId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuHelpAbout, this, wxID_ABOUT);
 
 }
 
-void GreenThumbFrame::OnMenuFileLogin(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuFileLogin(const wxCommandEvent& menuEvent) {
     Login();
 }
 
-void GreenThumbFrame::OnMenuFileLogout(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuFileLogout(const wxCommandEvent& menuEvent) {
     GreenThumb::GetBetfairApi().logout();
 }
 
-void GreenThumbFrame::OnMenuFileRefreshMenu(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuFileRefreshMenu(const wxCommandEvent& menuEvent) {
     eventTree->SyncMenu();
 }
 
-void GreenThumbFrame::OnMenuFileExit(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuFileSettings(const wxCommandEvent& menuEvent) {
+    dialog::Settings settings(NULL, wxID_ANY, "Settings");
+
+    if (settings.ShowModal() == wxID_OK) {
+
+    }
+    /*dialog::LoginDialog loginDialog(NULL, wxID_ANY, "Login");
+
+    if (loginDialog.ShowModal() == wxID_OK) {
+        eventTree->SyncMenu(false);
+
+        // get account currency if we don't already have it.
+        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        if (currencySymbol == "?") {
+            workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));
+        }
+
+    } */
+}
+
+void GreenThumbFrame::OnMenuFileExit(const wxCommandEvent& menuEvent) {
     Close(true);
 }
 
-void GreenThumbFrame::OnMenuViewAccount(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuViewAccount(const wxCommandEvent& menuEvent) {
     bettingPanel->Show(false);
     accountPanel->Show(true);
     Layout();
     entity::Config::SetConfigValue("mainView", VIEW_ACCOUNT);
 }
 
-void GreenThumbFrame::OnMenuViewBetting(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuViewBetting(const wxCommandEvent& menuEvent) {
     accountPanel->Show(false);
     bettingPanel->Show(true);
     Layout();
     entity::Config::SetConfigValue("mainView", VIEW_BETTING);
 }
 
-void GreenThumbFrame::OnMenuHelpAbout(wxCommandEvent& menuEvent) {
+void GreenThumbFrame::OnMenuHelpAbout(const wxCommandEvent& menuEvent) {
 
     (void) wxMessageBox(_("Green Thumb\n(c) 2015 Colin Doig"),
         _("Green Thumb"),
@@ -186,7 +216,7 @@ void GreenThumbFrame::OnMenuHelpAbout(wxCommandEvent& menuEvent) {
 
 }
 
-void GreenThumbFrame::OnSelChanged(wxTreeEvent& treeEvent) {
+void GreenThumbFrame::OnSelChanged(const wxTreeEvent& treeEvent) {
     wxTreeItemId itemId = treeEvent.GetItem();
     MenuTreeData* data = static_cast<MenuTreeData*>(eventTree->GetItemData(itemId));
 
@@ -210,9 +240,6 @@ void GreenThumbFrame::OnListMarketCatalogue(const wxThreadEvent& event) {
     } catch (const std::exception& e) {
         wxLogStatus(e.what());
     }
-}
-
-GreenThumbFrame::~GreenThumbFrame() {
 }
 
 }

@@ -1,3 +1,6 @@
+/**
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #include <set>
 
 #include "worker/ListMarketProfitAndLoss.h"
@@ -16,7 +19,6 @@ ListMarketProfitAndLoss::ListMarketProfitAndLoss(wxEvtHandler* eventHandler,
 wxThread::ExitCode ListMarketProfitAndLoss:: Entry() {
 
     wxLogStatus("List market profit and loss ...");
-
     greentop::ListMarketProfitAndLossResponse lmpalResp;
 
     try {
