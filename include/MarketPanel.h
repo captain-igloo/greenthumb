@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
 
@@ -8,6 +8,7 @@
 #include <greentop/sport/ListMarketBookRequest.h>
 #include <greentop/sport/ListMarketBookResponse.h>
 
+#include <wx/wx.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
 #include <wx/toolbar.h>
@@ -22,6 +23,7 @@
 
 #include "CurrentOrder.h"
 #include "MarketPanels.h"
+#include "MarketToolbar.h"
 #include "RunnerRow.h"
 
 namespace greenthumb {
@@ -45,9 +47,8 @@ class MarketPanel : public wxPanel {
          * @param style The window style.
          * @param name Window name.
          */
-        MarketPanel(MarketPanels* parent, const wxWindowID id = wxID_ANY,
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxSUNKEN_BORDER, const wxString& name = wxPanelNameStr);
+        MarketPanel(MarketPanels* parent, const wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = wxSUNKEN_BORDER, const wxString& name = wxPanelNameStr);
 
         /**
          * Update the market name.
@@ -72,30 +73,20 @@ class MarketPanel : public wxPanel {
         std::map<int, RunnerRow*> runnerRows;
         /** The parent panel. */
         MarketPanels* marketPanels;
-        /** The market name. */
-        wxStaticText* marketName;
-        // greentop::ListMarketBookRequest listMarketBookRequest;
-        // greentop::ListMarketBookResponse listMarketBookResponse;
         /** A timer used to refresh the market's prices at intervals */
         wxTimer refreshTimer;
         /** Worker manager. */
         worker::WorkerManager workerManager;
-        /** The toolbar - displays the market name, event start time, current orders + refresh + close buttons */
-        wxToolBar* toolbar;
-        /** The id of the "in play" tool. */
-        int inPlayToolId;
-        /** Display status if other than "open". */
-        wxStaticText* marketStatus;
         /** Display matched and unmatched orders. */
         dialog::CurrentOrders* currentOrdersDialog;
-        /** Button which opens the current orders dialog. */
-        wxToolBarToolBase* currentOrdersTool;
         /** The full market name. */
         std::string fullMarketName;
         /** The market id. */
         std::string marketId;
         /** The betfair market book information. */
         greentop::MarketBook marketBook;
+        /** Displays market name and status, and buttons to refresh and close and display current orders. */
+        MarketToolbar* marketToolbar;
 
         /**
          * Click price button handler. Opens the place bet dialog.
@@ -185,7 +176,7 @@ class MarketPanel : public wxPanel {
          */
         void OnListCurrentOrders(const wxThreadEvent& event);
 
-        DECLARE_NO_COPY_CLASS(MarketPanel)
+    DECLARE_NO_COPY_CLASS(MarketPanel)
 };
 
 }

@@ -2,10 +2,7 @@
  * Copyright 2016 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
-#include <wx/button.h>
-#include <wx/log.h>
 #include <wx/sizer.h>
-#include <wx/timer.h>
 #include <greentop/ExchangeApi.h>
 #include <greentop/sport/enum/MarketStatus.h>
 
@@ -16,7 +13,6 @@
 #include "worker/PlaceOrders.h"
 #include "worker/ReplaceOrders.h"
 
-#include "ArtProvider.h"
 #include "MarketPanel.h"
 #include "RunnerRow.h"
 #include "Util.h"
@@ -29,51 +25,22 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 
     marketPanels = parent;
 
-    wxBitmap closeBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::CLOSE);
-    wxBitmap refreshBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::REFRESH);
-    wxBitmap inPlayBlank = ArtProvider::GetBitmap(ArtProvider::IconId::BLANK);
-    wxBitmap currentOrdersBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::VIEW_LIST);
-
-    toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 50));
-
-    wxToolBarToolBase* inPlayTool = toolbar->AddTool(wxID_ANY, _(""), inPlayBlank);
-    inPlayToolId = inPlayTool->GetId();
-
-    marketName = new wxStaticText(toolbar, wxID_ANY, _(""));
-    toolbar->AddControl(marketName);
-
-    marketStatus = new wxStaticText(toolbar, wxID_ANY, _(""));
-    marketStatus->SetForegroundColour(wxColour(255, 0, 0));
-    toolbar->AddControl(marketStatus);
-
-    toolbar->AddStretchableSpace();
-
-    wxWindowID currentOrdersButtonId = wxWindow::NewControlId();
-    currentOrdersTool = toolbar->AddTool(currentOrdersButtonId, "", currentOrdersBitmap, "Show current bets");
-    toolbar->EnableTool(currentOrdersTool->GetId(), false);
-    Bind(wxEVT_TOOL, &MarketPanel::ShowCurrentOrders, this, currentOrdersButtonId);
-
-    wxWindowID refreshButtonId = wxWindow::NewControlId();
-    toolbar->AddTool(refreshButtonId, "", refreshBitmap, "Refresh");
-    Bind(wxEVT_TOOL, &MarketPanel::RefreshPrices, this, refreshButtonId);
-
-    wxWindowID closeButtonId = wxWindow::NewControlId();
-    toolbar->AddTool(closeButtonId, "", closeBitmap, "Close");
-    Bind(wxEVT_TOOL, &MarketPanel::OnClickClose, this, closeButtonId);
-
-    toolbar->Realize();
-
     wxBoxSizer* tbSizer = new wxBoxSizer(wxVERTICAL);
-    tbSizer->Add(toolbar, 0, wxEXPAND);
     SetSizer(tbSizer);
 
-    pricesPanel = new wxPanel(this);
+    marketToolbar = new MarketToolbar(this, wxID_ANY);
+    marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::OnClickClose, this, marketToolbar->GetCloseButtonId());
+    marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::RefreshPrices, this, marketToolbar->GetRefreshButtonId());
+    marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::ShowCurrentOrders, this, marketToolbar->GetCurrentOrdersButtonId());
+    tbSizer->Add(marketToolbar, 0, wxEXPAND);
+
+    pricesPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
 
     wxFlexGridSizer* sizer = new wxFlexGridSizer(10);
     sizer->AddGrowableCol(1, 1);
     pricesPanel->SetSizer(sizer);
 
-    tbSizer->Add(pricesPanel);
+    tbSizer->Add(pricesPanel, 0, wxEXPAND);
 
     refreshTimer.Start(entity::Config::GetConfigValue("marketRefreshSec", 60) * 1000);
 
@@ -166,7 +133,6 @@ void MarketPanel::RefreshPrices(const wxEvent& event) {
 void MarketPanel::SetMarket(const greentop::menu::Node& node) {
 
     marketId = node.getId();
-    // FIXME not portable ?
     std::tm marketStartTime = node.getMarketStartTime();
     time_t startTime = timegm(&marketStartTime);
     char formattedStartTime[20];
@@ -176,8 +142,8 @@ void MarketPanel::SetMarket(const greentop::menu::Node& node) {
         fullMarketName = node.getParent().getName() + " / " + node.getName();
         std::string title = fullMarketName + " / " + formattedStartTime;
         wxString label(title.c_str(), wxConvUTF8);
-        marketName->SetLabel(label);
         currentOrdersDialog->SetTitle(fullMarketName);
+        marketToolbar->SetMarketName(label);
     }
 
 }
@@ -203,27 +169,19 @@ void MarketPanel::UpdateMarketStatus() {
     if (marketBook.getStatus() == greentop::MarketStatus::SUSPENDED ||
         marketBook.getStatus() == greentop::MarketStatus::CLOSED) {
         std::string status = marketBook.getStatus();
-        marketStatus->SetLabel("(" + status + ")");
+        marketToolbar->SetMarketStatus("(" + status + ")");
     } else {
-        marketStatus->SetLabel("");
+        marketToolbar->SetMarketStatus("");
     }
 }
 
 void MarketPanel::UpdateToolBar() {
     if (market.GetMarketCatalogue().getDescription().getTurnInPlayEnabled()) {
         if (marketBook.getInplay().isValid() && marketBook.getInplay().getValue()) {
-            toolbar->DeleteTool(inPlayToolId);
-            wxBitmap inPlayGreenBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREEN);
-            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, wxID_ANY, wxT(""), inPlayGreenBitmap);
-            inPlayToolId = inPlayTool->GetId();
+            marketToolbar->SetInPlay(true);
         } else {
-            toolbar->DeleteTool(inPlayToolId);
-            wxBitmap inPlayGreyBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREY);
-            wxToolBarToolBase* inPlayTool = toolbar->InsertTool(0, wxID_ANY, wxT(""), inPlayGreyBitmap);
-            inPlayToolId = inPlayTool->GetId();
-
+            marketToolbar->SetInPlay(false);
         }
-        toolbar->Realize();
     }
 }
 
@@ -307,8 +265,6 @@ void MarketPanel::OnListCurrentOrders(const wxThreadEvent& event) {
     if (currentOrdersDialog->GetNumberOrders() > 0) {
         enabled = true;
     }
-
-    toolbar->EnableTool(currentOrdersTool->GetId(), enabled);
 }
 
 }
