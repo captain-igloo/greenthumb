@@ -22,9 +22,6 @@
 
 namespace greenthumb {
 
-RunnerRow::RunnerRow() : lastPriceTraded(-1), profitAndLossIfWin(0) {
-}
-
 RunnerRow::RunnerRow(wxWindow* parent) : lastPriceTraded(-1), profitAndLossIfWin(0) {
 
     currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
@@ -64,7 +61,7 @@ RunnerRow::RunnerRow(wxWindow* parent) : lastPriceTraded(-1), profitAndLossIfWin
 
 }
 
-PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& side, const wxColour& colour) {
+PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& side, const wxColour& colour) const {
 
     PriceButton* button = new PriceButton(parent);
     button->SetBackgroundColour(colour);
@@ -79,7 +76,7 @@ PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& sid
     return button;
 }
 
-uint64_t RunnerRow::GetSelectionId() {
+uint64_t RunnerRow::GetSelectionId() const {
     return runner.getSelectionId();
 }
 
@@ -104,11 +101,11 @@ void RunnerRow::SetProfit(double profit) {
 
 }
 
-void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBook& marketBook, const greentop::Runner& r) {
+void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBook& marketBook, const greentop::Runner& runner) {
 
     this->market = market;
     this->marketBook = marketBook;
-    runner = r;
+    this->runner = runner;
 
     if (market.HasRunner(runner.getSelectionId())) {
         wxString label(market.GetRunner(runner.getSelectionId()).getRunnerName());
@@ -257,7 +254,7 @@ void RunnerRow::SetButtonLabel(PriceButton* button, const double price, const do
 
 }
 
-void RunnerRow::ResetButton(PriceButton* button) {
+void RunnerRow::ResetButton(PriceButton* button) const {
 
     button->SetLabel("");
 

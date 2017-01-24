@@ -8,18 +8,18 @@
 
 namespace greenthumb {
 
-MarketToolbar::MarketToolbar(wxWindow* parent, const wxWindowID id,
-    const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name) : wxPanel(parent, id, pos, size, style, name) {
+MarketToolbar::MarketToolbar(wxWindow* parent, const wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
+    const wxString& name) : wxPanel(parent, id, pos, size, style, name) {
 
     int borderWidth = 10;
     int borderFlags = wxTOP | wxRIGHT | wxBOTTOM;
+    wxSize iconSize = wxSize(36, 36);
 
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-    inPlayButton = new wxButton(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(16, 16), wxBORDER_NONE);
+    inPlayButton = new wxButton(this, wxID_ANY, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
     inPlayButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::BLANK));
-    sizer->Add(inPlayButton, 0, wxLEFT | borderFlags, borderWidth);
+    sizer->Add(inPlayButton);
 
     marketName = new wxStaticText(this, wxID_ANY, wxEmptyString);
     sizer->Add(marketName, 0, borderFlags, borderWidth);
@@ -28,19 +28,28 @@ MarketToolbar::MarketToolbar(wxWindow* parent, const wxWindowID id,
     sizer->Add(marketStatus, 1, wxEXPAND | borderFlags, borderWidth);
 
     currentOrdersButtonId = wxWindow::NewControlId();
-    currentOrdersButton = new wxButton(this, currentOrdersButtonId, wxEmptyString, wxDefaultPosition, wxSize(16, 16), wxBORDER_NONE);
+    currentOrdersButton = new wxButton(this, currentOrdersButtonId, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
     currentOrdersButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::VIEW_LIST));
-    sizer->Add(currentOrdersButton, 0, borderFlags, borderWidth);
+    currentOrdersButton->SetToolTip("Current orders");
+    currentOrdersButton->Bind(wxEVT_ENTER_WINDOW, &MarketToolbar::OnMouseEnter, this, currentOrdersButtonId);
+    currentOrdersButton->Bind(wxEVT_LEAVE_WINDOW, &MarketToolbar::OnMouseLeave, this, currentOrdersButtonId);
+    sizer->Add(currentOrdersButton);
 
     refreshButtonId = wxWindow::NewControlId();
-    wxButton* refreshButton = new wxButton(this, refreshButtonId, wxEmptyString, wxDefaultPosition, wxSize(16, 16), wxBORDER_NONE);
+    wxButton* refreshButton = new wxButton(this, refreshButtonId, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
     refreshButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::REFRESH));
-    sizer->Add(refreshButton, 0, borderFlags, borderWidth);
+    refreshButton->SetToolTip("Refresh");
+    refreshButton->Bind(wxEVT_ENTER_WINDOW, &MarketToolbar::OnMouseEnter, this, refreshButtonId);
+    refreshButton->Bind(wxEVT_LEAVE_WINDOW, &MarketToolbar::OnMouseLeave, this, refreshButtonId);
+    sizer->Add(refreshButton);
 
     closeButtonId = wxWindow::NewControlId();
-    wxButton* closeButton = new wxButton(this, closeButtonId, wxEmptyString, wxDefaultPosition, wxSize(16, 16), wxBORDER_NONE);
+    wxButton* closeButton = new wxButton(this, closeButtonId, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
     closeButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::CLOSE));
-    sizer->Add(closeButton, 0, borderFlags, borderWidth);
+    closeButton->SetToolTip("Close");
+    closeButton->Bind(wxEVT_ENTER_WINDOW, &MarketToolbar::OnMouseEnter, this, closeButtonId);
+    closeButton->Bind(wxEVT_LEAVE_WINDOW, &MarketToolbar::OnMouseLeave, this, closeButtonId);
+    sizer->Add(closeButton);
 
     SetSizer(sizer);
 
@@ -71,6 +80,18 @@ void MarketToolbar::SetInPlay(bool inPlay) {
         inPlayButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREEN));
     } else {
         inPlayButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::TICK_GREY));
+    }
+}
+
+void MarketToolbar::OnMouseEnter(const wxMouseEvent& mouseEvent) {
+    wxWindow* window = wxDynamicCast(mouseEvent.GetEventObject(), wxWindow);
+    window->SetWindowStyle(wxBORDER_RAISED);
+}
+
+void MarketToolbar::OnMouseLeave(const wxMouseEvent& mouseEvent) {
+    wxWindow* window = wxDynamicCast(mouseEvent.GetEventObject(), wxWindow);
+    if (window) {
+        window->SetWindowStyle(wxBORDER_NONE);
     }
 }
 
