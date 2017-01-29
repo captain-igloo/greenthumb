@@ -1,5 +1,5 @@
-Greenthumb - GUI for Betfair
-============================
+Greenthumb - Cross-platform GUI for Betfair
+===========================================
 
 Introduction
 ------------
@@ -9,6 +9,11 @@ Sports betting exchange [Betfair](www.betfair.com) provides an API that allows y
  * manage your account
 
 and more.  Greenthumb is a wrapper for this API and can be used as an alternative to the Betfair website.  It is written in C++ and uses the wxWidgets toolkit.
+
+Screenshots
+-----------
+
+![Screenshot](https://raw.githubusercontent.com/captain-igloo/greenthumb/master/doc/screenshot1.png)
 
 License
 -------

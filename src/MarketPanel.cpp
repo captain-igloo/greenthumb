@@ -5,6 +5,7 @@
 #include <wx/sizer.h>
 #include <greentop/ExchangeApi.h>
 #include <greentop/sport/enum/MarketStatus.h>
+#include <greentop/sport/enum/RunnerStatus.h>
 
 #include "dialog/PlaceBet.h"
 #include "entity/Config.h"
@@ -192,17 +193,19 @@ void MarketPanel::SyncRunnerRows() {
     for (unsigned i = 0; i < runners.size(); ++i) {
         greentop::Runner runner = runners[i];
 
-        auto iter = runnerRows.find(runner.getSelectionId());
-        if (iter == runnerRows.end()) {
-            RunnerRow* runnerRow = new RunnerRow(pricesPanel);
-            runnerRows[runner.getSelectionId()] = runnerRow;
+        if (runner.getStatus() == greentop::RunnerStatus::ACTIVE) {
+            auto iter = runnerRows.find(runner.getSelectionId());
+            if (iter == runnerRows.end()) {
+                RunnerRow* runnerRow = new RunnerRow(pricesPanel);
+                runnerRows[runner.getSelectionId()] = runnerRow;
 
-            double profit = 0;
+                double profit = 0;
 
-            runnerRow->SetRunner(market, marketBook, runner);
-            runnerRow->SetProfit(profit);
-        } else {
-            iter->second->SetRunner(market, marketBook, runner);
+                runnerRow->SetRunner(market, marketBook, runner);
+                runnerRow->SetProfit(profit);
+            } else {
+                iter->second->SetRunner(market, marketBook, runner);
+            }
         }
     }
 
@@ -221,21 +224,22 @@ void MarketPanel::OnCancelOrders(const wxThreadEvent& event) {
 
 void MarketPanel::OnClick(const wxCommandEvent& event) {
 
-    PriceButton* button = static_cast<PriceButton*>(event.GetEventObject());
+    PriceButton* button = dynamic_cast<PriceButton*>(event.GetEventObject());
 
-    greentop::PlaceInstruction pi = button->GetPlaceInstruction();
+    if (button) {
+        greentop::PlaceInstruction pi = button->GetPlaceInstruction();
 
-    if (market.HasRunner(pi.getSelectionId())) {
-        greentop::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
-        std::string placeBetTitle = pi.getSide().getValue() + " " + runner.getRunnerName();
+        if (market.HasRunner(pi.getSelectionId())) {
+            greentop::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
+            std::string placeBetTitle = pi.getSide().getValue() + " " + runner.getRunnerName();
 
-        dialog::PlaceBet* placeBet = new dialog::PlaceBet(this, wxID_ANY, placeBetTitle);
+            dialog::PlaceBet* placeBet = new dialog::PlaceBet(this, wxID_ANY, placeBetTitle);
 
-        placeBet->SetMarket(market, fullMarketName);
-        placeBet->SetPlaceInstruction(runner.getRunnerName(), pi);
-        placeBet->Show();
+            placeBet->SetMarket(market, fullMarketName);
+            placeBet->SetPlaceInstruction(runner.getRunnerName(), pi);
+            placeBet->Show();
+        }
     }
-
 }
 
 void MarketPanel::OnClickClose(const wxCommandEvent& event) {
@@ -259,12 +263,11 @@ void MarketPanel::ShowCurrentOrders(const wxEvent& event) {
 }
 
 void MarketPanel::OnListCurrentOrders(const wxThreadEvent& event) {
-
-    bool enabled = false;
+    /* bool enabled = false;
 
     if (currentOrdersDialog->GetNumberOrders() > 0) {
         enabled = true;
-    }
+    } */
 }
 
 }

@@ -85,9 +85,9 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
 
     while (childId.IsOk()) {
 
-        MenuTreeData* childData = static_cast<MenuTreeData*>(GetItemData(childId));
+        MenuTreeData* childData = dynamic_cast<MenuTreeData*>(GetItemData(childId));
 
-        if (childData->valid) {
+        if (childData && childData->valid) {
             nodeIdsFound.insert(childData->node.getId());
             if (node.hasChild(childData->node)) {
                 if (recurse) {
@@ -144,8 +144,10 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
 void EventTree::OnItemExpanded(wxTreeEvent& treeEvent) {
     try {
         wxTreeItemId itemId = treeEvent.GetItem();
-        MenuTreeData* data = static_cast<MenuTreeData*>(GetItemData(itemId));
-        SyncNode(itemId, data->node, false);
+        MenuTreeData* data = dynamic_cast<MenuTreeData*>(GetItemData(itemId));
+        if (data) {
+            SyncNode(itemId, data->node, false);
+        }
     } catch (const std::out_of_range& e) {
         // attempt to expand a node that has been removed from the tree?
         wxLogStatus("Failed to expand node");

@@ -71,14 +71,15 @@ void CurrentOrders::OnListCurrentOrders(wxThreadEvent& event) {
     event.Skip();
 }
 
-void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjection, wxPanel* ordersPanel,
+void CurrentOrders::UpdateOrders(const greentop::OrderStatus& orderStatus, wxPanel* ordersPanel,
     const greentop::CurrentOrderSummaryReport& currentOrderSummaryReport) {
 
     std::set<std::string> betIdsFound;
     std::set<std::string> existingBetIds;
 
     for (wxWindowList::const_iterator it = ordersPanel->GetChildren().begin(); it != GetChildren().end(); ++it) {
-        CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        // CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
         if (currentOrder) {
             existingBetIds.insert(currentOrder->GetCurrentOrderSummary().getBetId());
         }
@@ -91,9 +92,9 @@ void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjectio
 
         std::string betId = currentOrderSummaryReport.getCurrentOrders()[i].getBetId();
 
-        if (orderProjection == currentOrderSummaryReport.getCurrentOrders()[i].getStatus()) {
+        if (orderStatus == currentOrderSummaryReport.getCurrentOrders()[i].getStatus()) {
             betIdsFound.insert(betId);
-            if (orderProjection == greentop::OrderProjection::EXECUTABLE) {
+            if (orderStatus == greentop::OrderStatus::EXECUTABLE) {
                 showNoUnmatchedOrdersMesssage = false;
             } else {
                 showNoMatchedOrdersMesssage = false;
@@ -104,7 +105,7 @@ void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjectio
                 wxWindowID currentOrderId = wxWindow::NewControlId();
 
                 CurrentOrder* order;
-                if (orderProjection == greentop::OrderProjection::EXECUTABLE) {
+                if (orderStatus == greentop::OrderStatus::EXECUTABLE) {
                     order = new UnmatchedOrder(ordersPanel, currentOrderId);
                 } else {
                     order = new MatchedOrder(ordersPanel, currentOrderId);
@@ -118,7 +119,8 @@ void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjectio
                 // already have this one, update it
                 wxWindowList::iterator it;
                 for (it = ordersPanel->GetChildren().begin(); it != ordersPanel->GetChildren().end(); ++it) {
-                    CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+                    // CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+                    CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
                     if (currentOrder && currentOrder->GetCurrentOrderSummary().getBetId() == betId) {
                         currentOrder->SetCurrentOrderSummary(currentOrderSummaryReport.getCurrentOrders()[i]);
                         break;
@@ -128,7 +130,7 @@ void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjectio
         }
     }
 
-    if (orderProjection == greentop::OrderProjection::EXECUTABLE) {
+    if (orderStatus == greentop::OrderStatus::EXECUTABLE) {
         noUnmatchedOrdersMessage->Show(showNoUnmatchedOrdersMesssage);
     } else {
         noMatchedOrdersMessage->Show(showNoMatchedOrdersMesssage);
@@ -141,7 +143,7 @@ void CurrentOrders::UpdateOrders(const greentop::OrderProjection& orderProjectio
         wxWindowList::const_iterator current = it;
         it++;
 
-        CurrentOrder* currentOrder = wxDynamicCast(*current, CurrentOrder);
+        CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*current);
         if (currentOrder) {
             if (betIdsFound.find(currentOrder->GetCurrentOrderSummary().getBetId()) == betIdsFound.end()) {
                 currentOrder->Destroy();
@@ -169,14 +171,16 @@ uint64_t CurrentOrders::GetNumberOrders() {
     uint64_t count = 0;
 
     for (wxWindowList::const_iterator it = unmatchedOrders->GetChildren().begin(); it != GetChildren().end(); ++it) {
-        CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        // CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
         if (currentOrder) {
             count++;
         }
     }
 
     for (wxWindowList::const_iterator it = matchedOrders->GetChildren().begin(); it != GetChildren().end(); ++it) {
-        CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        // CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
+        CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
         if (currentOrder) {
             count++;
         }

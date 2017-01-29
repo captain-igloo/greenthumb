@@ -90,20 +90,6 @@ class MarketToolbar : public wxPanel {
         /** Click to open the current orders dialog. */
         wxButton* currentOrdersButton;
 
-        /**
-         * Add a border around the button on mouse over.
-         *
-         * @param mouseEvent The mouse event.
-         */
-        void OnMouseEnter(const wxMouseEvent& mouseEvent);
-
-        /**
-         * Remove button border on mouse out.
-         *
-         * @param mouseEvent The mouse event.
-         */
-        void OnMouseLeave(const wxMouseEvent& mouseEvent);
-
     DECLARE_NO_COPY_CLASS(MarketToolbar)
 };
 

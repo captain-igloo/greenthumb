@@ -218,9 +218,9 @@ void GreenThumbFrame::OnMenuHelpAbout(const wxCommandEvent& menuEvent) {
 
 void GreenThumbFrame::OnSelChanged(const wxTreeEvent& treeEvent) {
     wxTreeItemId itemId = treeEvent.GetItem();
-    MenuTreeData* data = static_cast<MenuTreeData*>(eventTree->GetItemData(itemId));
+    MenuTreeData* data = dynamic_cast<MenuTreeData*>(eventTree->GetItemData(itemId));
 
-    if (data->valid && data->node.getType() == greentop::menu::Node::Type::MARKET) {
+    if (data && data->valid && data->node.getType() == greentop::menu::Node::Type::MARKET) {
         marketsPanel->AddMarket(data->node);
         if (betfairMarkets.exists(data->node.getId())) {
             marketsPanel->SetMarket(betfairMarkets.get(data->node.getId()));

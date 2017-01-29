@@ -4,6 +4,9 @@
 #ifndef DIALOG_CURRENTORDERS_H
 #define DIALOG_CURRENTORDERS_H
 
+#include <greentop/sport/enum/OrderStatus.h>
+#include <greentop/sport/CurrentOrderSummaryReport.h>
+
 #include <wx/wx.h>
 #include <wx/dialog.h>
 #include <wx/notebook.h>
@@ -90,11 +93,11 @@ class CurrentOrders : public wxDialog {
         /**
         * Update display of either matched or unmatched orders.
         *
-        * @param orderProjection Either EXECUTABLE (unmatched) or EXECUTION_COMPLETE (matched)
+        * @param orderStatus Either EXECUTABLE (unmatched) or EXECUTION_COMPLETE (matched)
         * @param ordersPanel The panel to update
         * @param currentOrderSummaryReport The "listCurrentOrders" response from betfair.
         */
-        void UpdateOrders(const greentop::OrderProjection& orderProjection, wxPanel* ordersPanel,
+        void UpdateOrders(const greentop::OrderStatus& orderProjection, wxPanel* ordersPanel,
             const greentop::CurrentOrderSummaryReport& currentOrderSummaryReport);
 
 };
