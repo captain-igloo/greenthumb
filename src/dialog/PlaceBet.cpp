@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/wx.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
@@ -65,7 +65,18 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
     stakeSpin = new wxTextCtrl(this, wxID_ANY, "100", wxDefaultPosition, wxDefaultSize, 0, numberValidator);
     stakeSpin->SetMinSize(wxSize(columnTwoWidth, -1));
     hbox->Add(stakeSpin, 1, wxEXPAND);
+    vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
+    hbox = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* persistLabel = new wxStaticText(this, wxID_ANY, "At In-Play:", wxDefaultPosition, wxSize(columnOneWidth, -1));
+    hbox->Add(persistLabel, 0, wxALIGN_CENTRE_VERTICAL);
+    persistKeep = new wxRadioButton(this, wxID_ANY, "Keep", wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    persistKeep->SetMinSize(wxSize(columnTwoWidth / 2, -1));
+    hbox->Add(persistKeep, 0, wxALIGN_CENTRE_VERTICAL);
+    persistCancel = new wxRadioButton(this, wxID_ANY, "Cancel");
+    persistCancel->SetValue(true);
+    persistCancel->SetMinSize(wxSize(columnTwoWidth / 2, -1));
+    hbox->Add(persistCancel, 0, wxALIGN_CENTRE_VERTICAL);
     vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
@@ -174,7 +185,6 @@ void PlaceBet::UpdateProfitAndLiability() {
 }
 
 void PlaceBet::PlaceOrderPending(const double stake, const double odds) {
-
     greentop::LimitOrder limitOrder(stake, odds, greentop::PersistenceType::LAPSE);
     pendingPlaceInstruction.setSide(side);
     pendingPlaceInstruction.setSelectionId(selectionId);
@@ -183,7 +193,6 @@ void PlaceBet::PlaceOrderPending(const double stake, const double odds) {
     wxCommandEvent event(PLACE_ORDER_PENDING);
     event.SetClientData(&pendingPlaceInstruction);
     AddPendingEvent(event);
-
 }
 
 
@@ -194,16 +203,23 @@ void PlaceBet::OnSpinChange(const wxEvent& spinEvent) {
 }
 
 void PlaceBet::OnSubmit(const wxCommandEvent& event) {
-
     backLayButton->Disable();
     cancelButton->Disable();
 
     double stake;
     if (stakeSpin->GetValue().ToDouble(&stake)) {
         greentop::OrderType orderType(greentop::OrderType::LIMIT);
-        greentop::PersistenceType persistenceType(greentop::PersistenceType::LAPSE);
+        greentop::PersistenceType persistenceType(
+            persistKeep->GetValue() ? greentop::PersistenceType::PERSIST : greentop::PersistenceType::LAPSE
+        );
         greentop::LimitOrder limitOrder(stake, oddsSpin->GetValue(), persistenceType);
-        greentop::PlaceInstruction placeInstruction(orderType, selectionId, greentop::Optional<double>(), side, limitOrder);
+        greentop::PlaceInstruction placeInstruction(
+            orderType,
+            selectionId,
+            greentop::Optional<double>(),
+            side,
+            limitOrder
+        );
         std::vector<greentop::PlaceInstruction> instructions;
         instructions.push_back(placeInstruction);
 

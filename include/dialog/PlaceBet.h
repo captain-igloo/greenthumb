@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_PLACEBET_H
 #define DIALOG_PLACEBET_H
@@ -8,6 +8,7 @@
 
 #include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
 
@@ -71,6 +72,8 @@ class PlaceBet : public wxDialog {
         wxWindow* cancelButton;
         wxStaticText* selection;
         wxStaticText* marketLabel;
+        wxRadioButton* persistKeep;
+        wxRadioButton* persistCancel;
         entity::Market market;
         greentop::PlaceInstruction pendingPlaceInstruction;
         uint64_t selectionId;
