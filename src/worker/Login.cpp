@@ -13,12 +13,11 @@ wxDEFINE_EVENT(LOGIN, wxThreadEvent);
 Login::Login(wxEvtHandler* eventHandler, const std::string& applicationKey,
     const std::string& username, const std::string& password)
     : Worker(eventHandler), applicationKey(applicationKey), username(username), password(password) {
-
+    description = "Login";
 }
 
 wxThread::ExitCode Login::Entry() {
-
-    wxLogStatus("Logging in ...");
+    wxThreadEvent* event = new wxThreadEvent(LOGIN);
 
     bool loginResult;
 
@@ -36,12 +35,12 @@ wxThread::ExitCode Login::Entry() {
     }
 
     if (loginResult) {
-        wxLogStatus("Logging in ... Success");
+        event->SetString(_(description) + _(" ... Success"));
     } else {
-        wxLogStatus("Logging in ... Failed");
+        event->SetString(_(description) + _(" ... Failed"));
     }
 
-    wxThreadEvent* event = new wxThreadEvent(LOGIN);
+
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     event->SetPayload<bool>(loginResult);
     QueueEvent(event);
