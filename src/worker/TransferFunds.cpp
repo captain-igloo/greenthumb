@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include "worker/TransferFunds.h"
 #include "GreenThumb.h"
 
@@ -25,7 +25,7 @@ wxThread::ExitCode TransferFunds::Entry() {
         wxLogStatus("Transfer funds failed: " + _(e.what()));
     }
 
-    QueueEvent(TRANSFER_FUNDS);
+    QueueEvent(new wxThreadEvent(TRANSFER_FUNDS));
 
     return (wxThread::ExitCode) 0;
 

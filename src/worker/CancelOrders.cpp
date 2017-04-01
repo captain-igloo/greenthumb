@@ -1,3 +1,7 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
+
 #include <vector>
 
 #include "worker/CancelOrders.h"
@@ -17,30 +21,27 @@ CancelOrders::CancelOrders(
     exchange(exchange),
     marketId(marketId),
     betId(betId) {
-
+    description = "Cancel order";
 }
 
 wxThread::ExitCode CancelOrders::Entry() {
-
-    wxLogStatus("Cancel order ...");
+    wxThreadEvent* event = new wxThreadEvent(CANCEL_ORDERS);
 
     greentop::CancelExecutionReport cer;
 
     try {
         cer = DoCancelOrders();
-        wxLogStatus("Cancel order ... Success");
+        event->SetString(_(description) + _(" ... Success"));
     } catch (std::exception const& e) {
-        wxLogStatus("Cancel order ... Failed: " + _(e.what()));
+        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
     }
 
-    wxThreadEvent* event = new wxThreadEvent(CANCEL_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     event->SetPayload<greentop::CancelExecutionReport>(cer);
 
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
-
 }
 
 greentop::CancelExecutionReport CancelOrders::DoCancelOrders() {

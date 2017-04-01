@@ -19,23 +19,20 @@ Worker::Worker(wxEvtHandler* eventHandler) : eventHandler(eventHandler) {
 }
 
 void Worker::QueueEvent(wxThreadEvent* threadEvent) {
-
     wxCriticalSectionLocker locker(criticalSection);
 
     if (!TestDestroy()) {
         threadEvent->SetId(managerId);
         wxQueueEvent(eventHandler, threadEvent);
     }
-
-
 }
 
-void Worker::QueueEvent(const wxEventTypeTag<wxThreadEvent>& eventTag) {
-    QueueEvent(new wxThreadEvent(eventTag));
-}
-
-int Worker::GetManagerId() {
+int Worker::GetManagerId() const {
     return managerId;
+}
+
+const std::string& Worker::GetDescription() const {
+    return description;
 }
 
 }

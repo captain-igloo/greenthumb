@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #include "GreenThumb.h"
 #include "worker/GetAccountFunds.h"
@@ -12,25 +12,24 @@ wxDEFINE_EVENT(GET_ACCOUNT_FUNDS_AUS, wxThreadEvent);
 
 GetAccountFunds::GetAccountFunds(wxEvtHandler* eventHandler, const greentop::Wallet& wallet) :
     Worker(eventHandler), wallet(wallet) {
-
+    description = "Get account funds";
 }
 
 wxThread::ExitCode GetAccountFunds::Entry() {
+    wxThreadEvent* event;
+    if (wallet == greentop::Wallet::UK) {
+        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_UK);
+    } else {
+        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_AUS);
+    }
 
     greentop::AccountFundsResponse afr;
 
     try {
         afr = DoGetAccountFunds();
+        event->SetString(_(description) + _(" ... Success"));
     } catch (const std::exception& e) {
-        wxLogStatus("Get account funds ... Failed: " + _(e.what()));
-    }
-
-    wxThreadEvent* event;
-
-    if (wallet == greentop::Wallet::UK) {
-        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_UK);
-    } else {
-        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_AUS);
+        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
     }
 
     event->SetPayload<greentop::AccountFundsResponse>(afr);

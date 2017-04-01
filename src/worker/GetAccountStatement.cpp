@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/log.h>
@@ -18,26 +18,23 @@ wxDEFINE_EVENT(GET_ACCOUNT_STATEMENT, wxThreadEvent);
 
 GetAccountStatement::GetAccountStatement(wxEvtHandler* eventHandler) :
     Worker(eventHandler) {
-
+    description = "Get account statement";
 }
 
 wxThread::ExitCode GetAccountStatement::Entry() {
+    wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_STATEMENT);
 
-    wxLogStatus("Retrieving account statement ...");
     try {
         DoGetAccountStatement();
-        wxLogStatus("Retrieving account statement ... Success");
+        event->SetString(_(description) + _(" ... Success"));
     } catch (std::exception const& e) {
-        wxLogStatus("Retrieving account statement ... Failed: " + _(e.what()));
+        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
     }
 
-    wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_STATEMENT);
     event->ResumePropagation(1);
-
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
-
 }
 
 void GetAccountStatement::DoGetAccountStatement() {

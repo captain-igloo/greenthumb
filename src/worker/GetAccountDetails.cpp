@@ -1,6 +1,7 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
+
 #include "GreenThumb.h"
 #include "entity/Config.h"
 #include "worker/GetAccountDetails.h"
@@ -11,23 +12,22 @@ namespace worker {
 wxDEFINE_EVENT(GET_ACCOUNT_DETAILS, wxThreadEvent);
 
 GetAccountDetails::GetAccountDetails(wxEvtHandler* eventHandler) : Worker(eventHandler) {
+    description = "Get account details";
 }
 
 wxThread::ExitCode GetAccountDetails::Entry() {
-
-    wxLogStatus("Get account details ...");
+    wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_DETAILS);
 
     try {
         DoGetAccountDetails();
-        wxLogStatus("Get account details ... Success");
+        event->SetString(_(description) + _(" ... Success"));
     } catch (std::exception const& e) {
-        wxLogStatus("Get account details ... Failed: " + _(e.what()));
+        event->SetString(_(description) + _(" ... Failed: " + _(e.what())));
     }
 
-    QueueEvent(GET_ACCOUNT_DETAILS);
+    QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
-
 }
 
 greentop::AccountDetailsResponse GetAccountDetails::DoGetAccountDetails() {

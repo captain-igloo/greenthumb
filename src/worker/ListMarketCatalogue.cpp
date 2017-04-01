@@ -13,12 +13,11 @@ wxDEFINE_EVENT(LIST_MARKET_CATALOGUE, wxThreadEvent);
 ListMarketCatalogue::ListMarketCatalogue(wxEvtHandler* eventHandler,
     const greentop::Exchange exchange,
     const std::set<std::string>& marketIds) : Worker(eventHandler), exchange(exchange), marketIds(marketIds) {
-
+    description = "List market catalogue";
 }
 
 wxThread::ExitCode ListMarketCatalogue::Entry() {
-
-    wxLogStatus("List market catalogue ...");
+    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_CATALOGUE);
 
     try {
 
@@ -35,26 +34,24 @@ wxThread::ExitCode ListMarketCatalogue::Entry() {
                 }
             }
             if (DoListMarketCatalogue(marketIdsPage)) {
-                wxLogStatus("List market catalogue ... Success");
+                event->SetString(_(description) + _(" ... Success"));
             } else {
-                wxLogStatus("List market catalogue ... Failed");
+                event->SetString(_(description) + _(" ... Failed"));
             }
         } else {
             if (DoListMarketCatalogue(marketIds)) {
-                wxLogStatus("List market catalogue ... Success");
+                event->SetString(_(description) + _(" ... Success"));
             } else {
-                wxLogStatus("List market catalogue ... Failed");
+                event->SetString(_(description) + _(" ... Failed"));
             }
         }
     } catch (const std::exception& e) {
-        wxLogStatus("List market catalogue ... Failed: " + _(e.what()));
+        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
     }
 
-    wxThreadEvent* threadEvent = new wxThreadEvent(LIST_MARKET_CATALOGUE);
-    threadEvent->ResumePropagation(wxEVENT_PROPAGATE_MAX);
-    // threadEvent->SetPayload<std::set<std::string> >(marketIds);
-    threadEvent->SetPayload<std::map<std::string, entity::Market>>(betfairMarkets);
-    QueueEvent(threadEvent);
+    event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
+    event->SetPayload<std::map<std::string, entity::Market>>(betfairMarkets);
+    QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
 
