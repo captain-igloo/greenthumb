@@ -137,7 +137,7 @@ void MarketPanel::SetMarket(const greentop::menu::Node& node) {
     std::tm marketStartTime = node.getMarketStartTime();
     time_t startTime = timegm(&marketStartTime);
     char formattedStartTime[20];
-    std::strftime(formattedStartTime, 20, "%F %T", std::localtime(&startTime));
+    std::strftime(formattedStartTime, 20, "%Y-%m-%d %H:%M:%S", std::localtime(&startTime));
 
     if (node.hasParent()) {
         fullMarketName = node.getParent().getName() + " / " + node.getName();
