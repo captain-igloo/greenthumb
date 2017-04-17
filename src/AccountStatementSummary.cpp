@@ -62,7 +62,7 @@ void AccountStatementSummary::Render() {
         char itemDate[20];
         std::tm itemDateTm = i->GetItemDate();
         time_t itemDateTime = timegm(&itemDateTm);
-        std::strftime(itemDate, 20, "%F %T", std::localtime(&itemDateTime));
+        std::strftime(itemDate, 20, "%Y-%m-%d %H:%M:%S", std::localtime(&itemDateTime));
 
         grid->SetCellValue(count, 0, itemDate);
         grid->SetCellValue(count, 1, i->GetFullMarketName());
