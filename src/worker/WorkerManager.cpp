@@ -50,13 +50,11 @@ void WorkerManager::OnTerminate(wxThreadEvent& event) {
 }
 
 WorkerManager::~WorkerManager() {
-
     wxCriticalSectionLocker locker(Worker::criticalSection);
 
     for (auto it = workers.begin(); it != workers.end(); ++it) {
-        it->second->Delete();
+        it->second->SetParentAlive(false);
     }
-
 }
 
 }

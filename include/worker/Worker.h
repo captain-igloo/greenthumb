@@ -48,10 +48,19 @@ class Worker : public wxThread {
          */
         const std::string& GetDescription() const;
 
+        /**
+         * If the parent wxEvtHandler has been deleted, no attempt will be made to signal it when
+         * the worker finishes.
+         *
+         * @param parentAlive False if the parent has been deleted.
+         */
+        void SetParentAlive(const bool parentAlive);
+
     protected:
         wxEvtHandler* eventHandler;
         int managerId;
         std::string description;
+        bool parentAlive = true;
 
     private:
         static int previousManagerId;

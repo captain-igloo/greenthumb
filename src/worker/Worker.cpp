@@ -21,7 +21,7 @@ Worker::Worker(wxEvtHandler* eventHandler) : eventHandler(eventHandler) {
 void Worker::QueueEvent(wxThreadEvent* threadEvent) {
     wxCriticalSectionLocker locker(criticalSection);
 
-    if (!TestDestroy()) {
+    if (parentAlive) {
         threadEvent->SetId(managerId);
         wxQueueEvent(eventHandler, threadEvent);
     }
@@ -33,6 +33,10 @@ int Worker::GetManagerId() const {
 
 const std::string& Worker::GetDescription() const {
     return description;
+}
+
+void Worker::SetParentAlive(const bool parentAlive) {
+    this->parentAlive = parentAlive;
 }
 
 }
