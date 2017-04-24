@@ -12,7 +12,6 @@ wxDEFINE_EVENT(GET_ACCOUNT_FUNDS_AUS, wxThreadEvent);
 
 GetAccountFunds::GetAccountFunds(wxEvtHandler* eventHandler, const greentop::Wallet& wallet) :
     Worker(eventHandler), wallet(wallet) {
-    description = "Get account funds";
 }
 
 wxThread::ExitCode GetAccountFunds::Entry() {
@@ -25,11 +24,12 @@ wxThread::ExitCode GetAccountFunds::Entry() {
 
     greentop::AccountFundsResponse afr;
 
+    wxLogStatus("Get account funds ...");
     try {
         afr = DoGetAccountFunds();
-        event->SetString(_(description) + _(" ... Success"));
+        wxLogStatus("Get account funds ... Success");
     } catch (const std::exception& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("Get account funds ... Failed: " + _(e.what()));
     }
 
     event->SetPayload<greentop::AccountFundsResponse>(afr);

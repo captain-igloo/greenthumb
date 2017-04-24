@@ -31,10 +31,6 @@ int Worker::GetManagerId() const {
     return managerId;
 }
 
-const std::string& Worker::GetDescription() const {
-    return description;
-}
-
 void Worker::SetParentAlive(const bool parentAlive) {
     this->parentAlive = parentAlive;
 }

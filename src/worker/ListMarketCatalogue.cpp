@@ -13,11 +13,10 @@ wxDEFINE_EVENT(LIST_MARKET_CATALOGUE, wxThreadEvent);
 ListMarketCatalogue::ListMarketCatalogue(wxEvtHandler* eventHandler,
     const greentop::Exchange exchange,
     const std::set<std::string>& marketIds) : Worker(eventHandler), exchange(exchange), marketIds(marketIds) {
-    description = "List market catalogue";
 }
 
 wxThread::ExitCode ListMarketCatalogue::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_CATALOGUE);
+    wxLogStatus("List market catalogue ...");
 
     try {
 
@@ -34,21 +33,22 @@ wxThread::ExitCode ListMarketCatalogue::Entry() {
                 }
             }
             if (DoListMarketCatalogue(marketIdsPage)) {
-                event->SetString(_(description) + _(" ... Success"));
+                wxLogStatus("List market catalogue ... Success");
             } else {
-                event->SetString(_(description) + _(" ... Failed"));
+                wxLogStatus("List market catalogue ... Failed");
             }
         } else {
             if (DoListMarketCatalogue(marketIds)) {
-                event->SetString(_(description) + _(" ... Success"));
+                wxLogStatus("List market catalogue ... Success");
             } else {
-                event->SetString(_(description) + _(" ... Failed"));
+                wxLogStatus("List market catalogue ... Failed");
             }
         }
     } catch (const std::exception& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("List market catalogue ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_CATALOGUE);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     event->SetPayload<std::map<std::string, entity::Market>>(betfairMarkets);
     QueueEvent(event);

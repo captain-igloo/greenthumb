@@ -17,20 +17,19 @@ ReplaceOrders::ReplaceOrders(
     marketId(marketId),
     betId(betId),
     newPrice(newPrice) {
-    description = "Replace orders";
 }
 
 wxThread::ExitCode ReplaceOrders::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(REPLACE_ORDERS);
     greentop::ReplaceExecutionReport report;
 
     try {
         report = DoReplaceOrders();
-        event->SetString(_(description) + _(" ... Success"));
+        wxLogStatus("Replace orders ... Success");
     } catch (std::exception const& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("Replace orders ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(REPLACE_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     event->SetPayload<greentop::ReplaceExecutionReport>(report);
     QueueEvent(event);

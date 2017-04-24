@@ -16,7 +16,6 @@ wxDEFINE_EVENT(LIST_CURRENT_ORDERS, wxThreadEvent);
 
 ListCurrentOrders::ListCurrentOrders(wxEvtHandler* eventHandler, entity::Market& market) :
     Worker(eventHandler), market(market) {
-    description = "List current orders";
 }
 
 wxThread::ExitCode ListCurrentOrders::Entry() {
@@ -24,15 +23,16 @@ wxThread::ExitCode ListCurrentOrders::Entry() {
 
     greentop::CurrentOrderSummaryReport currentOrderSummaryReport;
 
+    wxLogStatus("Retrieving orders ...");
     try {
         currentOrderSummaryReport = DoListCurrentOrders();
         if (currentOrderSummaryReport.isSuccess()) {
-            event->SetString(_(description) + _(" ... Success"));
+            wxLogStatus("Retrieving orders ... Success");
         } else {
-            event->SetString(_(description) + _(" ... Failed"));
+            wxLogStatus("Retrieving orders ... Failed");
         }
     } catch (const std::exception& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("Retrieving orders ... Failed: " + _(e.what()));
     }
 
     event->SetPayload<greentop::CurrentOrderSummaryReport>(currentOrderSummaryReport);

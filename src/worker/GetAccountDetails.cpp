@@ -12,19 +12,19 @@ namespace worker {
 wxDEFINE_EVENT(GET_ACCOUNT_DETAILS, wxThreadEvent);
 
 GetAccountDetails::GetAccountDetails(wxEvtHandler* eventHandler) : Worker(eventHandler) {
-    description = "Get account details";
 }
 
 wxThread::ExitCode GetAccountDetails::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_DETAILS);
+    wxLogStatus("Get account details ...");
 
     try {
         DoGetAccountDetails();
-        event->SetString(_(description) + _(" ... Success"));
+        wxLogStatus("Get account details ... Success");
     } catch (std::exception const& e) {
-        event->SetString(_(description) + _(" ... Failed: " + _(e.what())));
+        wxLogStatus("Get account details ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_DETAILS);
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;

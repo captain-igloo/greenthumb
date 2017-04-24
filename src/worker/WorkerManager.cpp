@@ -1,8 +1,6 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
-
-#include <wx/log.h>
 
 #include "worker/WorkerManager.h"
 
@@ -17,18 +15,11 @@ WorkerManager::WorkerManager(wxEvtHandler* parent) {
 }
 
 void WorkerManager::RunWorker(worker::Worker* worker) {
-
-    std::string description = worker->GetDescription();
-    if (description != "") {
-        wxLogStatus(_(description) + _(" ..."));
-    }
-
     int id = worker->GetManagerId();
 
     if (worker->Run() == wxTHREAD_NO_ERROR) {
         workers[id] = worker;
     }
-
 }
 
 void WorkerManager::OnTerminate(wxThreadEvent& event) {
@@ -36,10 +27,6 @@ void WorkerManager::OnTerminate(wxThreadEvent& event) {
     int workerId = event.GetId();
 
     auto it = workers.find(workerId);
-
-    if (event.GetString() != "") {
-        wxLogStatus(event.GetString());
-    }
 
     if (it != workers.end()) {
         workers.erase(workerId);

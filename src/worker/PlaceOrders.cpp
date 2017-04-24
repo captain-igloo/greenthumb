@@ -16,23 +16,23 @@ wxDEFINE_EVENT(PLACE_ORDERS, wxThreadEvent);
 PlaceOrders::PlaceOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
     const greentop::PlaceOrdersRequest& placeOrdersRequest)
     : Worker(eventHandler), exchange(exchange), placeOrdersRequest(placeOrdersRequest) {
-    description = "Place orders";
 }
 
 wxThread::ExitCode PlaceOrders::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(PLACE_ORDERS);
+    wxLogStatus("Place orders ...");
 
     try {
         if (DoPlaceOrder()) {
-            event->SetString(_(description) + _(" ... Success"));
+            wxLogStatus("Place orders ... Success");
         } else {
-            event->SetString(_(description) + _(" ... Failed"));
+            wxLogStatus("Place orders ... Failed");
         }
 
     } catch (std::exception const& e) {
         wxLogError("Failed to place orders: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(PLACE_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     QueueEvent(event);
 

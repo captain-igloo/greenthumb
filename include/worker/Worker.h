@@ -42,13 +42,6 @@ class Worker : public wxThread {
         void QueueEvent(wxThreadEvent* threadEvent);
 
         /**
-         * Returns a description of this worker.
-         *
-         * @return The worker's description.
-         */
-        const std::string& GetDescription() const;
-
-        /**
          * If the parent wxEvtHandler has been deleted, no attempt will be made to signal it when
          * the worker finishes.
          *
@@ -59,7 +52,6 @@ class Worker : public wxThread {
     protected:
         wxEvtHandler* eventHandler;
         int managerId;
-        std::string description;
         bool parentAlive = true;
 
     private:

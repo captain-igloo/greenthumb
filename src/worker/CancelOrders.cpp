@@ -21,21 +21,21 @@ CancelOrders::CancelOrders(
     exchange(exchange),
     marketId(marketId),
     betId(betId) {
-    description = "Cancel order";
 }
 
 wxThread::ExitCode CancelOrders::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(CANCEL_ORDERS);
+    wxLogStatus("Cancel order ...");
 
     greentop::CancelExecutionReport cer;
 
     try {
         cer = DoCancelOrders();
-        event->SetString(_(description) + _(" ... Success"));
+        wxLogStatus("Cancel order ... Success");
     } catch (std::exception const& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("Cancel order ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(CANCEL_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
     event->SetPayload<greentop::CancelExecutionReport>(cer);
 

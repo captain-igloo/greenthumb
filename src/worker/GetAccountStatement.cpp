@@ -18,17 +18,17 @@ wxDEFINE_EVENT(GET_ACCOUNT_STATEMENT, wxThreadEvent);
 
 GetAccountStatement::GetAccountStatement(wxEvtHandler* eventHandler) :
     Worker(eventHandler) {
-    description = "Get account statement";
 }
 
 wxThread::ExitCode GetAccountStatement::Entry() {
     wxThreadEvent* event = new wxThreadEvent(GET_ACCOUNT_STATEMENT);
 
+    wxLogStatus("Retrieving account statement ...");
     try {
         DoGetAccountStatement();
-        event->SetString(_(description) + _(" ... Success"));
+        wxLogStatus("Retrieving account statement ... Success");
     } catch (std::exception const& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("Retrieving account statement ... Failed: " + _(e.what()));
     }
 
     event->ResumePropagation(1);

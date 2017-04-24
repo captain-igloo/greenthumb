@@ -13,29 +13,26 @@ wxDEFINE_EVENT(LIST_MARKET_BOOK, wxThreadEvent);
 ListMarketBook::ListMarketBook(wxEvtHandler* eventHandler,
     const entity::Market& market) :
     Worker(eventHandler), market(market) {
-    description = "List market book";
 }
 
 wxThread::ExitCode ListMarketBook::Entry() {
-    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_BOOK);
-
+    wxLogStatus("List market book ...");
     try {
-
         if (DoListMarketBook()) {
-            event->SetString(_(description) + _(" ... Success"));
+            wxLogStatus("List market book ... Success");
         } else {
-            event->SetString(_(description) + _(" ... Failed"));
+            wxLogStatus("List market book ... Failed");
         }
 
     } catch (const std::exception& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("List market book ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_BOOK);
     event->SetPayload<greentop::MarketBook>(betfairMarketBook);
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
-
 }
 
 bool ListMarketBook::DoListMarketBook() {

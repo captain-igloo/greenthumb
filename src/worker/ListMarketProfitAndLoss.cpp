@@ -14,27 +14,25 @@ wxDEFINE_EVENT(LIST_MARKET_PROFIT_AND_LOSS, wxThreadEvent);
 ListMarketProfitAndLoss::ListMarketProfitAndLoss(wxEvtHandler* eventHandler,
     const greentop::Exchange exchange, const std::string& marketId) :
     Worker(eventHandler), exchange(exchange), marketId(marketId) {
-    description = "List market profit and loss";
 }
 
 wxThread::ExitCode ListMarketProfitAndLoss:: Entry() {
-    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_PROFIT_AND_LOSS);
-
     greentop::ListMarketProfitAndLossResponse lmpalResp;
-
+    wxLogStatus("List market profit and loss ...");
     try {
         lmpalResp = DoListMarketProfitAndLoss();
 
         if (lmpalResp.isSuccess()) {
-            event->SetString(_(description) + _(" ... Success"));
+            wxLogStatus("List market profit and loss ... Success");
         } else {
-            event->SetString(_(description) + _(" ... Failed"));
+            wxLogStatus("List market profit and loss ... Failed");
         }
 
     } catch (const std::exception& e) {
-        event->SetString(_(description) + _(" ... Failed: ") + _(e.what()));
+        wxLogStatus("List market profit and loss ... Failed: " + _(e.what()));
     }
 
+    wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_PROFIT_AND_LOSS);
     event->SetPayload<greentop::ListMarketProfitAndLossResponse>(lmpalResp);
 
     QueueEvent(event);
