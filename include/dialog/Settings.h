@@ -4,7 +4,9 @@
 #ifndef DIALOG_SETTINGS_H
 #define DIALOG_SETTINGS_H
 
+#include <wx/wx.h>
 #include <wx/dialog.h>
+#include <wx/spinctrl.h>
 
 namespace greenthumb {
 namespace dialog {
@@ -14,6 +16,10 @@ namespace dialog {
  */
 class Settings : public wxDialog {
     public:
+
+        const static uint32_t ACCOUNT_PAGE_SIZE;
+        const static uint32_t DEFAULT_STAKE;
+        const static uint32_t REFRESH_INTERVAL;
 
         /**
          * Constructor.
@@ -30,6 +36,14 @@ class Settings : public wxDialog {
             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
 
+    private:
+
+        wxSpinCtrl* accountRowsPerPage;
+        wxSpinCtrl* defaultStake;
+        wxSpinCtrl* refreshInterval;
+
+        void OnSave(const wxCommandEvent& event);
+        void OnCancel(const wxCommandEvent& event);
 };
 
 }

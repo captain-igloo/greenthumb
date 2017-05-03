@@ -31,6 +31,7 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
     int columnTwoWidth = 200;
     std::string currencySymbol = GetCurrencySymbol(
         entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+    int defaultStake = entity::Config::GetConfigValue<int>("defaultStake", 100);
 
     wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
 
@@ -39,7 +40,13 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
 
     wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
 
-    wxStaticText* selectionLabel = new wxStaticText(this, wxID_ANY, _("Selection:"), wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* selectionLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        _("Selection:"),
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(selectionLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     selection = new wxStaticText(this, wxID_ANY, _(""));
@@ -49,7 +56,13 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
 
-    wxStaticText* oddsLabel = new wxStaticText(this, wxID_ANY, _("Odds:"), wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* oddsLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        _("Odds:"),
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(oddsLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     oddsSpin = new OddsSpinCtrl(this, wxID_ANY);
@@ -59,18 +72,45 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
     wxString wxCurrencySymbol(currencySymbol.c_str(), wxConvUTF8);
-    wxStaticText* stakeLabel = new wxStaticText(this, wxID_ANY, _("Stake (") + wxCurrencySymbol + _("):"), wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* stakeLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        _("Stake (") + wxCurrencySymbol + _("):"),
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(stakeLabel, 0, wxALIGN_CENTRE_VERTICAL);
     wxFloatingPointValidator<float> numberValidator(2);
-    stakeSpin = new wxTextCtrl(this, wxID_ANY, "100", wxDefaultPosition, wxDefaultSize, 0, numberValidator);
+    stakeSpin = new wxTextCtrl(
+        this,
+        wxID_ANY,
+        std::to_string(defaultStake),
+        wxDefaultPosition,
+        wxDefaultSize,
+        0,
+        numberValidator
+    );
     stakeSpin->SetMinSize(wxSize(columnTwoWidth, -1));
     hbox->Add(stakeSpin, 1, wxEXPAND);
     vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText* persistLabel = new wxStaticText(this, wxID_ANY, "At In-Play:", wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* persistLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        "At In-Play:",
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(persistLabel, 0, wxALIGN_CENTRE_VERTICAL);
-    persistKeep = new wxRadioButton(this, wxID_ANY, "Keep", wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    persistKeep = new wxRadioButton(
+        this,
+        wxID_ANY,
+        "Keep",
+        wxDefaultPosition,
+        wxDefaultSize,
+        wxRB_GROUP
+    );
     persistKeep->SetMinSize(wxSize(columnTwoWidth / 2, -1));
     hbox->Add(persistKeep, 0, wxALIGN_CENTRE_VERTICAL);
     persistCancel = new wxRadioButton(this, wxID_ANY, "Cancel");
@@ -80,7 +120,13 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
     vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText* profitLabel = new wxStaticText(this, wxID_ANY, _("Profit (") + wxCurrencySymbol + _("):"), wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* profitLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        _("Profit (") + wxCurrencySymbol + _("):"),
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(profitLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     profit = new wxStaticText(this, wxID_ANY, _("0"));
@@ -89,7 +135,13 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
     vbox->Add(hbox, 0, wxEXPAND | borderFlags, border);
 
     hbox = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText* liabilityLabel = new wxStaticText(this, wxID_ANY, _("Liability (") + wxCurrencySymbol + _("):"), wxDefaultPosition, wxSize(columnOneWidth, -1));
+    wxStaticText* liabilityLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        _("Liability (") + wxCurrencySymbol + _("):"),
+        wxDefaultPosition,
+        wxSize(columnOneWidth, -1)
+    );
     hbox->Add(liabilityLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     liability = new wxStaticText(this, wxID_ANY, _("0"));
@@ -223,12 +275,14 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
         std::vector<greentop::PlaceInstruction> instructions;
         instructions.push_back(placeInstruction);
 
-        greentop::PlaceOrdersRequest placeOrdersRequest(market.GetMarketCatalogue().getMarketId(), instructions);
+        greentop::PlaceOrdersRequest placeOrdersRequest(
+            market.GetMarketCatalogue().getMarketId(),
+            instructions
+        );
 
-        // greentop::ExchangeApi::Exchange exchange =
-           //  entity::Exchange::GetExchange(static_cast<entity::Exchange::ExchangeId>(market.GetExchangeId()));
-
-        workerManager.RunWorker(new worker::PlaceOrders(&workerManager, market.GetExchange(), placeOrdersRequest));
+        workerManager.RunWorker(
+            new worker::PlaceOrders(&workerManager, market.GetExchange(), placeOrdersRequest)
+        );
     } else {
         wxLogError("Failed to convert: " + stakeSpin->GetValue());
     }

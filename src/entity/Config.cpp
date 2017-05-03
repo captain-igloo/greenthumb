@@ -6,6 +6,9 @@
 namespace greenthumb {
 namespace entity {
 
+const std::string Config::KEY_ACCOUNT_PAGE_SIZE = "accountPageSize";
+const std::string Config::KEY_REFRESH_INTERVAL = "refreshInterval";
+
 std::map<std::string, Config> Config::configCache = std::map<std::string, Config>();
 
 Config::Config() : id(0) {

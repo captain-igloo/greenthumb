@@ -6,6 +6,7 @@
 
 #include <map>
 #include <soci.h>
+#include <string>
 
 namespace greenthumb {
 namespace entity {
@@ -16,6 +17,9 @@ namespace entity {
 class Config {
 
     public:
+        const static std::string KEY_ACCOUNT_PAGE_SIZE;
+        const static std::string KEY_REFRESH_INTERVAL;
+
         /**
          * Constructor.
          */

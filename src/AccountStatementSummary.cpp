@@ -4,7 +4,9 @@
 
 #include <greentop/ExchangeApi.h>
 
+#include "dialog/Settings.h"
 #include "entity/AccountStatementMarket.h"
+#include "entity/Config.h"
 #include "AccountStatementSummary.h"
 #include "Util.h"
 
@@ -44,9 +46,14 @@ void AccountStatementSummary::Render() {
 
     UpdateToolbar();
 
-    uint32_t fromRecord = (currentPage - 1) * PAGE_SIZE;
+    int pageSize = entity::Config::GetConfigValue<int>(
+        entity::Config::KEY_ACCOUNT_PAGE_SIZE,
+        dialog::Settings::ACCOUNT_PAGE_SIZE
+    );
+    uint32_t fromRecord = (currentPage - 1) * pageSize;
 
-    std::vector<entity::AccountStatementMarket> ases = entity::AccountStatementMarket::FetchAccountStatementMarketPage(fromRecord, PAGE_SIZE);
+    std::vector<entity::AccountStatementMarket> ases =
+        entity::AccountStatementMarket::FetchAccountStatementMarketPage(fromRecord, pageSize);
 
     grid->BeginBatch();
     grid->ClearGrid();
@@ -82,7 +89,11 @@ void AccountStatementSummary::OnGetAccountStatement() {
 }
 
 void AccountStatementSummary::GetNumberPages() {
-    numberPages = ceil((double) entity::AccountStatementMarket::GetNumberRows() / (double) PAGE_SIZE);
+    int pageSize = entity::Config::GetConfigValue<int>(
+        entity::Config::KEY_ACCOUNT_PAGE_SIZE,
+        dialog::Settings::ACCOUNT_PAGE_SIZE
+    );
+    numberPages = ceil((double) entity::AccountStatementMarket::GetNumberRows() / (double) pageSize);
 }
 
 

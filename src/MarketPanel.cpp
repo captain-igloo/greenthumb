@@ -43,7 +43,8 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 
     tbSizer->Add(pricesPanel, 0, wxEXPAND);
 
-    refreshTimer.Start(entity::Config::GetConfigValue("marketRefreshSec", 60) * 1000);
+    int refreshInterval = entity::Config::GetConfigValue(entity::Config::KEY_REFRESH_INTERVAL, 60);
+    refreshTimer.Start(refreshInterval * 1000);
 
     currentOrdersDialog = new dialog::CurrentOrders(this, wxID_ANY, "Current Bets");
 

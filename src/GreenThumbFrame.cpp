@@ -121,8 +121,8 @@ void GreenThumbFrame::CreateMenuBar() {
     fileMenu->Append(menuFileLogoutId, _("Log &out"));
     wxWindowID menuFileRefreshMenuId = wxWindow::NewControlId();
     fileMenu->Append(menuFileRefreshMenuId, _("Refresh &menu"));
-    // wxWindowID menuFileSettingsId = wxWindow::NewControlId();
-    // fileMenu->Append(menuFileSettingsId, _("&Settings..."));
+    wxWindowID menuFileSettingsId = wxWindow::NewControlId();
+    fileMenu->Append(menuFileSettingsId, _("&Settings..."));
     fileMenu->Append(wxID_EXIT, _("E&xit"));
     menu->Append(fileMenu, _("&File"));
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileExit, this, wxID_EXIT);
@@ -151,7 +151,7 @@ void GreenThumbFrame::CreateMenuBar() {
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileLogin, this, menuFileLoginId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileLogout, this, menuFileLogoutId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileRefreshMenu, this, menuFileRefreshMenuId);
-    // Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileSettings, this, menuFileSettingsId);
+    Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuFileSettings, this, menuFileSettingsId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewAccount, this, menuViewAccountId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuViewBetting, this, menuViewBettingId);
     Bind(wxEVT_MENU, &GreenThumbFrame::OnMenuHelpAbout, this, wxID_ABOUT);

@@ -7,8 +7,6 @@
 
 namespace greenthumb {
 
-const uint32_t PaginatedGrid::PAGE_SIZE = 20;
-
 PaginatedGrid::PaginatedGrid(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name) :
     wxPanel(parent, id, pos, size, style, name), workerManager(this) {

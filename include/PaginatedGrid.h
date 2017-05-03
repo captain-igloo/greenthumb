@@ -17,8 +17,6 @@ class PaginatedGrid : public wxPanel {
             const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name=wxPanelNameStr);
     protected:
 
-        const static uint32_t PAGE_SIZE;
-
         uint32_t currentPage;
         uint32_t numberPages;
         wxGrid* grid;

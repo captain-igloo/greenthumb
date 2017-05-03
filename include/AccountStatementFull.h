@@ -20,9 +20,6 @@ class AccountStatementFull : public PaginatedGrid {
         virtual void Render();
 
     private:
-
-        // const static uint32_t PAGE_SIZE;
-
         void GetNumberPages();
 };
 
