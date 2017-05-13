@@ -16,6 +16,7 @@ RefreshMenu::RefreshMenu(wxEvtHandler* eventHandler, const std::string& cacheFil
 }
 
 wxThread::ExitCode RefreshMenu::Entry() {
+    wxLogStatus("Refresh menu ...");
 
     try {
         if (DoRefreshMenu()) {
@@ -35,11 +36,7 @@ wxThread::ExitCode RefreshMenu::Entry() {
 }
 
 bool RefreshMenu::DoRefreshMenu() {
-
-    GreenThumb::GetBetfairApi().refreshMenu(cacheFilename);
-
-    return true;
-
+    return GreenThumb::GetBetfairApi().refreshMenu(cacheFilename);
 }
 
 }
