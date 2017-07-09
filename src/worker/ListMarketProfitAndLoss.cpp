@@ -11,9 +11,8 @@ namespace worker {
 
 wxDEFINE_EVENT(LIST_MARKET_PROFIT_AND_LOSS, wxThreadEvent);
 
-ListMarketProfitAndLoss::ListMarketProfitAndLoss(wxEvtHandler* eventHandler,
-    const greentop::Exchange exchange, const std::string& marketId) :
-    Worker(eventHandler), exchange(exchange), marketId(marketId) {
+ListMarketProfitAndLoss::ListMarketProfitAndLoss(wxEvtHandler* eventHandler, const std::string& marketId) :
+    Worker(eventHandler), marketId(marketId) {
 }
 
 wxThread::ExitCode ListMarketProfitAndLoss:: Entry() {
@@ -47,7 +46,7 @@ greentop::ListMarketProfitAndLossResponse ListMarketProfitAndLoss::DoListMarketP
 
     greentop::ListMarketProfitAndLossRequest lmpalr(marketIds);
 
-    return GreenThumb::GetBetfairApi().listMarketProfitAndLoss(exchange, lmpalr);
+    return GreenThumb::GetBetfairApi().listMarketProfitAndLoss(lmpalr);
 
 }
 

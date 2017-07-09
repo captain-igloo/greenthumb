@@ -46,8 +46,7 @@ bool ListMarketBook::DoListMarketBook() {
     greentop::MatchProjection matchProjection(greentop::MatchProjection::ROLLED_UP_BY_AVG_PRICE);
     greentop::ListMarketBookRequest listMarketBookRequest(marketIds, priceProjection, orderProjection, matchProjection);
 
-    greentop::ListMarketBookResponse lmbResp = GreenThumb::GetBetfairApi().listMarketBook(
-        market.GetExchange(), listMarketBookRequest);
+    greentop::ListMarketBookResponse lmbResp = GreenThumb::GetBetfairApi().listMarketBook(listMarketBookRequest);
 
     if (TestDestroy()) {
         return false;

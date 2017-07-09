@@ -51,7 +51,7 @@ greentop::CancelExecutionReport CancelOrders::DoCancelOrders() {
     instructions.push_back(ci);
 
     greentop::CancelOrdersRequest cor(marketId, instructions);
-    return GreenThumb::GetBetfairApi().cancelOrders(exchange, cor);
+    return GreenThumb::GetBetfairApi().cancelOrders(cor);
 
 }
 

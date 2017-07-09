@@ -7,20 +7,15 @@
 namespace greenthumb {
 namespace worker {
 
-wxDEFINE_EVENT(GET_ACCOUNT_FUNDS_UK, wxThreadEvent);
-wxDEFINE_EVENT(GET_ACCOUNT_FUNDS_AUS, wxThreadEvent);
+wxDEFINE_EVENT(GET_ACCOUNT_FUNDS, wxThreadEvent);
 
-GetAccountFunds::GetAccountFunds(wxEvtHandler* eventHandler, const greentop::Wallet& wallet) :
-    Worker(eventHandler), wallet(wallet) {
+GetAccountFunds::GetAccountFunds(wxEvtHandler* eventHandler) : Worker(eventHandler) {
 }
 
 wxThread::ExitCode GetAccountFunds::Entry() {
     wxThreadEvent* event;
-    if (wallet == greentop::Wallet::UK) {
-        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_UK);
-    } else {
-        event = new wxThreadEvent(GET_ACCOUNT_FUNDS_AUS);
-    }
+
+    event = new wxThreadEvent(GET_ACCOUNT_FUNDS);
 
     greentop::AccountFundsResponse afr;
 
@@ -40,10 +35,9 @@ wxThread::ExitCode GetAccountFunds::Entry() {
 
 greentop::AccountFundsResponse GetAccountFunds::DoGetAccountFunds() {
 
-    greentop::GetAccountFundsRequest req(wallet);
+    greentop::GetAccountFundsRequest req;
 
-    greentop::AccountFundsResponse afr = GreenThumb::GetBetfairApi().getAccountFunds(
-        greentop::Exchange::UK, req);
+    greentop::AccountFundsResponse afr = GreenThumb::GetBetfairApi().getAccountFunds(req);
 
     return afr;
 }

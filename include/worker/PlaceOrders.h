@@ -19,16 +19,13 @@ wxDECLARE_EVENT(PLACE_ORDERS, wxThreadEvent);
 class PlaceOrders : public Worker {
     public:
 
-        PlaceOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
-            const greentop::PlaceOrdersRequest& placeOrdersRequest);
+        PlaceOrders(wxEvtHandler* eventHandler, const greentop::PlaceOrdersRequest& placeOrdersRequest);
 
     protected:
 
         virtual ExitCode Entry();
 
     private:
-
-        greentop::Exchange exchange;
         greentop::PlaceOrdersRequest placeOrdersRequest;
 
         bool DoPlaceOrder();

@@ -13,9 +13,8 @@ namespace worker {
 
 wxDEFINE_EVENT(PLACE_ORDERS, wxThreadEvent);
 
-PlaceOrders::PlaceOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
-    const greentop::PlaceOrdersRequest& placeOrdersRequest)
-    : Worker(eventHandler), exchange(exchange), placeOrdersRequest(placeOrdersRequest) {
+PlaceOrders::PlaceOrders(wxEvtHandler* eventHandler, const greentop::PlaceOrdersRequest& placeOrdersRequest)
+    : Worker(eventHandler), placeOrdersRequest(placeOrdersRequest) {
 }
 
 wxThread::ExitCode PlaceOrders::Entry() {
@@ -43,7 +42,7 @@ wxThread::ExitCode PlaceOrders::Entry() {
 bool PlaceOrders::DoPlaceOrder() {
 
     greentop::PlaceExecutionReport resp =
-        GreenThumb::GetBetfairApi().placeOrders(exchange, placeOrdersRequest);
+        GreenThumb::GetBetfairApi().placeOrders(placeOrdersRequest);
 
     return resp.isSuccess();
 

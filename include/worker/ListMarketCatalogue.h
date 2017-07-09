@@ -25,14 +25,12 @@ class ListMarketCatalogue : public Worker {
          * Constructor.
          *
          * @param eventHandler The handler to signal on completion.
-         * @param exchange The markets' exchange.
          * @param marketIds The markets whose information to retrieve.
          */
-        ListMarketCatalogue(wxEvtHandler* eventHandler, const greentop::Exchange exchange, const std::set<std::string>& marketIds);
+        ListMarketCatalogue(wxEvtHandler* eventHandler, const std::set<std::string>& marketIds);
     protected:
         virtual ExitCode Entry();
     private:
-        greentop::Exchange exchange;
         std::set<std::string> marketIds;
         std::map<std::string, entity::Market> betfairMarkets;
 

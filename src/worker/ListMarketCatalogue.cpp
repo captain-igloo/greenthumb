@@ -11,8 +11,7 @@ namespace worker {
 wxDEFINE_EVENT(LIST_MARKET_CATALOGUE, wxThreadEvent);
 
 ListMarketCatalogue::ListMarketCatalogue(wxEvtHandler* eventHandler,
-    const greentop::Exchange exchange,
-    const std::set<std::string>& marketIds) : Worker(eventHandler), exchange(exchange), marketIds(marketIds) {
+    const std::set<std::string>& marketIds) : Worker(eventHandler), marketIds(marketIds) {
 }
 
 wxThread::ExitCode ListMarketCatalogue::Entry() {
@@ -66,14 +65,12 @@ bool ListMarketCatalogue::DoListMarketCatalogue(const std::set<std::string>& mar
     marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::RUNNER_DESCRIPTION));
     marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::MARKET_START_TIME));
     marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::MARKET_DESCRIPTION));
+    marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::EVENT));
 
     greentop::ListMarketCatalogueRequest lmcRequest(filter, marketProjection, greentop::MarketSort(), 1000);
 
-    // greentop::Exchange exchange =
-       //  entity::Exchange::GetExchange(static_cast<entity::Exchange::ExchangeId>(exchangeId));
-
     greentop::ListMarketCatalogueResponse lmcResponse =
-        GreenThumb::GetBetfairApi().listMarketCatalogue(exchange, lmcRequest);
+        GreenThumb::GetBetfairApi().listMarketCatalogue(lmcRequest);
 
     if (!TestDestroy() && lmcResponse.isSuccess()) {
 
@@ -81,7 +78,6 @@ bool ListMarketCatalogue::DoListMarketCatalogue(const std::set<std::string>& mar
 
         for (unsigned i = 0; i < bfMarkets.size(); ++i) {
             entity::Market market;
-            market.SetExchange(exchange);
             market.SetMarketCatalogue(bfMarkets[i]);
             betfairMarkets[bfMarkets[i].getMarketId()] = market;
         }

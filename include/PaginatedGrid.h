@@ -15,11 +15,12 @@ class PaginatedGrid : public wxPanel {
     public:
         PaginatedGrid(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name=wxPanelNameStr);
-    protected:
 
+    protected:
         uint32_t currentPage;
         uint32_t numberPages;
         wxGrid* grid;
+        worker::WorkerManager workerManager;
 
         virtual void Render() = 0;
         void UpdateToolbar();
@@ -32,13 +33,12 @@ class PaginatedGrid : public wxPanel {
         wxWindowID nextPageButtonId;
         wxWindowID lastPageButtonId;
         wxToolBar* toolbar;
-        worker::WorkerManager workerManager;
 
-        void OnClickRefresh(wxCommandEvent& event);
-        void OnClickFirst(wxCommandEvent& event);
-        void OnClickPrevious(wxCommandEvent& event);
-        void OnClickNext(wxCommandEvent& event);
-        void OnClickLast(wxCommandEvent& event);
+        virtual void OnClickRefresh(wxCommandEvent& event);
+        virtual void OnClickFirst(wxCommandEvent& event);
+        virtual void OnClickPrevious(wxCommandEvent& event);
+        virtual void OnClickNext(wxCommandEvent& event);
+        virtual void OnClickLast(wxCommandEvent& event);
 
 };
 

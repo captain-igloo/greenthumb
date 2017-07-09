@@ -49,7 +49,8 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
         runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " + label);
 
         std::ostringstream priceLabelStream;
-        priceLabelStream << std::fixed << std::setprecision(2) << currentOrderSummary.getAveragePriceMatched();
+        double avPriceMatched = currentOrderSummary.getAveragePriceMatched();
+        priceLabelStream << std::fixed << std::setprecision(2) << avPriceMatched;
         wxString priceLabel(priceLabelStream.str().c_str(), wxConvUTF8);
         price->SetLabel(priceLabel);
 

@@ -29,7 +29,7 @@ class ListCurrentOrders : public Worker {
          * @param eventHandler The handler to signal on completion.
          * @param market The market whose orders will be retrieved.
          */
-        ListCurrentOrders(wxEvtHandler* eventHandler, entity::Market& market);
+        ListCurrentOrders(wxEvtHandler* eventHandler, entity::Market& market = entity::Market());
 
     protected:
         virtual ExitCode Entry();

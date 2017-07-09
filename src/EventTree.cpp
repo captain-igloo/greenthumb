@@ -107,7 +107,8 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
         Delete(*itr);
     }
 
-    std::map<greentop::Exchange, std::set<std::string>> marketIds;
+    // std::map<greentop::Exchange, std::set<std::string>> marketIds;
+    std::set<std::string> marketIds;
 
     for (auto it = node.getChildren().begin(); it != node.getChildren().end(); ++it) {
 
@@ -121,23 +122,23 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
         }
 
         if (it->getType() == greentop::menu::Node::Type::MARKET) {
-            marketIds[it->getExchange()].insert(it->getId());
+            marketIds.insert(it->getId());
         }
     }
 
-    if (!recurse) {
-        for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
-            for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
+    if (!recurse && marketIds.size() > 0) {
+        // for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
+            /* for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
                 if (betfairMarkets->exists(*it2)) {
                     it1->second.erase(it2++);
                 } else {
                     ++it2;
                 }
-            }
-            if (it1->second.size() > 0) {
-                workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, it1->first, it1->second));
-            }
-        }
+            } */
+            // if (it1->second.size() > 0) {
+        workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+            // }
+        // }
     }
 }
 

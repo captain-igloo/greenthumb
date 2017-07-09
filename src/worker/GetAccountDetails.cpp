@@ -32,7 +32,7 @@ wxThread::ExitCode GetAccountDetails::Entry() {
 
 greentop::AccountDetailsResponse GetAccountDetails::DoGetAccountDetails() {
 
-    greentop::AccountDetailsResponse adr = GreenThumb::GetBetfairApi().getAccountDetails(greentop::Exchange::UK);
+    greentop::AccountDetailsResponse adr = GreenThumb::GetBetfairApi().getAccountDetails();
     if (!TestDestroy() && adr.isSuccess()) {
         entity::Config::SetConfigValue("accountCurrency", adr.getCurrencyCode());
     }

@@ -77,8 +77,7 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
         }
 
         worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
-            new worker::ListMarketProfitAndLoss(&workerManager, market.GetExchange(),
-                market.GetMarketCatalogue().getMarketId());
+            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
         workerManager.RunWorker(listMarketProfitAndLossWorker);
 
         UpdateToolBar();

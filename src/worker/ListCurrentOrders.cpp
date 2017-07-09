@@ -5,7 +5,8 @@
 #include <wx/log.h>
 #include <vector>
 
-
+#include "dialog/Settings.h"
+#include "entity/Config.h"
 #include "worker/ListCurrentOrders.h"
 #include "GreenThumb.h"
 
@@ -44,12 +45,20 @@ wxThread::ExitCode ListCurrentOrders::Entry() {
 greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
 
     std::set<std::string> marketIds;
-    marketIds.insert(market.GetMarketCatalogue().getMarketId());
+    if (market.GetMarketCatalogue().isValid()) {
+        marketIds.insert(market.GetMarketCatalogue().getMarketId());
+    }
     greentop::OrderProjection op(greentop::OrderProjection::ALL);
 
     greentop::ListCurrentOrdersRequest lcor(std::set<std::string>(), marketIds, op);
 
-    return GreenThumb::GetBetfairApi().listCurrentOrders(market.GetExchange(), lcor);
+    int pageSize = entity::Config::GetConfigValue<int>(
+        entity::Config::KEY_ACCOUNT_PAGE_SIZE,
+        dialog::Settings::ACCOUNT_PAGE_SIZE
+    );
+    lcor.setRecordCount(pageSize);
+
+    return GreenThumb::GetBetfairApi().listCurrentOrders(lcor);
 }
 
 }

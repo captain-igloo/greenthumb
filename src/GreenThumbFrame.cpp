@@ -74,6 +74,7 @@ GreenThumbFrame::GreenThumbFrame()
     bettingPanel->SplitVertically(eventTreePanel, marketsPanel, 200);
 
     accountPanel = new AccountPanel(this, wxID_ANY);
+    accountPanel->SetBetfairMarketsCache(&betfairMarkets);
 
     if (mainView == VIEW_ACCOUNT) {
         bettingPanel->Show(false);

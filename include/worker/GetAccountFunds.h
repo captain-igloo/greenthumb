@@ -14,8 +14,7 @@
 namespace greenthumb {
 namespace worker {
 
-wxDECLARE_EVENT(GET_ACCOUNT_FUNDS_UK, wxThreadEvent);
-wxDECLARE_EVENT(GET_ACCOUNT_FUNDS_AUS, wxThreadEvent);
+wxDECLARE_EVENT(GET_ACCOUNT_FUNDS, wxThreadEvent);
 
 /**
  * Get account balance for a wallet.
@@ -27,15 +26,12 @@ class GetAccountFunds : public Worker {
          * Constructor.
          *
          * @param eventHandler The handler to signal on completion.
-         * @param wallet The wallet whose account balance to get.
          */
-        GetAccountFunds(wxEvtHandler* eventHandler, const greentop::Wallet& wallet);
+        GetAccountFunds(wxEvtHandler* eventHandler);
 
     protected:
         virtual ExitCode Entry();
     private:
-
-        greentop::Wallet wallet;
 
         greentop::AccountFundsResponse DoGetAccountFunds();
 };

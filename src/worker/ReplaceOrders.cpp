@@ -8,12 +8,10 @@ wxDEFINE_EVENT(REPLACE_ORDERS, wxThreadEvent);
 
 ReplaceOrders::ReplaceOrders(
     wxEvtHandler* eventHandler,
-    const greentop::Exchange exchange,
     const std::string& marketId,
     const std::string& betId,
     const double newPrice) :
     Worker(eventHandler),
-    exchange(exchange),
     marketId(marketId),
     betId(betId),
     newPrice(newPrice) {
@@ -22,6 +20,7 @@ ReplaceOrders::ReplaceOrders(
 wxThread::ExitCode ReplaceOrders::Entry() {
     greentop::ReplaceExecutionReport report;
 
+    wxLogStatus("Replace orders ...");
     try {
         report = DoReplaceOrders();
         wxLogStatus("Replace orders ... Success");
@@ -49,7 +48,7 @@ greentop::ReplaceExecutionReport ReplaceOrders::DoReplaceOrders() {
 
     greentop::ReplaceOrdersRequest replaceOrdersRequest(marketId, instructions);
 
-    return GreenThumb::GetBetfairApi().replaceOrders(exchange, replaceOrdersRequest);
+    return GreenThumb::GetBetfairApi().replaceOrders(replaceOrdersRequest);
 }
 
 }

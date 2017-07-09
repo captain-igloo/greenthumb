@@ -1,8 +1,10 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
 #ifndef ACCOUNTPANEL_H
 #define ACCOUNTPANEL_H
+
+#include <greentop/LRUCache.h>
 
 #include <wx/wx.h>
 #include <wx/grid.h>
@@ -10,12 +12,13 @@
 
 #include "AccountStatementFull.h"
 #include "AccountStatementSummary.h"
+#include "CurrentOrdersGrid.h"
 
 namespace greenthumb {
 
 /**
-* Display the account statement.
-*/
+ * Display the account statement.
+ */
 class AccountPanel : public wxNotebook {
     public:
 
@@ -33,6 +36,9 @@ class AccountPanel : public wxNotebook {
             const wxSize& size = wxDefaultSize, long style = wxNB_BOTTOM,
             const wxString& name=wxNotebookNameStr);
 
+
+        void SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets);
+
     protected:
     private:
 
@@ -40,6 +46,8 @@ class AccountPanel : public wxNotebook {
         AccountStatementFull* accountStatementFull;
         /** The account statement summary.  Displays a summary of bets grouped by event. */
         AccountStatementSummary* accountStatementSummary;
+
+        CurrentOrdersGrid* currentOrdersGrid;
 
         /**
          * Render the account statement pages.

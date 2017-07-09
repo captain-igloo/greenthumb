@@ -17,13 +17,11 @@ wxDECLARE_EVENT(LIST_MARKET_PROFIT_AND_LOSS, wxThreadEvent);
 class ListMarketProfitAndLoss : public Worker {
     public:
 
-        ListMarketProfitAndLoss(wxEvtHandler* eventHandler,
-            const greentop::Exchange exchange, const  std::string& marketId);
+        ListMarketProfitAndLoss(wxEvtHandler* eventHandler, const  std::string& marketId);
     protected:
         virtual ExitCode Entry();
     private:
 
-        greentop::Exchange exchange;
         std::string marketId;
         greentop::ListMarketProfitAndLossResponse DoListMarketProfitAndLoss();
 };

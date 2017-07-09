@@ -280,9 +280,7 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
             instructions
         );
 
-        workerManager.RunWorker(
-            new worker::PlaceOrders(&workerManager, market.GetExchange(), placeOrdersRequest)
-        );
+        workerManager.RunWorker(new worker::PlaceOrders(&workerManager, placeOrdersRequest));
     } else {
         wxLogError("Failed to convert: " + stakeSpin->GetValue());
     }

@@ -16,12 +16,11 @@ wxDECLARE_EVENT(REPLACE_ORDERS, wxThreadEvent);
 
 class ReplaceOrders : public Worker {
     public:
-        ReplaceOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
-            const std::string& marketId, const std::string& betId, const double newPrice);
+        ReplaceOrders(wxEvtHandler* eventHandler, const std::string& marketId,
+            const std::string& betId, const double newPrice);
     protected:
         virtual ExitCode Entry();
     private:
-        greentop::Exchange exchange;
         std::string marketId;
         std::string betId;
         double newPrice;

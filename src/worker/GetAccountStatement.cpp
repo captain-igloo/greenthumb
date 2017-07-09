@@ -75,8 +75,7 @@ void GetAccountStatement::DoGetAccountStatement() {
 
 bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStatementRequest& gasr) {
 
-    greentop::AccountStatementReport asr = GreenThumb::GetBetfairApi().getAccountStatement(
-        greentop::Exchange::UK, gasr);
+    greentop::AccountStatementReport asr = GreenThumb::GetBetfairApi().getAccountStatement(gasr);
 
     if (TestDestroy()) {
         return false;
