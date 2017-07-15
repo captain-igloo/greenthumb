@@ -15,7 +15,7 @@ namespace worker {
 
 wxDEFINE_EVENT(LIST_CURRENT_ORDERS, wxThreadEvent);
 
-ListCurrentOrders::ListCurrentOrders(wxEvtHandler* eventHandler, entity::Market& market) :
+ListCurrentOrders::ListCurrentOrders(wxEvtHandler* eventHandler, const entity::Market& market) :
     Worker(eventHandler), market(market) {
 }
 

@@ -1,6 +1,7 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ */
+#include <sstream>
 #include <wx/file.h>
 #include <wx/wfstream.h>
 #include <wx/stdpaths.h>
