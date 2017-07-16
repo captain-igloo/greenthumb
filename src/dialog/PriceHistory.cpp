@@ -105,24 +105,15 @@ const wxString PriceHistory::GetGraphFilename(const entity::Market& market, cons
     wxString marketId(market.GetMarketCatalogue().getMarketId().substr(2));
 
     std::ostringstream oStream;
-    oStream << runner.getSelectionId();
+    oStream << runner.getSelectionId().getValue();
     wxString selectionId = oStream.str();
 
-    wxString graphHost;
-    if (market.GetExchange() == greentop::Exchange::UK) {
-        graphHost = wxT("uk.site.sports.betfair.com");
-    } else {
-        graphHost = wxT("au.site.sports.betfair.com");
-    }
-
-    wxURL url(wxT("http://") + graphHost + wxT("/betting/LoadRunnerInfoChartAction.do?marketId=") +
+    wxURL url(wxT("http://sportsiteexweb.betfair.com.au/betting/LoadRunnerInfoChartAction.do?marketId=") +
         marketId +
         wxT("&selectionId=") +
-        selectionId +
-        wxT("&asianLineId=0"));
+        selectionId);
 
     if (url.GetError() == wxURL_NOERR) {
-
         wxString imageData;
         wxInputStream* in = url.GetInputStream();
 
