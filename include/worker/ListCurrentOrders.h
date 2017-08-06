@@ -33,7 +33,7 @@ class ListCurrentOrders : public Worker {
         ListCurrentOrders(
             wxEvtHandler* eventHandler,
             const entity::Market& market = entity::Market(),
-            const uint32_t currentPage = 0
+            const uint32_t currentPage = 1
         );
 
     protected:
