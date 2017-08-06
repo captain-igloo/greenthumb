@@ -15,26 +15,24 @@ namespace greenthumb {
 AccountPanel::AccountPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
     long style, const wxString& name) : wxNotebook(parent, id, pos, size, style, name) {
 
-    // currentOrdersGrid = new CurrentOrdersGrid(this);
     accountStatementFull = new AccountStatementFull(this);
     accountStatementSummary = new AccountStatementSummary(this);
+    currentOrdersGrid = new CurrentOrdersGrid(this);
 
-    // AddPage(currentOrdersGrid, "Current Orders");
     AddPage(accountStatementFull, "Full");
     AddPage(accountStatementSummary, "Summary");
+    AddPage(currentOrdersGrid, "Current Orders");
 
     Bind(worker::GET_ACCOUNT_STATEMENT, &AccountPanel::OnGetAccountStatement, this, wxID_ANY);
 }
 
 void AccountPanel::SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets) {
-    // currentOrdersGrid->SetBetfairMarketsCache(betfairMarkets);
+    currentOrdersGrid->SetBetfairMarketsCache(betfairMarkets);
 }
 
 void AccountPanel::OnGetAccountStatement(const wxThreadEvent& event) {
-
     accountStatementFull->OnGetAccountStatement();
     accountStatementSummary->OnGetAccountStatement();
-
 }
 
 }

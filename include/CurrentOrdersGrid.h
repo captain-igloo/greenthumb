@@ -22,11 +22,19 @@ class CurrentOrdersGrid : public PaginatedGrid {
     protected:
         virtual void Render();
 
+        virtual void OnClickFirst(wxCommandEvent& event);
+        virtual void OnClickPrevious(wxCommandEvent& event);
+        virtual void OnClickNext(wxCommandEvent& event);
+        virtual void OnClickLast(wxCommandEvent& event);
+
     private:
         greentop::LRUCache<std::string, entity::Market>* betfairMarkets;
+        greentop::CurrentOrderSummaryReport currentOrderSummaryReport;
 
+        void Refresh();
         void OnClickRefresh(wxCommandEvent& event);
         void OnListCurrentOrders(const wxThreadEvent& event);
+        void OnListMarketCatalogue(const wxThreadEvent& event);
 };
 
 }

@@ -9,7 +9,7 @@ namespace greenthumb {
 
 PaginatedGrid::PaginatedGrid(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name) :
-    wxPanel(parent, id, pos, size, style, name), workerManager(this) {
+    wxPanel(parent, id, pos, size, style, name), workerManager(this), numberPages(1), currentPage(1) {
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -48,9 +48,7 @@ PaginatedGrid::PaginatedGrid(wxWindow* parent, wxWindowID id, const wxPoint& pos
 }
 
 void PaginatedGrid::OnClickRefresh(wxCommandEvent& event) {
-
     workerManager.RunWorker(new worker::GetAccountStatement(&workerManager));
-
 }
 
 void PaginatedGrid::OnClickFirst(wxCommandEvent& event) {

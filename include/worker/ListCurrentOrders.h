@@ -9,6 +9,7 @@
 #include <wx/event.h>
 #include <wx/thread.h>
 
+#include "dialog/Settings.h"
 #include "entity/Market.h"
 #include "worker/Worker.h"
 
@@ -29,13 +30,18 @@ class ListCurrentOrders : public Worker {
          * @param eventHandler The handler to signal on completion.
          * @param market The market whose orders will be retrieved.
          */
-        ListCurrentOrders(wxEvtHandler* eventHandler, const entity::Market& market = entity::Market());
+        ListCurrentOrders(
+            wxEvtHandler* eventHandler,
+            const entity::Market& market = entity::Market(),
+            const uint32_t currentPage = 0
+        );
 
     protected:
         virtual ExitCode Entry();
     private:
 
         entity::Market market;
+        uint32_t currentPage;
 
         greentop::CurrentOrderSummaryReport DoListCurrentOrders();
 };

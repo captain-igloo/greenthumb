@@ -24,6 +24,11 @@ class PaginatedGrid : public wxPanel {
 
         virtual void Render() = 0;
         void UpdateToolbar();
+        virtual void OnClickRefresh(wxCommandEvent& event);
+        virtual void OnClickFirst(wxCommandEvent& event);
+        virtual void OnClickPrevious(wxCommandEvent& event);
+        virtual void OnClickNext(wxCommandEvent& event);
+        virtual void OnClickLast(wxCommandEvent& event);
 
     private:
 
@@ -33,13 +38,6 @@ class PaginatedGrid : public wxPanel {
         wxWindowID nextPageButtonId;
         wxWindowID lastPageButtonId;
         wxToolBar* toolbar;
-
-        virtual void OnClickRefresh(wxCommandEvent& event);
-        virtual void OnClickFirst(wxCommandEvent& event);
-        virtual void OnClickPrevious(wxCommandEvent& event);
-        virtual void OnClickNext(wxCommandEvent& event);
-        virtual void OnClickLast(wxCommandEvent& event);
-
 };
 
 }

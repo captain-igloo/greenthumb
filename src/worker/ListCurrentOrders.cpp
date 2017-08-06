@@ -15,8 +15,11 @@ namespace worker {
 
 wxDEFINE_EVENT(LIST_CURRENT_ORDERS, wxThreadEvent);
 
-ListCurrentOrders::ListCurrentOrders(wxEvtHandler* eventHandler, const entity::Market& market) :
-    Worker(eventHandler), market(market) {
+ListCurrentOrders::ListCurrentOrders(
+    wxEvtHandler* eventHandler,
+    const entity::Market& market,
+    const uint32_t currentPage) :
+    Worker(eventHandler), market(market), currentPage(currentPage) {
 }
 
 wxThread::ExitCode ListCurrentOrders::Entry() {
@@ -56,6 +59,9 @@ greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
         entity::Config::KEY_ACCOUNT_PAGE_SIZE,
         dialog::Settings::ACCOUNT_PAGE_SIZE
     );
+
+    lcor.setFromRecord((currentPage - 1) * pageSize);
+
     lcor.setRecordCount(pageSize);
 
     return GreenThumb::GetBetfairApi().listCurrentOrders(lcor);
