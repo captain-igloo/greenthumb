@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #ifndef PAGINATEDGRID_H
 #define PAGINATEDGRID_H
 
@@ -17,10 +17,10 @@ class PaginatedGrid : public wxPanel {
             const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name=wxPanelNameStr);
 
     protected:
-        uint32_t currentPage;
-        uint32_t numberPages;
-        wxGrid* grid;
         worker::WorkerManager workerManager;
+        uint32_t numberPages;
+        uint32_t currentPage;
+        wxGrid* grid;
 
         virtual void Render() = 0;
         void UpdateToolbar();
