@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include <set>
 
 #include <wx/log.h>
@@ -42,6 +45,8 @@ bool ListMarketBook::DoListMarketBook() {
     std::set<greentop::PriceData> priceData;
     priceData.insert(greentop::PriceData(greentop::PriceData::EX_BEST_OFFERS));
     greentop::PriceProjection priceProjection(priceData);
+    // show "virtual" bets
+    priceProjection.setVirtualise(true);
     greentop::OrderProjection orderProjection(greentop::OrderProjection::EXECUTABLE);
     greentop::MatchProjection matchProjection(greentop::MatchProjection::ROLLED_UP_BY_AVG_PRICE);
     greentop::ListMarketBookRequest listMarketBookRequest(marketIds, priceProjection, orderProjection, matchProjection);
