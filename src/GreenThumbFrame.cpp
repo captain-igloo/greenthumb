@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 
 #include <wx/wx.h>
@@ -85,9 +85,10 @@ GreenThumbFrame::GreenThumbFrame()
     sizer->Add(bettingPanel, 1, wxEXPAND, 0);
     sizer->Add(accountPanel, 1, wxEXPAND, 0);
 
-    Bind(wxEVT_TREE_SEL_CHANGED, &GreenThumbFrame::OnSelChanged, this, wxID_ANY);
+    Bind(wxEVT_TREE_ITEM_ACTIVATED, &GreenThumbFrame::OnItemActivated, this, wxID_ANY);
     workerManager.Bind(worker::GET_ACCOUNT_DETAILS);
 
+    workerManager.Bind(worker::LIST_MARKET_CATALOGUE);
     Bind(worker::LIST_MARKET_CATALOGUE, &GreenThumbFrame::OnListMarketCatalogue, this, wxID_ANY);
 
     CreateStatusBar(1);
@@ -173,22 +174,7 @@ void GreenThumbFrame::OnMenuFileRefreshMenu(const wxCommandEvent& menuEvent) {
 
 void GreenThumbFrame::OnMenuFileSettings(const wxCommandEvent& menuEvent) {
     dialog::Settings settings(NULL, wxID_ANY, "Settings");
-
-    if (settings.ShowModal() == wxID_OK) {
-
-    }
-    /*dialog::LoginDialog loginDialog(NULL, wxID_ANY, "Login");
-
-    if (loginDialog.ShowModal() == wxID_OK) {
-        eventTree->SyncMenu(false);
-
-        // get account currency if we don't already have it.
-        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
-        if (currencySymbol == "?") {
-            workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));
-        }
-
-    } */
+    settings.ShowModal();
 }
 
 void GreenThumbFrame::OnMenuFileExit(const wxCommandEvent& menuEvent) {
@@ -217,7 +203,7 @@ void GreenThumbFrame::OnMenuHelpAbout(const wxCommandEvent& menuEvent) {
 
 }
 
-void GreenThumbFrame::OnSelChanged(const wxTreeEvent& treeEvent) {
+void GreenThumbFrame::OnItemActivated(const wxTreeEvent& treeEvent) {
     wxTreeItemId itemId = treeEvent.GetItem();
     MenuTreeData* data = dynamic_cast<MenuTreeData*>(eventTree->GetItemData(itemId));
 
@@ -225,6 +211,11 @@ void GreenThumbFrame::OnSelChanged(const wxTreeEvent& treeEvent) {
         marketsPanel->AddMarket(data->node);
         if (betfairMarkets.exists(data->node.getId())) {
             marketsPanel->SetMarket(betfairMarkets.get(data->node.getId()));
+        } else {
+            if (!eventTree->ListMarketCatalogueInProgress()) {
+                std::set<std::string> marketIds = { data->node.getId() };
+                workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+            }
         }
     }
 }

@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -20,10 +23,9 @@
 
 namespace greenthumb {
 
-EventTree::EventTree(wxWindow *parent, const wxWindowID id,
-                       const wxPoint& pos, const wxSize& size,
-                       long style)
-    : wxTreeCtrl(parent, id, pos, size, style | wxTR_HIDE_ROOT), workerManager(this) {
+EventTree::EventTree(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
+        long style) : wxTreeCtrl(parent, id, pos, size, style | wxTR_HIDE_ROOT), workerManager(this),
+        listMarketCatalogueInProgress(false) {
 
     rootId = AddRoot(wxT("Root"));
 
@@ -40,6 +42,7 @@ EventTree::EventTree(wxWindow *parent, const wxWindowID id,
     Bind(wxEVT_TREE_ITEM_EXPANDED, &EventTree::OnItemExpanded, this, wxID_ANY);
 
     workerManager.Bind(worker::LIST_MARKET_CATALOGUE);
+    Bind(worker::LIST_MARKET_CATALOGUE, &EventTree::OnListMarketCatalogue, this, wxID_ANY);
 
     Bind(worker::REFRESH_MENU, &EventTree::Refresh, this, wxID_ANY);
     workerManager.Bind(worker::REFRESH_MENU);
@@ -107,7 +110,6 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
         Delete(*itr);
     }
 
-    // std::map<greentop::Exchange, std::set<std::string>> marketIds;
     std::set<std::string> marketIds;
 
     for (auto it = node.getChildren().begin(); it != node.getChildren().end(); ++it) {
@@ -137,9 +139,19 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
             } */
             // if (it1->second.size() > 0) {
         workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+        listMarketCatalogueInProgress = true;
             // }
         // }
     }
+}
+
+bool EventTree::ListMarketCatalogueInProgress() {
+    return listMarketCatalogueInProgress;
+}
+
+void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
+    listMarketCatalogueInProgress = false;
+    event.Skip();
 }
 
 void EventTree::OnItemExpanded(wxTreeEvent& treeEvent) {

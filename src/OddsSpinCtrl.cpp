@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include "OddsSpinCtrl.h"
 
 #include <iostream>
@@ -11,17 +14,22 @@ OddsSpinCtrl::OddsSpinCtrl(wxWindow* parent, wxWindowID id, const wxString &valu
     previousValue = initial;
     SetSnapToTicks(true);
 
-    Bind(wxEVT_SPINCTRLDOUBLE, &OddsSpinCtrl::onSpin, this, wxID_ANY);
+    Bind(wxEVT_TEXT, &OddsSpinCtrl::OnTextChange, this, wxID_ANY);
+    Bind(wxEVT_SPINCTRLDOUBLE, &OddsSpinCtrl::OnSpin, this, wxID_ANY);
 }
 
-void OddsSpinCtrl::onSpin(wxSpinDoubleEvent& spinEvent) {
+void OddsSpinCtrl::OnTextChange(wxCommandEvent& event) {
+    SetIncrement();
+    event.Skip();
+}
+
+void OddsSpinCtrl::OnSpin(wxSpinDoubleEvent& spinEvent) {
     SetIncrement();
     previousValue = GetValue();
     spinEvent.Skip();
 }
 
 void OddsSpinCtrl::SetIncrement() {
-
     double value = GetValue();
 
     if (value <= previousValue) {
@@ -80,9 +88,6 @@ void OddsSpinCtrl::SetValue(double value) {
     previousValue = value;
     wxSpinCtrlDouble::SetValue(value);
     SetIncrement();
-}
-
-OddsSpinCtrl::~OddsSpinCtrl() {
 }
 
 }

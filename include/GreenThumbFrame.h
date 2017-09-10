@@ -28,7 +28,7 @@ class GreenThumbFrame : public wxFrame {
 
     public:
 
-        /** 
+        /**
          * Constructor.
          */
         GreenThumbFrame();
@@ -72,7 +72,7 @@ class GreenThumbFrame : public wxFrame {
 
         /**
          * File / Logout handler - logs out from betfair.
-         * 
+         *
          * @param menuEvent The menu event.
          */
         void OnMenuFileLogout(const wxCommandEvent& menuEvent);
@@ -120,11 +120,11 @@ class GreenThumbFrame : public wxFrame {
         void OnMenuHelpAbout(const wxCommandEvent& menuEvent);
 
         /**
-         * Open market when the user clicks on a market in the tree.
+         * Open market when the user double clicks on a market in the tree.
          *
          * @param treeEvent The tree event.
          */
-        void OnSelChanged(const wxTreeEvent& treeEvent);
+        void OnItemActivated(const wxTreeEvent& treeEvent);
 
         /**
          * Cache market catalogue(s) and update display.
