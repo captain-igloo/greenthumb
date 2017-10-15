@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_CURRENTORDERS_H
 #define DIALOG_CURRENTORDERS_H
@@ -89,6 +89,8 @@ class CurrentOrders : public wxDialog {
         * @param event The worker event.
         */
         void OnReplaceOrders(wxThreadEvent& event);
+
+        void OnCancelOrders(wxThreadEvent& event);
 
         /**
         * Update display of either matched or unmatched orders.

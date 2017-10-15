@@ -1,11 +1,12 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
  #include <wx/wx.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 
 #include "dialog/CurrentOrders.h"
+#include "worker/CancelOrders.h"
 #include "worker/ListCurrentOrders.h"
 #include "worker/ReplaceOrders.h"
 #include "UnmatchedOrder.h"
@@ -48,6 +49,7 @@ CurrentOrders::CurrentOrders(wxWindow* parent, wxWindowID id, const wxString& ti
     SetExtraStyle(extraStyle - wxWS_EX_BLOCK_EVENTS);
 
     Bind(worker::LIST_CURRENT_ORDERS, &CurrentOrders::OnListCurrentOrders, this, wxID_ANY);
+    Bind(worker::CANCEL_ORDERS, &CurrentOrders::OnCancelOrders, this, wxID_ANY);
     workerManager.Bind(worker::LIST_CURRENT_ORDERS);
 
     Bind(worker::REPLACE_ORDERS, &CurrentOrders::OnReplaceOrders, this, wxID_ANY);
@@ -68,6 +70,38 @@ void CurrentOrders::OnListCurrentOrders(wxThreadEvent& event) {
     }
 
     event.ResumePropagation(wxEVENT_PROPAGATE_MAX);
+    event.Skip();
+}
+
+void CurrentOrders::OnCancelOrders(wxThreadEvent& event) {
+    greentop::CancelExecutionReport cer = event.GetPayload<greentop::CancelExecutionReport>();
+
+    if (cer.isSuccess() && cer.getStatus() == greentop::ExecutionReportStatus::SUCCESS) {
+        bool showNoUnmatchedOrdersMessage = true;
+        for (unsigned i = 0; i < cer.getInstructionReports().size(); ++i) {
+            greentop::CancelInstructionReport cir = cer.getInstructionReports()[i];
+
+            wxWindowList::iterator it = unmatchedOrders->GetChildren().begin();
+            while (it != unmatchedOrders->GetChildren().end()) {
+                // iterator will be invalidated (?) if the order is erased, so take a copy.
+                wxWindowList::const_iterator current = it;
+                it++;
+
+                CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*current);
+                if (currentOrder) {
+                    if (cir.getInstruction().getBetId() == currentOrder->GetCurrentOrderSummary().getBetId()) {
+                        currentOrder->Destroy();
+                    } else {
+                        showNoUnmatchedOrdersMessage = false;
+                    }
+                }
+            }
+        }
+
+        noUnmatchedOrdersMessage->Show(showNoUnmatchedOrdersMessage);
+        Refresh();
+    }
+
     event.Skip();
 }
 

@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #ifndef WORKER_GETPRICEHISTORYGRAPH_H
 #define WORKER_GETPRICEHISTORYGRAPH_H
 
@@ -32,7 +32,6 @@ class GetPriceHistoryGraph : public Worker {
     private:
         entity::Market market;
         greentop::Runner runner;
-        double lastPriceTraded;
 };
 
 }

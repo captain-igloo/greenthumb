@@ -24,7 +24,7 @@ endef
 
 .PHONY: all
 all: $(OBJS) $(BIN)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -Wall -fexceptions  -std=c++11 -g -I./include $(OBJS) $(LIBS) main.cpp -o $(EXE)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -Wall -fexceptions  -std=c++11 -g -I./include $(OBJS) main.cpp $(LIBS) -o $(EXE)
 
 .PHONY: clean
 clean:
