@@ -11,6 +11,7 @@
 #include "entity/Config.h"
 #include "worker/CancelOrders.h"
 #include "worker/ListCurrentOrders.h"
+#include "worker/ListMarketCatalogue.h"
 #include "worker/PlaceOrders.h"
 #include "worker/ReplaceOrders.h"
 
@@ -56,7 +57,6 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     Bind(worker::CANCEL_ORDERS, &MarketPanel::OnCancelOrders, this);
     Bind(wxEVT_TIMER, &MarketPanel::RefreshPrices, this);
     Bind(dialog::PLACE_ORDER_PENDING, &MarketPanel::OnPlaceOrderPending, this);
-    Bind(worker::LIST_CURRENT_ORDERS, &MarketPanel::OnListCurrentOrders, this, wxID_ANY);
     Bind(worker::REPLACE_ORDERS, &MarketPanel::RefreshPrices, this, wxID_ANY);
 }
 
@@ -123,8 +123,18 @@ void MarketPanel::OnListMarketProfitAndLoss(const wxThreadEvent& event) {
 }
 
 void MarketPanel::RefreshPrices() {
-    worker::ListMarketBook* listMarketBookThread = new worker::ListMarketBook(&workerManager, market);
-    workerManager.RunWorker(listMarketBookThread);
+    if (market.GetMarketCatalogue().getMarketId() == "") {
+        // we don't have the market catalogue, probably means previous attempt to get it failed.
+        // try again.
+        std::set<std::string> marketIds = { marketId };
+        workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+    } else {
+        worker::ListMarketBook* listMarketBookThread = new worker::ListMarketBook(
+            &workerManager,
+            market
+        );
+        workerManager.RunWorker(listMarketBookThread);
+    }
 }
 
 void MarketPanel::RefreshPrices(const wxEvent& event) {
@@ -260,14 +270,6 @@ void MarketPanel::OnPlaceOrderPending(const wxCommandEvent& event) {
 
 void MarketPanel::ShowCurrentOrders(const wxEvent& event) {
     currentOrdersDialog->Show();
-}
-
-void MarketPanel::OnListCurrentOrders(const wxThreadEvent& event) {
-    /* bool enabled = false;
-
-    if (currentOrdersDialog->GetNumberOrders() > 0) {
-        enabled = true;
-    } */
 }
 
 }

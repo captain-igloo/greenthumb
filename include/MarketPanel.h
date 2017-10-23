@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
@@ -116,7 +116,7 @@ class MarketPanel : public wxPanel {
 
         /**
          * Refreshes prices.
-         * 
+         *
          * @param event The click event.
          */
         void RefreshPrices(const wxEvent& event);
@@ -168,13 +168,6 @@ class MarketPanel : public wxPanel {
          * Open current orders dialog.
          */
         void ShowCurrentOrders(const wxEvent& event);
-
-        /**
-         * Enable / disable button that opens the current orders dialog.
-         *
-         * @param event The worker event.
-         */
-        void OnListCurrentOrders(const wxThreadEvent& event);
 
     DECLARE_NO_COPY_CLASS(MarketPanel)
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef ENTITY_MARKET_H
 #define ENTITY_MARKET_H
@@ -10,22 +10,10 @@ namespace greenthumb {
 namespace entity {
 
 /**
- * A greentop::MarketCatalogue and its exchange id.
+ * Wraps greentop::MarketCatalogue.
  */
 class Market {
     public:
-
-        /**
-         * Sets the exchange.
-         *
-         * @param exchangeId The exchange id.
-         */
-        void SetExchange(const greentop::Exchange exchange);
-
-        /**
-         * Gets the exchange.
-         */
-        const greentop::Exchange GetExchange() const;
 
         /**
          * Sets the market catalogue.
@@ -54,9 +42,6 @@ class Market {
         const greentop::RunnerCatalog& GetRunner(uint64_t selectionId) const;
 
     private:
-
-        unsigned exchangeId;
-        greentop::Exchange exchange;
         greentop::MarketCatalogue marketCatalogue;
         std::map<uint64_t, greentop::RunnerCatalog> runners;
 };

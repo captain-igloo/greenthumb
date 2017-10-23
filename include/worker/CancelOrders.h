@@ -1,10 +1,9 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_CANCELORDERS_H
 #define WORKER_CANCELORDERS_H
 
-#include <greentop/Exchange.h>
 #include <greentop/sport/CancelExecutionReport.h>
 #include <string>
 #include <wx/event.h>
@@ -31,16 +30,14 @@ class CancelOrders : public Worker {
          * @param marketId The order's marketId.
          * @param betId The bet id of the order to cancel.
          */
-        CancelOrders(wxEvtHandler* eventHandler, const greentop::Exchange exchange,
-            const std::string& marketId, const std::string& betId);
+        CancelOrders(wxEvtHandler* eventHandler, const std::string& marketId,
+            const std::string& betId);
 
     protected:
 
         virtual ExitCode Entry();
 
     private:
-
-        greentop::Exchange exchange;
         std::string marketId;
         std::string betId;
 

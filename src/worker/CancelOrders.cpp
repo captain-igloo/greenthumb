@@ -14,11 +14,9 @@ wxDEFINE_EVENT(CANCEL_ORDERS, wxThreadEvent);
 
 CancelOrders::CancelOrders(
     wxEvtHandler* eventHandler,
-    const greentop::Exchange exchange,
     const std::string& marketId,
     const std::string& betId) :
     Worker(eventHandler),
-    exchange(exchange),
     marketId(marketId),
     betId(betId) {
 }

@@ -140,8 +140,13 @@ void UnmatchedOrder::OnSpin(wxSpinDoubleEvent& event) {
 }
 
 void UnmatchedOrder::OnClickCancel(wxCommandEvent& event) {
-    workerManager.RunWorker(new worker::CancelOrders(&workerManager,
-        market.GetExchange(), currentOrderSummary.getMarketId(), currentOrderSummary.getBetId()));
+    workerManager.RunWorker(
+        new worker::CancelOrders(
+            &workerManager,
+            currentOrderSummary.getMarketId(),
+            currentOrderSummary.getBetId()
+        )
+    );
 }
 
 void UnmatchedOrder::OnClickSubmit(wxCommandEvent& event) {

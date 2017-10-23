@@ -3,14 +3,6 @@
 namespace greenthumb {
 namespace entity {
 
-void Market::SetExchange(const greentop::Exchange exchange) {
-    this->exchange = exchange;
-}
-
-const greentop::Exchange Market::GetExchange() const {
-    return exchange;
-}
-
 void Market::SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue) {
     this->marketCatalogue = marketCatalogue;
 

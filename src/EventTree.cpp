@@ -129,19 +129,17 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     }
 
     if (!recurse && marketIds.size() > 0) {
-        // for (auto it1 = marketIds.begin(); it1 != marketIds.end(); ++it1) {
-            /* for (auto it2 = it1->second.begin(); it2 != it1->second.end(); ) {
-                if (betfairMarkets->exists(*it2)) {
-                    it1->second.erase(it2++);
-                } else {
-                    ++it2;
-                }
-            } */
-            // if (it1->second.size() > 0) {
-        workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
-        listMarketCatalogueInProgress = true;
-            // }
-        // }
+        for (auto it = marketIds.begin(); it != marketIds.end(); ) {
+            if (betfairMarkets->exists(*it)) {
+                marketIds.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+        if (marketIds.size() > 0) {
+            workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+            listMarketCatalogueInProgress = true;
+        }
     }
 }
 

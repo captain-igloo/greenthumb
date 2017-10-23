@@ -197,7 +197,7 @@ void GreenThumbFrame::OnMenuViewBetting(const wxCommandEvent& menuEvent) {
 
 void GreenThumbFrame::OnMenuHelpAbout(const wxCommandEvent& menuEvent) {
 
-    (void) wxMessageBox(_("Green Thumb\n(c) 2015 Colin Doig"),
+    (void) wxMessageBox(_("Green Thumb\n(c) 2017 Colin Doig"),
         _("Green Thumb"),
         wxOK | wxICON_INFORMATION);
 
