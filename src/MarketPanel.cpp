@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/sizer.h>
@@ -10,7 +10,6 @@
 #include "dialog/PlaceBet.h"
 #include "entity/Config.h"
 #include "worker/CancelOrders.h"
-#include "worker/ListCurrentOrders.h"
 #include "worker/ListMarketCatalogue.h"
 #include "worker/PlaceOrders.h"
 #include "worker/ReplaceOrders.h"
@@ -61,7 +60,6 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 }
 
 void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
-
     greentop::MarketBook tempMarketBook = event.GetPayload<greentop::MarketBook>();
 
     if (tempMarketBook.isValid()) {
@@ -76,19 +74,12 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
             refreshTimer.Stop();
         }
 
-        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
-            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
-        workerManager.RunWorker(listMarketProfitAndLossWorker);
-
         UpdateToolBar();
         UpdateMarketStatus();
     }
 }
 
 void MarketPanel::OnListMarketProfitAndLoss(const wxThreadEvent& event) {
-
-    currentOrdersDialog->Refresh();
-
     greentop::ListMarketProfitAndLossResponse lmpalr = event.GetPayload<greentop::ListMarketProfitAndLossResponse>();
 
     if (lmpalr.isSuccess()) {
@@ -134,6 +125,12 @@ void MarketPanel::RefreshPrices() {
             market
         );
         workerManager.RunWorker(listMarketBookThread);
+
+        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
+            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
+        workerManager.RunWorker(listMarketProfitAndLossWorker);
+
+        currentOrdersDialog->Refresh();
     }
 }
 

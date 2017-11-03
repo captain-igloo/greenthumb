@@ -140,7 +140,9 @@ void CurrentOrdersGrid::OnListMarketCatalogue(const wxThreadEvent& event) {
         event.GetPayload<std::map<std::string, entity::Market>>();
 
     for (auto it = markets.begin(); it != markets.end(); ++it) {
-        betfairMarkets->put(it->second.GetMarketCatalogue().getMarketId(), it->second);
+        if (it->second.HasMarketCatalogue()) {
+            betfairMarkets->put(it->second.GetMarketCatalogue().getMarketId(), it->second);
+        }
     }
 
     Render();

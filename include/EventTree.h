@@ -60,6 +60,7 @@ class EventTree : public wxTreeCtrl {
         wxString menuCacheFilename;
         greentop::LRUCache<std::string, entity::Market>* betfairMarkets;
         bool listMarketCatalogueInProgress;
+        std::map<std::string, wxTreeItemId> marketNodes;
 
         EventTree();
         void Refresh(const wxThreadEvent& event = wxThreadEvent());

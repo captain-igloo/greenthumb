@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include <set>
 
 #include <wx/log.h>
@@ -73,6 +76,11 @@ bool ListMarketCatalogue::DoListMarketCatalogue(const std::set<std::string>& mar
         GreenThumb::GetBetfairApi().listMarketCatalogue(lmcRequest);
 
     if (!TestDestroy() && lmcResponse.isSuccess()) {
+
+        for (auto it = marketIdsPage.begin(); it != marketIdsPage.end(); ++it) {
+            entity::Market market;
+            betfairMarkets[*it] = market;
+        }
 
         std::vector<greentop::MarketCatalogue> bfMarkets = lmcResponse.getMarketCatalogues();
 

@@ -226,8 +226,10 @@ void GreenThumbFrame::OnListMarketCatalogue(const wxThreadEvent& event) {
             event.GetPayload<std::map<std::string, entity::Market>>();
 
         for (auto it = markets.begin(); it != markets.end(); ++it) {
-            betfairMarkets.put(it->second.GetMarketCatalogue().getMarketId(), it->second);
-            marketsPanel->SetMarket(it->second);
+            if (it->second.HasMarketCatalogue()) {
+                betfairMarkets.put(it->second.GetMarketCatalogue().getMarketId(), it->second);
+                marketsPanel->SetMarket(it->second);
+            }
         }
     } catch (const std::exception& e) {
         wxLogStatus(e.what());

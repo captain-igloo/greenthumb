@@ -1,3 +1,7 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
+
 #include "entity/Market.h"
 
 namespace greenthumb {
@@ -13,6 +17,7 @@ void Market::SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue
         runners[r[i].getSelectionId()] = r[i];
     }
 
+    hasMarketCatalogue = true;
 }
 const greentop::MarketCatalogue& Market::GetMarketCatalogue() const {
     return marketCatalogue;
@@ -24,6 +29,10 @@ bool Market::HasRunner(uint64_t selectionId) const {
 
 const greentop::RunnerCatalog& Market::GetRunner(uint64_t selectionId) const {
     return runners.at(selectionId);
+}
+
+bool Market::HasMarketCatalogue() const {
+    return hasMarketCatalogue;
 }
 
 }

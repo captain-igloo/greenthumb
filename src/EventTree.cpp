@@ -121,6 +121,9 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
             if (it->getChildren().size() > 0) {
                 AppendItem(childItemId, "", -1, -1, new MenuTreeData());
             }
+            if (it->getType() == greentop::menu::Node::Type::MARKET) {
+                marketNodes[it->getId()] = childItemId;
+            }
         }
 
         if (it->getType() == greentop::menu::Node::Type::MARKET) {
@@ -149,6 +152,23 @@ bool EventTree::ListMarketCatalogueInProgress() {
 
 void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
     listMarketCatalogueInProgress = false;
+
+    std::map<std::string, entity::Market> markets =
+        event.GetPayload<std::map<std::string, entity::Market>>();
+
+    for (auto it = markets.begin(); it != markets.end(); ++it) {
+        if (!it->second.HasMarketCatalogue()) {
+            // The market doesn't exist, so remove its node from the tree
+            wxTreeItemId parentId = GetItemParent(marketNodes[it->first]);
+            Delete(marketNodes[it->first]);
+            marketNodes.erase(it->first);
+            if (GetChildrenCount(parentId) == 0) {
+                // The parent no longer has any children so remove it as well
+                Delete(parentId);
+            }
+        }
+    }
+
     event.Skip();
 }
 
