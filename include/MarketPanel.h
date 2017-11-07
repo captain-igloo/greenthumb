@@ -14,6 +14,7 @@
 #include <wx/toolbar.h>
 
 #include "dialog/CurrentOrders.h"
+#include "dialog/Html.h"
 
 #include "entity/Market.h"
 
@@ -79,6 +80,8 @@ class MarketPanel : public wxPanel {
         worker::WorkerManager workerManager;
         /** Display matched and unmatched orders. */
         dialog::CurrentOrders* currentOrdersDialog;
+        /** Display the market's rules. */
+        dialog::Html* rulesDialog;
         /** The full market name. */
         std::string fullMarketName;
         /** The market id. */
@@ -168,6 +171,11 @@ class MarketPanel : public wxPanel {
          * Open current orders dialog.
          */
         void ShowCurrentOrders(const wxEvent& event);
+
+        /**
+         * Open rules dialog.
+         */
+        void ShowRules(const wxEvent& event);
 
     DECLARE_NO_COPY_CLASS(MarketPanel)
 };

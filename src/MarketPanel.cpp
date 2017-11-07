@@ -33,6 +33,7 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::OnClickClose, this, marketToolbar->GetCloseButtonId());
     marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::RefreshPrices, this, marketToolbar->GetRefreshButtonId());
     marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::ShowCurrentOrders, this, marketToolbar->GetCurrentOrdersButtonId());
+    marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::ShowRules, this, marketToolbar->GetRulesButtonId());
     tbSizer->Add(marketToolbar, 0, wxEXPAND);
 
     pricesPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
@@ -47,6 +48,8 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     refreshTimer.Start(refreshInterval * 1000);
 
     currentOrdersDialog = new dialog::CurrentOrders(this, wxID_ANY, "Current Bets");
+
+    rulesDialog = new dialog::Html(this, wxID_ANY, "Rules");
 
     Bind(worker::LIST_MARKET_BOOK, &MarketPanel::OnMarketUpdated, this);
     workerManager.Bind(worker::LIST_MARKET_BOOK);
@@ -76,6 +79,10 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 
         UpdateToolBar();
         UpdateMarketStatus();
+
+        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
+            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
+        workerManager.RunWorker(listMarketProfitAndLossWorker);
     }
 }
 
@@ -126,10 +133,6 @@ void MarketPanel::RefreshPrices() {
         );
         workerManager.RunWorker(listMarketBookThread);
 
-        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
-            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
-        workerManager.RunWorker(listMarketProfitAndLossWorker);
-
         currentOrdersDialog->Refresh();
     }
 }
@@ -167,6 +170,8 @@ void MarketPanel::SetMarket(const entity::Market& market) {
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
 
     currentOrdersDialog->SetMarket(market);
+    wxString rules(market.GetMarketCatalogue().getDescription().getRules().c_str(), wxConvUTF8);
+    rulesDialog->SetPage(rules);
 
     UpdateToolBar();
     UpdateMarketStatus();
@@ -267,6 +272,10 @@ void MarketPanel::OnPlaceOrderPending(const wxCommandEvent& event) {
 
 void MarketPanel::ShowCurrentOrders(const wxEvent& event) {
     currentOrdersDialog->Show();
+}
+
+void MarketPanel::ShowRules(const wxEvent& event) {
+    rulesDialog->Show();
 }
 
 }

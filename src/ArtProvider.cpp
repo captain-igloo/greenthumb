@@ -1,4 +1,7 @@
-#include <iostream>
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
+
 #include <wx/stdpaths.h>
 
 #include "ArtProvider.h"
@@ -6,12 +9,10 @@
 namespace greenthumb {
 
 wxBitmap ArtProvider::GetBitmap(IconId iconId) {
-
     wxBitmap bitmap;
     wxString filename("blank.png");
 
     switch (iconId) {
-
         case IconId::BLANK:
             filename = "blank.png";
             break;
@@ -51,6 +52,9 @@ wxBitmap ArtProvider::GetBitmap(IconId iconId) {
         case IconId::CHART:
             filename = "chart.png";
             break;
+        case IconId::RULES:
+            filename = "rules.png";
+            break;
     }
 
     wxStandardPaths sp = wxStandardPaths::Get();
@@ -62,7 +66,6 @@ wxBitmap ArtProvider::GetBitmap(IconId iconId) {
     }
 
     return wxBitmap(bitmapFilename, wxBITMAP_TYPE_PNG);
-
 }
 
 }

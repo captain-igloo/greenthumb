@@ -27,6 +27,12 @@ MarketToolbar::MarketToolbar(wxWindow* parent, const wxWindowID id, const wxPoin
     marketStatus = new wxStaticText(this, wxID_ANY, wxEmptyString);
     sizer->Add(marketStatus, 1, wxEXPAND | borderFlags, borderWidth);
 
+    rulesButtonId = wxWindow::NewControlId();
+    rulesButton = new wxButton(this, rulesButtonId, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
+    rulesButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::RULES));
+    rulesButton->SetToolTip("Rules");
+    sizer->Add(rulesButton);
+
     currentOrdersButtonId = wxWindow::NewControlId();
     currentOrdersButton = new wxButton(this, currentOrdersButtonId, wxEmptyString, wxDefaultPosition, iconSize, wxBORDER_NONE);
     currentOrdersButton->SetBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::VIEW_LIST));
@@ -57,16 +63,20 @@ void MarketToolbar::SetMarketStatus(const wxString& marketStatus) {
     this->marketStatus->SetLabel(marketStatus);
 }
 
-const wxWindowID MarketToolbar::GetCloseButtonId() {
+const wxWindowID& MarketToolbar::GetCloseButtonId() const {
     return closeButtonId;
 }
 
-const wxWindowID MarketToolbar::GetRefreshButtonId() {
+const wxWindowID& MarketToolbar::GetRefreshButtonId() const {
     return refreshButtonId;
 }
 
-const wxWindowID MarketToolbar::GetCurrentOrdersButtonId() {
+const wxWindowID& MarketToolbar::GetCurrentOrdersButtonId() const {
     return currentOrdersButtonId;
+}
+
+const wxWindowID& MarketToolbar::GetRulesButtonId() const {
+    return rulesButtonId;
 }
 
 void MarketToolbar::SetInPlay(bool inPlay) {

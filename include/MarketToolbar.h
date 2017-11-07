@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETTOOLBAR_H
 #define MARKETTOOLBAR_H
@@ -50,21 +50,28 @@ class MarketToolbar : public wxPanel {
          *
          * @return The close button id.
          */
-        const wxWindowID GetCloseButtonId();
+        const wxWindowID& GetCloseButtonId() const;
 
         /**
          * Gets the refresh button id.
          *
          * @return The refresh button id.
          */
-        const wxWindowID GetRefreshButtonId();
+        const wxWindowID& GetRefreshButtonId() const;
 
         /**
          * Gets the current orders button id.
          *
          * @return the current orders button id.
          */
-        const wxWindowID GetCurrentOrdersButtonId();
+        const wxWindowID& GetCurrentOrdersButtonId() const;
+
+        /**
+         * Gets the rules button id.
+         *
+         * @return The rules button id.
+         */
+        const wxWindowID& GetRulesButtonId() const;
 
         /**
          * Set whether or not the market is in play.  If set true, a green tick is displayed, else a grey tick is
@@ -81,6 +88,8 @@ class MarketToolbar : public wxPanel {
         wxWindowID refreshButtonId;
         /** The current orders button id. */
         wxWindowID currentOrdersButtonId;
+        /** The rules button id. */
+        wxWindowID rulesButtonId;
         /** The in-play status.*/
         wxButton* inPlayButton;
         /** Displays the market name. */
@@ -89,6 +98,8 @@ class MarketToolbar : public wxPanel {
         wxStaticText* marketStatus;
         /** Click to open the current orders dialog. */
         wxButton* currentOrdersButton;
+        /** Click to open the market's rules dialog. */
+        wxButton* rulesButton;
 
     DECLARE_NO_COPY_CLASS(MarketToolbar)
 };
