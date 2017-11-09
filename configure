@@ -2674,11 +2674,11 @@ $as_echo_n "checking for wxWidgets version >= $min_wx_version ()... " >&6; }
     if test -n "$wx_ver_ok"; then
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes (version $WX_VERSION)" >&5
 $as_echo "yes (version $WX_VERSION)" >&6; }
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs adv,core,base,net`
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs adv,core,base,net,html`
 
                               { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wxWidgets static library" >&5
 $as_echo_n "checking for wxWidgets static library... " >&6; }
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs adv,core,base,net 2>/dev/null`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs adv,core,base,net,html 2>/dev/null`
       if test "x$WX_LIBS_STATIC" = "x"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -2721,16 +2721,16 @@ $as_echo "yes" >&6; }
       fi
 
       if test "x$wx_has_cppflags" = x ; then
-                  WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags adv,core,base,net`
+                  WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags adv,core,base,net,html`
          WX_CPPFLAGS=$WX_CFLAGS
          WX_CXXFLAGS=$WX_CFLAGS
 
          WX_CFLAGS_ONLY=$WX_CFLAGS
          WX_CXXFLAGS_ONLY=$WX_CFLAGS
       else
-                  WX_CPPFLAGS=`$WX_CONFIG_WITH_ARGS --cppflags adv,core,base,net`
-         WX_CXXFLAGS=`$WX_CONFIG_WITH_ARGS --cxxflags adv,core,base,net`
-         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags adv,core,base,net`
+                  WX_CPPFLAGS=`$WX_CONFIG_WITH_ARGS --cppflags adv,core,base,net,html`
+         WX_CXXFLAGS=`$WX_CONFIG_WITH_ARGS --cxxflags adv,core,base,net,html`
+         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags adv,core,base,net,html`
 
          WX_CFLAGS_ONLY=`echo $WX_CFLAGS | sed "s@^$WX_CPPFLAGS *@@"`
          WX_CXXFLAGS_ONLY=`echo $WX_CXXFLAGS | sed "s@^$WX_CFLAGS *@@"`
@@ -3255,6 +3255,7 @@ fi
 
 
 
+CXXFLAGS="$CXXFLAGS -std=c++11"
 ac_fn_cxx_check_header_mongrel "$LINENO" "greentop/ExchangeApi.h" "ac_cv_header_greentop_ExchangeApi_h" "$ac_includes_default"
 if test "x$ac_cv_header_greentop_ExchangeApi_h" = xyes; then :
 

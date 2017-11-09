@@ -5,7 +5,7 @@ AC_LANG(C++)
 
 m4_include([/usr/share/aclocal/wxwin.m4])
 
-WX_CONFIG_CHECK([3.0.0], [wxWin=1], [wxWin=0], [adv,core,base,net])
+WX_CONFIG_CHECK([3.0.0], [wxWin=1], [wxWin=0], [adv,core,base,net,html])
 
 if test "$wxWin" != 1; then
     AC_MSG_ERROR([
@@ -44,6 +44,7 @@ AC_CHECK_HEADER(
     [AC_MSG_ERROR([sqlite3/soci-sqlite3.h not found])]
 )
 
+CXXFLAGS="$CXXFLAGS -std=c++11"
 AC_CHECK_HEADER(
     [greentop/ExchangeApi.h],
     [],
