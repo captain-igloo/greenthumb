@@ -36,6 +36,9 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     marketToolbar->Bind(wxEVT_BUTTON, &MarketPanel::ShowRules, this, marketToolbar->GetRulesButtonId());
     tbSizer->Add(marketToolbar, 0, wxEXPAND);
 
+    handicapPanel = new market::HandicapPanel(this);
+    tbSizer->Add(handicapPanel);
+
     pricesPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
 
     wxFlexGridSizer* sizer = new wxFlexGridSizer(10);
@@ -60,6 +63,7 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     Bind(wxEVT_TIMER, &MarketPanel::RefreshPrices, this);
     Bind(dialog::PLACE_ORDER_PENDING, &MarketPanel::OnPlaceOrderPending, this);
     Bind(worker::REPLACE_ORDERS, &MarketPanel::RefreshPrices, this, wxID_ANY);
+    Bind(market::HANDICAP_CHANGED, &MarketPanel::OnHandicapChanged, this, wxID_ANY);
 }
 
 void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
@@ -169,8 +173,14 @@ void MarketPanel::SetMarket(const entity::Market& market) {
 
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
 
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+        handicapPanel->Show(true);
+    }
+
+
     currentOrdersDialog->SetMarket(market);
     wxString rules(market.GetMarketCatalogue().getDescription().getRules().c_str(), wxConvUTF8);
+
     rulesDialog->SetPage(rules);
 
     UpdateToolBar();
@@ -215,8 +225,16 @@ void MarketPanel::SyncRunnerRows() {
 
                 runnerRow->SetRunner(market, marketBook, runner);
                 runnerRow->SetProfit(profit);
+                // runnerRow->SetHandicap(handicapPanel->GetHandicap(runner.getSelectionId()));
             } else {
                 iter->second->SetRunner(market, marketBook, runner);
+            }
+
+            if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+                greentop::Optional<double> runnerHandicap = runner.getHandicap();
+                if (runnerHandicap.isValid()) {
+                    handicapPanel->AddHandicap(runner.getSelectionId(), runnerHandicap.getValue());
+                }
             }
         }
     }
@@ -276,6 +294,15 @@ void MarketPanel::ShowCurrentOrders(const wxEvent& event) {
 
 void MarketPanel::ShowRules(const wxEvent& event) {
     rulesDialog->Show();
+}
+
+void MarketPanel::OnHandicapChanged(wxEvent& event) {
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+        for (const auto &it : runnerRows) {
+            RunnerRow* runnerRow = it.second;
+            runnerRow->SetHandicap(handicapPanel->GetHandicap(it.first));
+        }
+    }
 }
 
 }

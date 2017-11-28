@@ -180,6 +180,15 @@ void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop
     oddsSpin->SetValue(placeInstruction.getLimitOrder().getPrice());
 
     wxString runner(runnerName.c_str(), wxConvUTF8);
+
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+        wxString sign = "";
+        if (placeInstruction.getHandicap() > 0) {
+            sign = "+";
+        }
+        runner = runner + " " + sign + DoubleToString(placeInstruction.getHandicap(), 1);
+    }
+
     selection->SetLabel(runner);
 
     UpdateProfitAndLiability();

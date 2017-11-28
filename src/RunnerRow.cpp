@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/button.h>
 #include <wx/colour.h>
@@ -66,6 +66,7 @@ PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& sid
     PriceButton* button = new PriceButton(parent);
     button->SetBackgroundColour(colour);
     button->SetSide(side);
+    button->SetHandicap(static_cast<double>(handicap) / scaleFactor);
 
     wxFont font = parent->GetFont();
     font.MakeSmaller();
@@ -76,8 +77,8 @@ PriceButton* RunnerRow::CreateButton(wxWindow* parent, const greentop::Side& sid
     return button;
 }
 
-uint64_t RunnerRow::GetSelectionId() const {
-    return runner.getSelectionId();
+const int64_t RunnerRow::GetSelectionId() const {
+    return selectionId;
 }
 
 void RunnerRow::SetProfit(double profit) {
@@ -102,10 +103,17 @@ void RunnerRow::SetProfit(double profit) {
 }
 
 void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBook& marketBook, const greentop::Runner& runner) {
+    selectionId = runner.getSelectionId();
+
+    int64_t runnerHandicap = 0;
+    if (runner.getHandicap().isValid()) {
+        runnerHandicap = runner.getHandicap().getValue() * 100;
+    }
+    runners[runnerHandicap] = runner;
 
     this->market = market;
     this->marketBook = marketBook;
-    this->runner = runner;
+    // this->runner = runner;
 
     if (market.HasRunner(runner.getSelectionId())) {
         wxString label(market.GetRunner(runner.getSelectionId()).getRunnerName());
@@ -125,74 +133,74 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
 
 void RunnerRow::RefreshPrices() {
 
-    if (runner.getLastPriceTraded().isValid()) {
-        lastPriceTraded = runner.getLastPriceTraded().getValue();
+    if (GetRunner().getLastPriceTraded().isValid()) {
+        lastPriceTraded = GetRunner().getLastPriceTraded().getValue();
     }
 
     bool marketOpen = marketBook.getStatus() == greentop::MarketStatus::OPEN;
 
     wxString wxCurrencySymbol(currencySymbol.c_str(), wxConvUTF8);
 
-    if (marketOpen && runner.getEx().getAvailableToBack().size() >= 3) {
+    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 3) {
         SetButtonLabel(
             bestBackPrice3,
-            runner.getEx().getAvailableToBack()[2].getPrice(),
-            runner.getEx().getAvailableToBack()[2].getSize(),
+            GetRunner().getEx().getAvailableToBack()[2].getPrice(),
+            GetRunner().getEx().getAvailableToBack()[2].getSize(),
             wxCurrencySymbol
         );
     } else {
         ResetButton(bestBackPrice3);
     }
 
-    if (marketOpen && runner.getEx().getAvailableToBack().size() >= 2) {
+    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 2) {
         SetButtonLabel(
             bestBackPrice2,
-            runner.getEx().getAvailableToBack()[1].getPrice(),
-            runner.getEx().getAvailableToBack()[1].getSize(),
+            GetRunner().getEx().getAvailableToBack()[1].getPrice(),
+            GetRunner().getEx().getAvailableToBack()[1].getSize(),
             wxCurrencySymbol
         );
     } else {
         ResetButton(bestBackPrice2);
     }
 
-    if (marketOpen && runner.getEx().getAvailableToBack().size() >= 1) {
+    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 1) {
         SetButtonLabel(
             bestBackPrice1,
-            runner.getEx().getAvailableToBack()[0].getPrice(),
-            runner.getEx().getAvailableToBack()[0].getSize(),
+            GetRunner().getEx().getAvailableToBack()[0].getPrice(),
+            GetRunner().getEx().getAvailableToBack()[0].getSize(),
             wxCurrencySymbol
         );
     } else {
         ResetButton(bestBackPrice1);
     }
 
-    if (marketOpen && runner.getEx().getAvailableToLay().size() >= 1) {
+    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 1) {
         SetButtonLabel(
             bestLayPrice1,
-            runner.getEx().getAvailableToLay()[0].getPrice(),
-            runner.getEx().getAvailableToLay()[0].getSize(),
+            GetRunner().getEx().getAvailableToLay()[0].getPrice(),
+            GetRunner().getEx().getAvailableToLay()[0].getSize(),
             wxCurrencySymbol
         );
     } else {
         ResetButton(bestLayPrice1);
     }
 
-    if (marketOpen && runner.getEx().getAvailableToLay().size() >= 2) {
+    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 2) {
         SetButtonLabel(
             bestLayPrice2,
-            runner.getEx().getAvailableToLay()[1].getPrice(),
-            runner.getEx().getAvailableToLay()[1].getSize(),
+            GetRunner().getEx().getAvailableToLay()[1].getPrice(),
+            GetRunner().getEx().getAvailableToLay()[1].getSize(),
             wxCurrencySymbol
         );
     } else {
         ResetButton(bestLayPrice2);
     }
 
-    if (marketOpen && runner.getEx().getAvailableToLay().size() >= 3) {
+    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 3) {
         SetButtonLabel(
             bestLayPrice3,
-            runner.getEx().getAvailableToLay()[2].getPrice(),
-            runner.getEx().getAvailableToLay()[2].getSize(),
+            GetRunner().getEx().getAvailableToLay()[2].getPrice(),
+            GetRunner().getEx().getAvailableToLay()[2].getSize(),
             wxCurrencySymbol
         );
     } else {
@@ -205,7 +213,7 @@ void RunnerRow::SetPendingPlaceInstruction(const greentop::PlaceInstruction& pla
 
     double diff = 0;
 
-    if (runner.getSelectionId() == placeInstruction.getSelectionId()) {
+    if (GetRunner().getSelectionId() == placeInstruction.getSelectionId()) {
 
         diff = placeInstruction.getLimitOrder().getSize() * (placeInstruction.getLimitOrder().getPrice() - 1);
         if (placeInstruction.getSide() == greentop::Side::LAY) {
@@ -246,12 +254,11 @@ void RunnerRow::SetPendingPlaceInstruction(const greentop::PlaceInstruction& pla
 }
 
 void RunnerRow::SetButtonLabel(PriceButton* button, const double price, const double size, const wxString& currency) const {
-
     wxString label = wxString::Format(wxT("%.2f\n"), price) + currency +
         wxString::Format(wxT("%.0f"), size);
     button->SetLabel(label);
     button->SetPrice(price);
-
+    button->SetHandicap(static_cast<double>(handicap) / scaleFactor);
 }
 
 void RunnerRow::ResetButton(PriceButton* button) const {
@@ -268,12 +275,29 @@ void RunnerRow::ResetButton(PriceButton* button) const {
 }
 
 void RunnerRow::OnClickChart(wxEvent& event) {
-
     dialog::PriceHistory priceHistory(NULL, wxID_ANY, "Price History");
     priceHistory.SetLastPriceTraded(lastPriceTraded);
-    priceHistory.SetRunner(market, runner);
+    priceHistory.SetRunner(market, GetRunner());
     priceHistory.ShowModal();
+}
 
+void RunnerRow::SetHandicap(const double handicap) {
+    int64_t scaledHandicap = handicap * scaleFactor;
+    if ((runners.find(scaledHandicap) != runners.end()) && market.HasRunner(selectionId)) {
+        this->handicap = scaledHandicap;
+        RefreshPrices();
+
+        wxString label(market.GetRunner(GetRunner().getSelectionId()).getRunnerName());
+        wxString sign = "";
+        if (handicap > 0) {
+            sign = "+";
+        }
+        runnerName->SetLabel(label + " " + sign + DoubleToString(handicap, 1));
+    }
+}
+
+const greentop::Runner& RunnerRow::GetRunner() {
+    return runners[handicap];
 }
 
 }

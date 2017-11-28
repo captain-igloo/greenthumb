@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include "PriceButton.h"
 
 namespace greenthumb {
@@ -12,7 +15,7 @@ void PriceButton::SetSide(const greentop::Side& side) {
     placeInstruction.setSide(side);
 }
 
-const greentop::Side& PriceButton::GetSide() {
+const greentop::Side& PriceButton::GetSide() const {
     return placeInstruction.getSide();
 }
 
@@ -25,7 +28,11 @@ void PriceButton::SetPrice(const double price) {
     placeInstruction.setLimitOrder(limitOrder);
 }
 
-const greentop::PlaceInstruction& PriceButton::GetPlaceInstruction() {
+void PriceButton::SetHandicap(const double handicap) {
+    placeInstruction.setHandicap(handicap);
+}
+
+const greentop::PlaceInstruction& PriceButton::GetPlaceInstruction() const {
     return placeInstruction;
 }
 

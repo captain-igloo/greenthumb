@@ -1,3 +1,9 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
+#include <iomanip>
+#include <sstream>
+
 #include "Util.h"
 
 namespace greenthumb {
@@ -57,17 +63,6 @@ time_t timegm(tm* t) {
     return result;
 }
 
-/* time_t timegm(tm* time) {
-    time_t localTime = mktime(time);
-    tm tmVal;
-    gmtime_s(&tmVal, &localTime);
-    int offset = (tmVal.tm_hour - time->tm_hour);
-    if (offset > 12) {
-        offset = 24 - offset;
-    }
-    time_t utc = mktime(time) - offset * 3600;
-    return utc;
-} */
 #endif
 
 std::string GetCurrencySymbol(const std::string& currencyCode) {
@@ -84,5 +79,10 @@ std::string GetCurrencySymbol(const std::string& currencyCode) {
     return currencyCode;
 }
 
+std::string DoubleToString(const double dble, const unsigned precision) {
+    std::ostringstream s;
+    s << std::fixed << std::setprecision(precision) << dble;
+    return s.str();
+}
 
 }

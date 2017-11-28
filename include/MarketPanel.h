@@ -18,6 +18,8 @@
 
 #include "entity/Market.h"
 
+#include "market/HandicapPanel.h"
+
 #include "worker/ListMarketBook.h"
 #include "worker/ListMarketProfitAndLoss.h"
 #include "worker/WorkerManager.h"
@@ -71,7 +73,7 @@ class MarketPanel : public wxPanel {
         /** Market catalogue information from betfair. */
         entity::Market market;
         /** The market's runners and their prices. */
-        std::map<int, RunnerRow*> runnerRows;
+        std::map<int64_t, RunnerRow*> runnerRows;
         /** The parent panel. */
         MarketPanels* marketPanels;
         /** A timer used to refresh the market's prices at intervals */
@@ -90,6 +92,8 @@ class MarketPanel : public wxPanel {
         greentop::MarketBook marketBook;
         /** Displays market name and status, and buttons to refresh and close and display current orders. */
         MarketToolbar* marketToolbar;
+        /** Displays currently selected handicap and buttons to go backwards and forwards. */
+        market::HandicapPanel* handicapPanel;
 
         /**
          * Click price button handler. Opens the place bet dialog.
@@ -176,6 +180,13 @@ class MarketPanel : public wxPanel {
          * Open rules dialog.
          */
         void ShowRules(const wxEvent& event);
+
+        /**
+         * Update the market prices and runner labels.
+         *
+         * @param event The handicap changed event.
+         */
+        void OnHandicapChanged(wxEvent& event);
 
     DECLARE_NO_COPY_CLASS(MarketPanel)
 };
