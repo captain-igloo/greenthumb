@@ -78,6 +78,7 @@ class PlaceBet : public wxDialog {
         greentop::PlaceInstruction pendingPlaceInstruction;
         uint64_t selectionId;
         worker::WorkerManager workerManager;
+        greentop::Optional<double> handicap;
 
         void UpdateProfitAndLiability();
         void OnTextChange(wxCommandEvent& event);

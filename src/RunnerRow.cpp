@@ -107,9 +107,13 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
 
     int64_t runnerHandicap = 0;
     if (runner.getHandicap().isValid()) {
-        runnerHandicap = runner.getHandicap().getValue() * 100;
+        runnerHandicap = runner.getHandicap().getValue() * scaleFactor;
     }
     runners[runnerHandicap] = runner;
+
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_SINGLE_LINE) {
+        handicap = runnerHandicap;
+    }
 
     this->market = market;
     this->marketBook = marketBook;

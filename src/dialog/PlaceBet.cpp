@@ -176,6 +176,7 @@ void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop
 
     side = placeInstruction.getSide();
     selectionId = placeInstruction.getSelectionId();
+    handicap = placeInstruction.getHandicap();
 
     oddsSpin->SetValue(placeInstruction.getLimitOrder().getPrice());
 
@@ -277,10 +278,11 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
         greentop::PlaceInstruction placeInstruction(
             orderType,
             selectionId,
-            greentop::Optional<double>(),
+            handicap,
             side,
             limitOrder
         );
+
         std::vector<greentop::PlaceInstruction> instructions;
         instructions.push_back(placeInstruction);
 
