@@ -55,7 +55,6 @@ class OddsSpinCtrl : public wxSpinCtrlDouble {
         void SetValue(double value);
 
     private:
-
         double previousValue;
 
         void SetIncrement();
@@ -63,6 +62,8 @@ class OddsSpinCtrl : public wxSpinCtrlDouble {
         void OnSpin(wxSpinDoubleEvent& spinEvent);
 
         void OnTextChange(wxCommandEvent& event);
+
+        void AdjustValue();
 };
 
 }

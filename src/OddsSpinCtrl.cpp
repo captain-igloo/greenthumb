@@ -7,6 +7,10 @@
 
 namespace greenthumb {
 
+bool DoubleEquals(double d1, double d2) {
+    return std::abs((d2 - d1) * 1000) < 1;
+}
+
 OddsSpinCtrl::OddsSpinCtrl(wxWindow* parent, wxWindowID id, const wxString &value,
     const wxPoint& pos, const wxSize& size, long style, double min, double max,
     double initial, double increment, const wxString& name) :
@@ -25,15 +29,78 @@ void OddsSpinCtrl::OnTextChange(wxCommandEvent& event) {
 
 void OddsSpinCtrl::OnSpin(wxSpinDoubleEvent& spinEvent) {
     SetIncrement();
+    AdjustValue();
     previousValue = GetValue();
     spinEvent.Skip();
+}
+
+/**
+ * The spin event is received after the value has changed, making it difficult to set the increment
+ * correctly.  Here we detect that the value has not changed correctly and fix it.
+ */
+void OddsSpinCtrl::AdjustValue() {
+    if (DoubleEquals(previousValue, 2)) {
+        if (DoubleEquals(GetValue(), 1.98)) {
+            SetValue(1.99);
+        } else if (DoubleEquals(GetValue(), 2.01)) {
+            SetValue(2.02);
+        }
+    } else if (DoubleEquals(previousValue, 3)) {
+        if (DoubleEquals(GetValue(), 2.95)) {
+            SetValue(2.98);
+        } else if (DoubleEquals(GetValue(), 3.02)) {
+            SetValue(3.05);
+        }
+    } else if (DoubleEquals(previousValue, 4)) {
+        if (DoubleEquals(GetValue(), 3.9)) {
+            SetValue(3.95);
+        } else if (DoubleEquals(GetValue(), 4.05)) {
+            SetValue(3.10);
+        }
+    } else if (DoubleEquals(previousValue, 6)) {
+        if (DoubleEquals(GetValue(), 5.8)) {
+            SetValue(5.9);
+        } else if (DoubleEquals(GetValue(), 6.1)) {
+            SetValue(6.2);
+        }
+    } else if (DoubleEquals(previousValue, 10)) {
+        if (DoubleEquals(GetValue(), 9.5)) {
+            SetValue(9.8);
+        } else if (DoubleEquals(GetValue(), 10.2)) {
+            SetValue(10.5);
+        }
+    } else if (DoubleEquals(previousValue, 20)) {
+        if (DoubleEquals(GetValue(), 19)) {
+            SetValue(19.5);
+        } else if (DoubleEquals(GetValue(), 20.5)) {
+            SetValue(21);
+        }
+    } else if (DoubleEquals(previousValue, 30)) {
+        if (DoubleEquals(GetValue(), 28)) {
+            SetValue(29);
+        } else if (DoubleEquals(GetValue(), 31)) {
+            SetValue(32);
+        }
+    } else if (DoubleEquals(previousValue, 50)) {
+        if (DoubleEquals(GetValue(), 45)) {
+            SetValue(48);
+        } else if (DoubleEquals(GetValue(), 52)) {
+            SetValue(55);
+        }
+    } else if (DoubleEquals(previousValue, 100)) {
+        if (DoubleEquals(GetValue(), 90)) {
+            SetValue(95);
+        } else if (DoubleEquals(GetValue(), 105)) {
+            SetValue(110);
+        }
+    }
+    // }
 }
 
 void OddsSpinCtrl::SetIncrement() {
     double value = GetValue();
 
     if (value <= previousValue) {
-
         // spin down
         if (value <= 2) {
             wxSpinCtrlDouble::SetIncrement(0.01);
