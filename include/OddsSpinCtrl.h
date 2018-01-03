@@ -4,7 +4,7 @@
 #ifndef ODDSSPINCTRL_H
 #define ODDSSPINCTRL_H
 
-#include <iostream>
+#include <map>
 
 #include <wx/spinctrl.h>
 
@@ -55,14 +55,31 @@ class OddsSpinCtrl : public wxSpinCtrlDouble {
         void SetValue(double value);
 
     private:
+        const static std::map<unsigned, std::pair<double, double> > ranges;
         double previousValue;
 
+        /**
+         * Sets the increment according to the current value.
+         */
         void SetIncrement();
 
+        /**
+         * Handle the spin event.
+         *
+         * @param The spin event.
+         */
         void OnSpin(wxSpinDoubleEvent& spinEvent);
 
+        /**
+         * Handle text change event.
+         *
+         * @param The text change event.
+         */
         void OnTextChange(wxCommandEvent& event);
 
+        /**
+         * Adjust value if necessary.
+         */
         void AdjustValue();
 };
 

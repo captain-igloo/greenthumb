@@ -3,13 +3,25 @@
  */
 #include "OddsSpinCtrl.h"
 
-#include <iostream>
-
 namespace greenthumb {
 
 bool DoubleEquals(double d1, double d2) {
     return std::abs((d2 - d1) * 1000) < 1;
 }
+
+/** The increment ranges.  Below 2 the increment is 0.01, between 2 and 3 the increment is 0.02 etc. */
+const std::map<unsigned, std::pair<double, double> > OddsSpinCtrl::ranges = {
+    { 2, { 0.01, 0.02 } },
+    { 3, { 0.02, 0.05 } },
+    { 4, { 0.05, 0.1 } },
+    { 6, { 0.1, 0.2 } },
+    { 10, { 0.2, 0.5 } },
+    { 20, { 0.5, 1 } },
+    { 30, { 1, 2 } },
+    { 50, { 2, 5 } },
+    { 100, { 5, 10 } },
+    { 1000, { 10, -1 } }
+};
 
 OddsSpinCtrl::OddsSpinCtrl(wxWindow* parent, wxWindowID id, const wxString &value,
     const wxPoint& pos, const wxSize& size, long style, double min, double max,
@@ -39,116 +51,39 @@ void OddsSpinCtrl::OnSpin(wxSpinDoubleEvent& spinEvent) {
  * correctly.  Here we detect that the value has not changed correctly and fix it.
  */
 void OddsSpinCtrl::AdjustValue() {
-    if (DoubleEquals(previousValue, 2)) {
-        if (DoubleEquals(GetValue(), 1.98)) {
-            SetValue(1.99);
-        } else if (DoubleEquals(GetValue(), 2.01)) {
-            SetValue(2.02);
-        }
-    } else if (DoubleEquals(previousValue, 3)) {
-        if (DoubleEquals(GetValue(), 2.95)) {
-            SetValue(2.98);
-        } else if (DoubleEquals(GetValue(), 3.02)) {
-            SetValue(3.05);
-        }
-    } else if (DoubleEquals(previousValue, 4)) {
-        if (DoubleEquals(GetValue(), 3.9)) {
-            SetValue(3.95);
-        } else if (DoubleEquals(GetValue(), 4.05)) {
-            SetValue(3.10);
-        }
-    } else if (DoubleEquals(previousValue, 6)) {
-        if (DoubleEquals(GetValue(), 5.8)) {
-            SetValue(5.9);
-        } else if (DoubleEquals(GetValue(), 6.1)) {
-            SetValue(6.2);
-        }
-    } else if (DoubleEquals(previousValue, 10)) {
-        if (DoubleEquals(GetValue(), 9.5)) {
-            SetValue(9.8);
-        } else if (DoubleEquals(GetValue(), 10.2)) {
-            SetValue(10.5);
-        }
-    } else if (DoubleEquals(previousValue, 20)) {
-        if (DoubleEquals(GetValue(), 19)) {
-            SetValue(19.5);
-        } else if (DoubleEquals(GetValue(), 20.5)) {
-            SetValue(21);
-        }
-    } else if (DoubleEquals(previousValue, 30)) {
-        if (DoubleEquals(GetValue(), 28)) {
-            SetValue(29);
-        } else if (DoubleEquals(GetValue(), 31)) {
-            SetValue(32);
-        }
-    } else if (DoubleEquals(previousValue, 50)) {
-        if (DoubleEquals(GetValue(), 45)) {
-            SetValue(48);
-        } else if (DoubleEquals(GetValue(), 52)) {
-            SetValue(55);
-        }
-    } else if (DoubleEquals(previousValue, 100)) {
-        if (DoubleEquals(GetValue(), 90)) {
-            SetValue(95);
-        } else if (DoubleEquals(GetValue(), 105)) {
-            SetValue(110);
+    std::map<unsigned, std::pair<double, double> >::const_iterator it;
+    for (it = ranges.begin(); it != ranges.end(); ++it) {
+        if (DoubleEquals(previousValue, it->first)) {
+            if (DoubleEquals(GetValue(), it->first - it->second.second)) {
+                // eg previous value == 2, new value 1.98, adjust to 1.99
+                SetValue(it->first - it->second.first);
+            } else if (DoubleEquals(GetValue(), it->first + it->second.first)) {
+                // eg previous value == 2, new value 2.01, adjust to 2.02
+                SetValue(it->first + it->second.second);
+            }
         }
     }
-    // }
 }
 
 void OddsSpinCtrl::SetIncrement() {
     double value = GetValue();
 
-    if (value <= previousValue) {
-        // spin down
-        if (value <= 2) {
-            wxSpinCtrlDouble::SetIncrement(0.01);
-        } else if (value <= 3) {
-            wxSpinCtrlDouble::SetIncrement(0.02);
-        } else if (value <= 4) {
-            wxSpinCtrlDouble::SetIncrement(0.05);
-        } else if (value <= 6) {
-            wxSpinCtrlDouble::SetIncrement(0.1);
-        } else if (value <= 10) {
-            wxSpinCtrlDouble::SetIncrement(0.2);
-        } else if (value <= 20) {
-            wxSpinCtrlDouble::SetIncrement(0.5);
-        } else if (value <= 30) {
-            wxSpinCtrlDouble::SetIncrement(1);
-        } else if (value <= 50) {
-            wxSpinCtrlDouble::SetIncrement(2);
-        } else if (value <= 100) {
-            wxSpinCtrlDouble::SetIncrement(5);
+    std::map<unsigned, std::pair<double, double> >::const_iterator it;
+    for (it = ranges.begin(); it != ranges.end(); ++it) {
+        if (value <= previousValue) {
+            // spin down
+            if (value <= it->first) {
+                wxSpinCtrlDouble::SetIncrement(it->second.first);
+                break;
+            }
         } else {
-            wxSpinCtrlDouble::SetIncrement(10);
-        }
-
-    } else {
-        // spin up
-        if (value < 2) {
-            wxSpinCtrlDouble::SetIncrement(0.01);
-        } else if (value < 3) {
-            wxSpinCtrlDouble::SetIncrement(0.02);
-        } else if (value < 4) {
-            wxSpinCtrlDouble::SetIncrement(0.05);
-        } else if (value < 6) {
-            wxSpinCtrlDouble::SetIncrement(0.1);
-        } else if (value < 10) {
-            wxSpinCtrlDouble::SetIncrement(0.2);
-        } else if (value < 20) {
-            wxSpinCtrlDouble::SetIncrement(0.5);
-        } else if (value < 30) {
-            wxSpinCtrlDouble::SetIncrement(1);
-        } else if (value < 50) {
-            wxSpinCtrlDouble::SetIncrement(2);
-        } else if (value < 100) {
-            wxSpinCtrlDouble::SetIncrement(5);
-        } else {
-            wxSpinCtrlDouble::SetIncrement(10);
+            // spin up
+            if (value < it->first) {
+                wxSpinCtrlDouble::SetIncrement(it->second.first);
+                break;
+            }
         }
     }
-
 }
 
 void OddsSpinCtrl::SetValue(double value) {
