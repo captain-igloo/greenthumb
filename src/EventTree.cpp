@@ -157,7 +157,8 @@ void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
         event.GetPayload<std::map<std::string, entity::Market>>();
 
     for (auto it = markets.begin(); it != markets.end(); ++it) {
-        if (!it->second.HasMarketCatalogue()) {
+        // check that the node is still in the tree, it could have been removed after menu refresh.
+        if (!it->second.HasMarketCatalogue() && marketNodes[it->first].IsOk()) {
             // The market doesn't exist, so remove its node from the tree
             wxTreeItemId parentId = GetItemParent(marketNodes[it->first]);
             Delete(marketNodes[it->first]);

@@ -38,15 +38,17 @@ wxThread::ExitCode GetAccountStatement::Entry() {
 }
 
 void GetAccountStatement::DoGetAccountStatement() {
-
     uint32_t fromRecord = 0;
     greentop::GetAccountStatementRequest gasr;
+
     std::tm fromDate;
     fromDate = entity::AccountStatementItem::GetMostRecentItemDate();
-
     fromDate.tm_sec++;
+    // mktime will correct overflow - if tm_sec is 60 it will be changed to 0 and tm_min incremented.
+    mktime(&fromDate);
     greentop::TimeRange timeRange(fromDate);
     gasr.setItemDateRange(timeRange);
+
     gasr.setWallet(greentop::Wallet::UK);
     gasr.setFromRecord(fromRecord);
     gasr.setRecordCount(PAGE_SIZE);
@@ -74,7 +76,6 @@ void GetAccountStatement::DoGetAccountStatement() {
 }
 
 bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStatementRequest& gasr) {
-
     greentop::AccountStatementReport asr = GreenThumb::GetBetfairApi().getAccountStatement(gasr);
 
     if (TestDestroy()) {
