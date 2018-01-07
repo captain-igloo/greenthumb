@@ -1,3 +1,6 @@
+/**
+ * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ */
 #include <greentop/Exchange.h>
 
 #include "entity/AccountStatementItem.h"
@@ -34,7 +37,7 @@ std::vector<AccountStatementItem> AccountStatementItem::FetchAccountStatementIte
 
     soci::session session(Db::GetConnectionPool());
 
-    soci::statement st = (session.prepare << "SELECT * FROM account_statement_item ORDER BY item_date DESC, id LIMIT :pageSize OFFSET :fromRecord",
+    soci::statement st = (session.prepare << "SELECT * FROM account_statement_item ORDER BY id DESC LIMIT :pageSize OFFSET :fromRecord",
             soci::into(asi), soci::use(pageSize), soci::use(fromRecord));
 
     st.execute();
@@ -71,7 +74,7 @@ double AccountStatementItem::GetTotalBalanceForEvent(uint64_t eventId) {
 
     soci::session session(Db::GetConnectionPool());
 
-    std::string query = "SELECT total_balance FROM account_statement_item where event_id = :eventId ORDER BY id LIMIT 1";
+    std::string query = "SELECT total_balance FROM account_statement_item where event_id = :eventId ORDER BY id DESC LIMIT 1";
 
     session << query, soci::into(totalBalanceForEvent), soci::use(eventId);
 
@@ -122,7 +125,6 @@ void AccountStatementItem::Update() {
 }
 
 bool AccountStatementItem::Insert() {
-
     soci::session session(Db::GetConnectionPool());
 
     session << "INSERT INTO account_statement_item ("
@@ -138,7 +140,6 @@ bool AccountStatementItem::Insert() {
         soci::use(selectionName), soci::use(startDate), soci::use(transactionType), soci::use(winLose);
 
     return true;
-
 }
 
 uint32_t AccountStatementItem::GetNumberRows() {
@@ -301,7 +302,6 @@ void AccountStatementItem::SetTotalBalance(const double totalBalance) {
 const double AccountStatementItem::GetTotalBalance() const {
     return totalBalance;
 }
-
 
 }
 }

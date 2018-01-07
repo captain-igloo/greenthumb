@@ -86,8 +86,7 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
 
         std::vector<greentop::StatementItem> items = asr.getAccountStatement();
 
-        for (unsigned i = 0; i < items.size(); ++i) {
-
+        for (int32_t i = items.size() - 1; i >= 0; --i) {
             greentop::StatementLegacyData data = items[i].getLegacyData();
 
             entity::AccountStatementItem asi;
@@ -115,7 +114,6 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
             asi.SetTransactionType(data.getTransactionType());
             asi.SetWinLose(data.getWinLose());
             asi.Insert();
-
         }
 
     } else {

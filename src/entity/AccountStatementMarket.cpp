@@ -63,24 +63,22 @@ void AccountStatementMarket::Populate() {
         soci::into(itemDate), soci::into(eventId), soci::into(fullMarketName), soci::into(amount));
     st.execute();
 
-    std::vector<AccountStatementMarket> ases;
+    std::vector<AccountStatementMarket> asms;
 
     while (st.fetch()) {
-
-        AccountStatementMarket accountStatementEvent;
-        accountStatementEvent.exchangeId = exchangeId;
-        accountStatementEvent.itemDate = itemDate;
-        accountStatementEvent.balance = 0;
-        accountStatementEvent.amount = amount;
-        accountStatementEvent.eventId = eventId;
-        accountStatementEvent.fullMarketName = fullMarketName;
-        accountStatementEvent.totalBalance = AccountStatementItem::GetTotalBalanceForEvent(eventId);
-        ases.push_back(accountStatementEvent);
-
+        AccountStatementMarket accountStatementMarket;
+        accountStatementMarket.SetExchangeId(exchangeId);
+        accountStatementMarket.SetItemDate(itemDate);
+        accountStatementMarket.SetBalance(0);
+        accountStatementMarket.SetAmount(amount);
+        accountStatementMarket.SetEventId(eventId);
+        accountStatementMarket.SetFullMarketName(fullMarketName);
+        accountStatementMarket.SetTotalBalance(AccountStatementItem::GetTotalBalanceForEvent(eventId));
+        asms.push_back(accountStatementMarket);
     }
 
-    for (unsigned i = 0; i < ases.size(); ++i) {
-        ases[i].Insert();
+    for (unsigned i = 0; i < asms.size(); ++i) {
+        asms[i].Insert();
     }
 
 }

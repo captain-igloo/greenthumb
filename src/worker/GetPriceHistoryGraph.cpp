@@ -1,7 +1,6 @@
 /**
  * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
-#include <iostream>
 #include <sstream>
 #include <wx/file.h>
 #include <wx/filesys.h>
@@ -45,8 +44,6 @@ wxThread::ExitCode GetPriceHistoryGraph::Entry() {
         marketId +
         wxT("&selectionId=") +
         selectionId;
-
-    std::cout << imageUrl << std::endl;
 
     wxFSFile* file = fileSystem.OpenFile(imageUrl);
 

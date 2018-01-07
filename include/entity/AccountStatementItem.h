@@ -1,8 +1,6 @@
 #ifndef ENTITY_ACCOUNTSTATEMENTITEM_H
 #define ENTITY_ACCOUNTSTATEMENTITEM_H
 
-#include <iostream>
-
 #include <ctime>
 #include <soci.h>
 #include <string>
