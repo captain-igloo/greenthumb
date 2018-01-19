@@ -22,12 +22,18 @@ Requirements
 
 Build
 -----
+export CPPFLAGS=-I/usr/include/jsoncpp
 
 ./configure --prefix=/usr
 
 make
 
 make install
+
+Ubuntu Installation
+-------------------
+
+Binaries for Ubuntu are available at [https://launchpad.net/~captain-igloo/+archive/ubuntu/greenthumb](https://launchpad.net/~captain-igloo/+archive/ubuntu/greenthumb).
 
 Screenshots
 -----------

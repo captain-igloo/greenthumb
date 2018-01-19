@@ -1,0 +1,11 @@
+greenthumb (0.4.1+xenial) xenial; urgency=medium
+
+  * Rebuild for new version of greentop.
+
+ -- Colin Doig <colindoig@gmail.com>  Fri, 19 Jan 2018 20:29:13 +1300
+
+greenthumb (0.4.0+xenial) xenial; urgency=medium
+
+  * Initial release.
+
+ -- Colin Doig <colindoig@gmail.com>  Tue, 16 Jan 2018 19:02:55 +1300

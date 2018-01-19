@@ -1,0 +1,2 @@
+bin/greenthumb         usr/bin/
+art/*.png              usr/share/greenthumb/
