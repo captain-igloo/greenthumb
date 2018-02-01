@@ -1,3 +1,9 @@
+greenthumb (0.5.1+xenial) xenial; urgency=medium
+
+  * xenial build
+
+ -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:51:53 +1300
+
 greenthumb (0.5.0+xenial) xenial; urgency=medium
 
   * refresh menu - retrieve the menu in a worker thread and parse in the main thread in order to avoid different threads reading + updating the menu at the same time.
