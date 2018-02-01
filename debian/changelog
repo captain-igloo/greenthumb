@@ -1,3 +1,9 @@
+greenthumb (0.5.0+xenial) xenial; urgency=medium
+
+  * refresh menu - retrieve the menu in a worker thread and parse in the main thread in order to avoid different threads reading + updating the menu at the same time.
+
+ -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:23:59 +1300
+
 greenthumb (0.4.1+xenial) xenial; urgency=medium
 
   * Rebuild for new version of greentop.

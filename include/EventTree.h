@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef EVENTTREE_H
 #define EVENTTREE_H
@@ -63,7 +63,8 @@ class EventTree : public wxTreeCtrl {
         std::map<std::string, wxTreeItemId> marketNodes;
 
         EventTree();
-        void Refresh(const wxThreadEvent& event = wxThreadEvent());
+        void Refresh();
+        void Refresh(const wxThreadEvent& event);
         void OnItemExpanded(wxTreeEvent& event);
         void SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse = false);
         void ReadMenuCache();

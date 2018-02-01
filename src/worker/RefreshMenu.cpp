@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/log.h>
 
 #include "worker/RefreshMenu.h"
@@ -36,7 +36,7 @@ wxThread::ExitCode RefreshMenu::Entry() {
 }
 
 bool RefreshMenu::DoRefreshMenu() {
-    return GreenThumb::GetBetfairApi().refreshMenu(cacheFilename);
+    return GreenThumb::GetBetfairApi().retrieveMenu(cacheFilename);
 }
 
 }

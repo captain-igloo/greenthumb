@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/filename.h>
@@ -70,9 +70,14 @@ void EventTree::SyncMenu(bool force) {
     }
 }
 
+void EventTree::Refresh() {
+    SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode(), true);
+}
+
 void EventTree::Refresh(const wxThreadEvent& event) {
     try {
-        SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode(), true);
+        GreenThumb::GetBetfairApi().parseMenu();
+        Refresh();
     } catch (const std::exception& e) {
         wxLogStatus("Failed to refresh menu");
     }

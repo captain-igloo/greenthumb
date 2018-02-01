@@ -36,13 +36,13 @@ AC_CHECK_HEADER(
     [AC_MSG_ERROR([soci.h not found])]
 )
 
-# AC_CHECK_LIB([soci_core])
-
 AC_CHECK_HEADER(
     [sqlite3/soci-sqlite3.h],
     [],
     [AC_MSG_ERROR([sqlite3/soci-sqlite3.h not found])]
 )
+
+AC_CHECK_HEADER([json/json.h], [], [AC_MSG_ERROR([json/json.h not found])])
 
 CXXFLAGS="$CXXFLAGS -std=c++11"
 AC_CHECK_HEADER(

@@ -1,13 +1,13 @@
 Source: greenthumb
 Priority: extra
 Maintainer: Colin Doig <colindoig@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, libjsoncpp-dev, libcurl4-openssl-dev, libgreentop-dev, libwxgtk3.0-dev, libsoci-dev, libsqlite3-dev
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, libjsoncpp-dev, libcurl4-openssl-dev, libgreentop-dev (= 0.9.0), libwxgtk3.0-dev, libsoci-dev, libsqlite3-dev
 Standards-Version: 3.9.2
 Section: libs
 
 Package: greenthumb
 Architecture: any
-Depends: libgreentop, libjsoncpp-dev, libcurl4-openssl-dev, libwxgtk3.0-0v5, libsoci-dev, libsqlite3-0
+Depends: libgreentop (= 0.9.0), libjsoncpp-dev, libcurl4-openssl-dev, libwxgtk3.0-0v5, libsoci-dev, libsqlite3-0
 Description: Betfair API client
  Use the Betfair API to read markets and prices, place bets, manage your account, and more.
 
