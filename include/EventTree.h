@@ -62,12 +62,44 @@ class EventTree : public wxTreeCtrl {
         bool listMarketCatalogueInProgress;
         std::map<std::string, wxTreeItemId> marketNodes;
 
+        /**
+         * Prevent use of the default constructor.
+         */
         EventTree();
-        void Refresh();
-        void Refresh(const wxThreadEvent& event);
-        void OnItemExpanded(wxTreeEvent& event);
+
+        /**
+         * Sync the entire navigation menu.
+         *
+         * @param event The worker event.
+         */
+        void Refresh(const wxThreadEvent& event = wxThreadEvent());
+
+        /**
+         * Handle expand node event.
+         *
+         * @param event The expand node event.
+         */
+        void OnItemExpanded(const wxTreeEvent& event);
+
+        /**
+         * Sync a node in the navigation menu.
+         *
+         * @param itemId The id of the tree node to synchronise.
+         * @param node The corresponding node in the navigation menu.
+         * @param recurse Whether or not to synchronise recursively.
+         */
         void SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse = false);
+
+        /**
+         * Read cached navigation menu.
+         */
         void ReadMenuCache();
+
+        /**
+         * Delete market nodes from the tree that have been recently closed.
+         *
+         * @param event The worker event.
+         */
         void OnListMarketCatalogue(wxThreadEvent& event);
 };
 

@@ -70,14 +70,10 @@ void EventTree::SyncMenu(bool force) {
     }
 }
 
-void EventTree::Refresh() {
-    SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode(), true);
-}
 
 void EventTree::Refresh(const wxThreadEvent& event) {
     try {
-        GreenThumb::GetBetfairApi().parseMenu();
-        Refresh();
+        SyncNode(rootId, GreenThumb::GetBetfairApi().getMenu().getRootNode(), true);
     } catch (const std::exception& e) {
         wxLogStatus("Failed to refresh menu");
     }
@@ -178,7 +174,8 @@ void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
     event.Skip();
 }
 
-void EventTree::OnItemExpanded(wxTreeEvent& treeEvent) {
+void EventTree::OnItemExpanded(const wxTreeEvent& treeEvent) {
+    wxCriticalSectionLocker locker(worker::RefreshMenu::criticalSection);
     try {
         wxTreeItemId itemId = treeEvent.GetItem();
         MenuTreeData* data = dynamic_cast<MenuTreeData*>(GetItemData(itemId));

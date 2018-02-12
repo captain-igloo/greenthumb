@@ -11,6 +11,8 @@ namespace worker {
 
 wxDEFINE_EVENT(REFRESH_MENU, wxThreadEvent);
 
+wxCriticalSection RefreshMenu::criticalSection;
+
 RefreshMenu::RefreshMenu(wxEvtHandler* eventHandler, const std::string& cacheFilename) :
     Worker(eventHandler), cacheFilename(cacheFilename) {
 }
@@ -36,7 +38,12 @@ wxThread::ExitCode RefreshMenu::Entry() {
 }
 
 bool RefreshMenu::DoRefreshMenu() {
-    return GreenThumb::GetBetfairApi().retrieveMenu(cacheFilename);
+    bool result = false;
+    if (GreenThumb::GetBetfairApi().retrieveMenu(cacheFilename)) {
+        wxCriticalSectionLocker locker(RefreshMenu::criticalSection);
+        result = GreenThumb::GetBetfairApi().parseMenu();
+    }
+    return result;
 }
 
 }
