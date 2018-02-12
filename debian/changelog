@@ -2,7 +2,7 @@ greenthumb (0.6.0+xenial) xenial; urgency=medium
 
   * refresh menu - prevent nodes from being expanded during menu refresh
 
- -- Colin Doig <colind@colind-desktop>  Mon, 12 Feb 2018 18:06:13 +1300
+ -- Colin Doig <colindoig@gmail.com>  Mon, 12 Feb 2018 18:06:13 +1300
 
 greenthumb (0.5.1+xenial) xenial; urgency=medium
 
