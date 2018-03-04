@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/button.h>
 #include <wx/colour.h>
@@ -110,6 +110,9 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
         runnerHandicap = runner.getHandicap().getValue() * scaleFactor;
     }
     runners[runnerHandicap] = runner;
+    if (runners.find(handicap) == runners.end()) {
+        handicap = runnerHandicap;
+    }
 
     if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_SINGLE_LINE) {
         handicap = runnerHandicap;
@@ -117,12 +120,6 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
 
     this->market = market;
     this->marketBook = marketBook;
-    // this->runner = runner;
-
-    if (market.HasRunner(runner.getSelectionId())) {
-        wxString label(market.GetRunner(runner.getSelectionId()).getRunnerName());
-        runnerName->SetLabel(label);
-    }
 
     bestBackPrice3->SetSelectionId(runner.getSelectionId());
     bestBackPrice2->SetSelectionId(runner.getSelectionId());
@@ -132,7 +129,7 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
     bestLayPrice3->SetSelectionId(runner.getSelectionId());
 
     RefreshPrices();
-
+    UpdateRunnerName();
 }
 
 void RunnerRow::RefreshPrices() {
@@ -276,6 +273,7 @@ void RunnerRow::ResetButton(PriceButton* button) const {
         price = 1.01;
     }
     button->SetPrice(price);
+    button->SetHandicap(static_cast<double>(handicap) / scaleFactor);
 }
 
 void RunnerRow::OnClickChart(wxEvent& event) {
@@ -290,18 +288,30 @@ void RunnerRow::SetHandicap(const double handicap) {
     if ((runners.find(scaledHandicap) != runners.end()) && market.HasRunner(selectionId)) {
         this->handicap = scaledHandicap;
         RefreshPrices();
-
-        wxString label(market.GetRunner(GetRunner().getSelectionId()).getRunnerName());
-        wxString sign = "";
-        if (handicap > 0) {
-            sign = "+";
-        }
-        runnerName->SetLabel(label + " " + sign + DoubleToString(handicap, 1));
+        UpdateRunnerName();
     }
 }
 
 const greentop::Runner& RunnerRow::GetRunner() {
     return runners[handicap];
+}
+
+const wxString RunnerRow::GetRunnerName() const {
+    wxString runnerName = market.GetRunner(selectionId).getRunnerName();
+
+    if (handicap != 0 && (runners.find(handicap) != runners.end()) && market.HasRunner(selectionId)) {
+        wxString sign = "";
+        double unscaledHandicap = static_cast<double>(handicap) / scaleFactor;
+        if (unscaledHandicap > 0) {
+            sign = "+";
+        }
+        runnerName += " " + sign + DoubleToString(unscaledHandicap, 1);
+    }
+    return runnerName;
+}
+
+void RunnerRow::UpdateRunnerName() {
+    runnerName->SetLabel(GetRunnerName());
 }
 
 }

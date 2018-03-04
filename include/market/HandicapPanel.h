@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKET_HANDICAPPANEL_H
 #define MARKET_HANDICAPPANEL_H
@@ -36,12 +36,11 @@ class HandicapPanel : public wxPanel {
             const wxSize& size = wxDefaultSize, long style = wxBORDER_NONE, const wxString& name = wxPanelNameStr);
 
         /**
-         * Adds a handicap.
+         * Adds a page, ie a set of selection id + handicap.
          *
-         * @param selectionId The runner's id.
-         * @param handicap The handicap to apply to the runner.
+         * @param page The page to add.
          */
-        void AddHandicap(const int64_t selectionId, const double handicap);
+        void AddPage(const std::vector<std::pair<int64_t, double>>& page);
 
         /**
          * Gets the current handicap for the given runner.
@@ -57,10 +56,12 @@ class HandicapPanel : public wxPanel {
         int64_t selectionId = 0;
         /** The set of allowed handicaps. */
         std::set<int64_t> runnerHandicaps;
-        /** The current handicap. */
-        std::set<int64_t>::iterator currentHandicap;
         /** Displays the current handicap. */
         wxStaticText* handicapText;
+        /** The pages ie selection ids and handicaps */
+        std::vector<std::vector<std::pair<int64_t, double>>> handicapPages;
+        /** The current handicap. */
+        std::vector<std::vector<std::pair<int64_t, double>>>::iterator currentHandicap;
 
         /**
          * Change the current handicap to the previous value (if there is one).

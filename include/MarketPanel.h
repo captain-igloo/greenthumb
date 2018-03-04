@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
@@ -94,7 +94,8 @@ class MarketPanel : public wxPanel {
         MarketToolbar* marketToolbar;
         /** Displays currently selected handicap and buttons to go backwards and forwards. */
         market::HandicapPanel* handicapPanel;
-
+        /** Whether or not the handicap panel has been initialised. */
+        bool handicapInitialised = false;
         /**
          * Click price button handler. Opens the place bet dialog.
          *
@@ -186,7 +187,7 @@ class MarketPanel : public wxPanel {
          *
          * @param event The handicap changed event.
          */
-        void OnHandicapChanged(wxEvent& event);
+        void OnHandicapChanged(const wxEvent& event);
 
     DECLARE_NO_COPY_CLASS(MarketPanel)
 };

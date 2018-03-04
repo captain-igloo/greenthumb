@@ -211,6 +211,8 @@ void MarketPanel::UpdateToolBar() {
 void MarketPanel::SyncRunnerRows() {
 
     std::vector<greentop::Runner> runners = marketBook.getRunners();
+    std::set<int64_t> selectionIdsFound;
+    std::vector<std::pair<int64_t, double>> page;
 
     for (unsigned i = 0; i < runners.size(); ++i) {
         greentop::Runner runner = runners[i];
@@ -225,23 +227,37 @@ void MarketPanel::SyncRunnerRows() {
 
                 runnerRow->SetRunner(market, marketBook, runner);
                 runnerRow->SetProfit(profit);
-                // runnerRow->SetHandicap(handicapPanel->GetHandicap(runner.getSelectionId()));
             } else {
                 iter->second->SetRunner(market, marketBook, runner);
             }
 
-            if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
-                greentop::Optional<double> runnerHandicap = runner.getHandicap();
-                if (runnerHandicap.isValid()) {
-                    handicapPanel->AddHandicap(runner.getSelectionId(), runnerHandicap.getValue());
+            if (!handicapInitialised && market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+                if (selectionIdsFound.find(runner.getSelectionId()) == selectionIdsFound.end()) {
+                    // add runner to current page
+                    selectionIdsFound.insert(runner.getSelectionId());
+                    std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
+                    page.push_back(pageRunner);
+                } else {
+                    // new page
+                    handicapPanel->AddPage(page);
+                    page.clear();
+                    selectionIdsFound.clear();
+                    selectionIdsFound.insert(runner.getSelectionId());
+                    std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
+                    page.push_back(pageRunner);
                 }
             }
         }
     }
 
+    if (page.size() > 0) {
+        // add final page
+        handicapPanel->AddPage(page);
+        // OnHandicapChanged();
+        handicapInitialised = true;
+    }
     // TODO - remove obsolete runnerrows
     GetParent()->FitInside();
-
 }
 
 void MarketPanel::OnPlaceBet(const wxThreadEvent& event) {
@@ -260,14 +276,18 @@ void MarketPanel::OnClick(const wxCommandEvent& event) {
         greentop::PlaceInstruction pi = button->GetPlaceInstruction();
 
         if (market.HasRunner(pi.getSelectionId())) {
-            greentop::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
-            std::string placeBetTitle = pi.getSide().getValue() + " " + runner.getRunnerName();
 
-            dialog::PlaceBet* placeBet = new dialog::PlaceBet(this, wxID_ANY, placeBetTitle);
+            auto it = runnerRows.find(pi.getSelectionId());
+            if (it != runnerRows.end()) {
+                greentop::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
+                wxString placeBetTitle = pi.getSide().getValue() + " " + it->second->GetRunnerName();
 
-            placeBet->SetMarket(market, fullMarketName);
-            placeBet->SetPlaceInstruction(runner.getRunnerName(), pi);
-            placeBet->Show();
+                dialog::PlaceBet* placeBet = new dialog::PlaceBet(this, wxID_ANY, placeBetTitle);
+
+                placeBet->SetMarket(market, fullMarketName);
+                placeBet->SetPlaceInstruction(runner.getRunnerName(), pi);
+                placeBet->Show();
+            }
         }
     }
 }
@@ -296,7 +316,7 @@ void MarketPanel::ShowRules(const wxEvent& event) {
     rulesDialog->Show();
 }
 
-void MarketPanel::OnHandicapChanged(wxEvent& event) {
+void MarketPanel::OnHandicapChanged(const wxEvent& event) {
     if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
         for (const auto &it : runnerRows) {
             RunnerRow* runnerRow = it.second;

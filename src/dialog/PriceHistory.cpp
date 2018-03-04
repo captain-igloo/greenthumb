@@ -1,3 +1,6 @@
+/**
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ */
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -74,8 +77,6 @@ void PriceHistory::SetRunner(const entity::Market& market, const greentop::Runne
         bettingOn->SetLabel(rc.getRunnerName());
     }
 
-    // bettingOn->SetLabel(runner.GetRunnerName());
-
     wxBitmap bitmap(GRAPH_WIDTH, GRAPH_HEIGHT);
 
     wxImage image = bitmap.ConvertToImage();
@@ -89,15 +90,6 @@ void PriceHistory::SetRunner(const entity::Market& market, const greentop::Runne
 
 }
 
-/* void PriceHistory::OnPaint(wxPaintEvent &WXUNUSED(event)) {
-
-    if (graph.IsOk()) {
-        wxPaintDC dc(graphPanel);
-        PrepareDC(dc);
-        dc.DrawBitmap(graph, 0, 0);
-    }
-} */
-
 const wxString PriceHistory::GetGraphFilename(const entity::Market& market, const greentop::Runner& runner) {
 
     wxStandardPaths sp = wxStandardPaths::Get();
@@ -108,10 +100,18 @@ const wxString PriceHistory::GetGraphFilename(const entity::Market& market, cons
     oStream << runner.getSelectionId().getValue();
     wxString selectionId = oStream.str();
 
+    wxString handicap = "0";
+    greentop::Optional<double> optionalHandicap = runner.getHandicap();
+    if (optionalHandicap.isValid()) {
+        std::ostringstream handicapStream;
+        handicapStream << optionalHandicap.getValue();
+        handicap = handicapStream.str();
+    }
+
     wxURL url(wxT("http://sportsiteexweb.betfair.com.au/betting/LoadRunnerInfoChartAction.do?marketId=") +
         marketId +
         wxT("&selectionId=") +
-        selectionId);
+        selectionId + "&handicap=" + handicap);
 
     if (url.GetError() == wxURL_NOERR) {
         wxString imageData;
@@ -123,7 +123,6 @@ const wxString PriceHistory::GetGraphFilename(const entity::Market& market, cons
         }
 
         delete in;
-
     }
 
     return filename;

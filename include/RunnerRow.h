@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef RUNNERROW_H
 #define RUNNERROW_H
@@ -77,7 +77,13 @@ class RunnerRow {
          */
         void SetHandicap(const double handicap);
 
-    protected:
+        /**
+         * Returns the name of runner, including handicap if applicable.
+         *
+         * @return The name of the runner including handicap.
+         */
+        const wxString GetRunnerName() const;
+
     private:
         const static unsigned scaleFactor = 100;
         const static int chartButtonWidth = 30;
@@ -143,6 +149,11 @@ class RunnerRow {
          * @param The current runner.
          */
         const greentop::Runner& GetRunner();
+
+        /**
+         * Updates the runner name label.
+         */
+        void UpdateRunnerName();
 };
 
 }
