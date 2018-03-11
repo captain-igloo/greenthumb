@@ -128,7 +128,9 @@ void RunnerRow::SetRunner(const entity::Market& market, const greentop::MarketBo
     bestLayPrice2->SetSelectionId(runner.getSelectionId());
     bestLayPrice3->SetSelectionId(runner.getSelectionId());
 
-    RefreshPrices();
+    if (handicap == runnerHandicap) {
+        RefreshPrices();
+    }
     UpdateRunnerName();
 }
 

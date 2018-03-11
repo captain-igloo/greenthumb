@@ -6,6 +6,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 #include <wx/wx.h>
 #include <wx/panel.h>
