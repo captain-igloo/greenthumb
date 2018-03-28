@@ -37,11 +37,13 @@ class HandicapPanel : public wxPanel {
             const wxSize& size = wxDefaultSize, long style = wxBORDER_NONE, const wxString& name = wxPanelNameStr);
 
         /**
-         * Adds a page, ie a set of selection id + handicap.
+         * Adds pages, each page is a set of selection id + handicap.
          *
          * @param page The page to add.
+         * @param defaultHandicapIndex The index of the page to start on.
          */
-        void AddPage(const std::vector<std::pair<int64_t, double>>& page);
+        void AddPages(const std::vector<std::vector<std::pair<int64_t, double>>>& pages,
+            unsigned defaultHandicapIndex);
 
         /**
          * Gets the current handicap for the given runner.
@@ -62,7 +64,8 @@ class HandicapPanel : public wxPanel {
         /** The pages ie selection ids and handicaps */
         std::vector<std::vector<std::pair<int64_t, double>>> handicapPages;
         /** The current handicap. */
-        std::vector<std::vector<std::pair<int64_t, double>>>::iterator currentHandicap;
+        ///std::vector<std::vector<std::pair<int64_t, double>>>::iterator currentHandicap;
+        unsigned currentHandicapIndex;
 
         /**
          * Change the current handicap to the previous value (if there is one).

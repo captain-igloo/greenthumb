@@ -209,7 +209,6 @@ void RunnerRow::RefreshPrices() {
     } else {
         ResetButton(bestLayPrice3);
     }
-
 }
 
 void RunnerRow::SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction) {

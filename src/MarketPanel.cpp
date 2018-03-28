@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/sizer.h>
@@ -71,6 +71,14 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 
     if (tempMarketBook.isValid()) {
         marketBook = tempMarketBook;
+
+        market.SetMarketBook(marketBook);
+
+        if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE &&
+            !handicapPanel->IsShown()) {
+            handicapPanel->Show(true);
+            handicapPanel->AddPages(market.GetHandicapPages(), market.GetDefaultHandicapIndex());
+        }
 
         SyncRunnerRows();
 
@@ -164,7 +172,6 @@ void MarketPanel::SetMarket(const greentop::menu::Node& node) {
 }
 
 void MarketPanel::SetMarket(const entity::Market& market) {
-
     this->market = market;
     marketId = market.GetMarketCatalogue().getMarketId();
 
@@ -173,11 +180,6 @@ void MarketPanel::SetMarket(const entity::Market& market) {
 
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
 
-    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
-        handicapPanel->Show(true);
-    }
-
-
     currentOrdersDialog->SetMarket(market);
     wxString rules(market.GetMarketCatalogue().getDescription().getRules().c_str(), wxConvUTF8);
 
@@ -185,7 +187,6 @@ void MarketPanel::SetMarket(const entity::Market& market) {
 
     UpdateToolBar();
     UpdateMarketStatus();
-
 }
 
 void MarketPanel::UpdateMarketStatus() {
@@ -209,10 +210,8 @@ void MarketPanel::UpdateToolBar() {
 }
 
 void MarketPanel::SyncRunnerRows() {
-
     std::vector<greentop::Runner> runners = marketBook.getRunners();
-    std::set<int64_t> selectionIdsFound;
-    std::vector<std::pair<int64_t, double>> page;
+
 
     for (unsigned i = 0; i < runners.size(); ++i) {
         greentop::Runner runner = runners[i];
@@ -230,32 +229,9 @@ void MarketPanel::SyncRunnerRows() {
             } else {
                 iter->second->SetRunner(market, marketBook, runner);
             }
-
-            if (!handicapInitialised && market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
-                if (selectionIdsFound.find(runner.getSelectionId()) == selectionIdsFound.end()) {
-                    // add runner to current page
-                    selectionIdsFound.insert(runner.getSelectionId());
-                    std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
-                    page.push_back(pageRunner);
-                } else {
-                    // new page
-                    handicapPanel->AddPage(page);
-                    page.clear();
-                    selectionIdsFound.clear();
-                    selectionIdsFound.insert(runner.getSelectionId());
-                    std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
-                    page.push_back(pageRunner);
-                }
-            }
         }
     }
 
-    if (page.size() > 0) {
-        // add final page
-        handicapPanel->AddPage(page);
-        // OnHandicapChanged();
-        handicapInitialised = true;
-    }
     // TODO - remove obsolete runnerrows
     GetParent()->FitInside();
 }

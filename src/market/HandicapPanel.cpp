@@ -45,23 +45,25 @@ HandicapPanel::HandicapPanel(wxPanel* parent, const wxWindowID id, const wxPoint
     Bind(wxEVT_BUTTON, &HandicapPanel::OnClickNext, this, nextButtonId);
 }
 
-void HandicapPanel::AddPage(const std::vector<std::pair<int64_t, double>>& page) {
-    handicapPages.push_back(page);
-    currentHandicap = handicapPages.begin();
-    if (handicapPages.size() == 1) {
-        if (page.size() > 0) {
-            handicapText->SetLabel(DoubleToString(page.at(0).second, 1));
-        }
-        wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
-        QueueEvent(handicapEvent);
+void HandicapPanel::AddPages(const std::vector<std::vector<std::pair<int64_t, double>>>& pages, unsigned defaultHandicapIndex) {
+    handicapPages = pages;
+    // currentHandicap = handicapPages.begin();
+    currentHandicapIndex = defaultHandicapIndex;
+
+    auto page = handicapPages.at(defaultHandicapIndex);
+    if (page.size() > 0) {
+        handicapText->SetLabel(DoubleToString(page.at(0).second, 1));
     }
+
+    wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
+    QueueEvent(handicapEvent);
 }
 
 void HandicapPanel::OnClickPrevious(const wxCommandEvent& event) {
-    if (currentHandicap != handicapPages.begin()) {
-        --currentHandicap;
-        if (currentHandicap->size() > 0) {
-            handicapText->SetLabel(DoubleToString(currentHandicap->at(0).second, 1));
+    if (currentHandicapIndex > 0) {
+        --currentHandicapIndex;
+        if (handicapPages.at(currentHandicapIndex).size() > 0) {
+            handicapText->SetLabel(DoubleToString(handicapPages.at(currentHandicapIndex).at(0).second, 1));
             wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
             QueueEvent(handicapEvent);
         }
@@ -69,19 +71,16 @@ void HandicapPanel::OnClickPrevious(const wxCommandEvent& event) {
 }
 
 void HandicapPanel::OnClickNext(wxCommandEvent& event) {
-    ++currentHandicap;
-    if (currentHandicap != handicapPages.end()) {
-        handicapText->SetLabel(DoubleToString(currentHandicap->at(0).second, 1));
+    if (currentHandicapIndex < handicapPages.size() - 1) {
+        ++currentHandicapIndex;
+        handicapText->SetLabel(DoubleToString(handicapPages.at(currentHandicapIndex).at(0).second, 1));
         wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
         QueueEvent(handicapEvent);
-    } else {
-        // backtrack, we don't want to past the end of the set.
-        --currentHandicap;
     }
 }
 
 const double HandicapPanel::GetHandicap(int64_t selectionId) const {
-    std::vector<std::pair<int64_t, double>> page = *currentHandicap;
+    std::vector<std::pair<int64_t, double>> page = handicapPages.at(currentHandicapIndex);
 
     for (auto it = page.begin(); it != page.end(); ++it) {
         if (it->first == selectionId) {

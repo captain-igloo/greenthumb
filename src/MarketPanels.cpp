@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 
@@ -14,7 +14,6 @@ MarketPanels::MarketPanels(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 }
 
 void MarketPanels::AddMarket(const greentop::menu::Node& node) {
-
     if (marketPanels.find(node.getId()) == marketPanels.end()) {
         MarketPanel* marketPanel = new MarketPanel(this);
         marketPanel->SetMarket(node);
@@ -22,7 +21,6 @@ void MarketPanels::AddMarket(const greentop::menu::Node& node) {
         GetSizer()->Add(marketPanel, 0, wxEXPAND, 0);
         FitInside();
     }
-
 }
 
 void MarketPanels::SetMarket(const entity::Market& market) {
@@ -34,14 +32,12 @@ void MarketPanels::SetMarket(const entity::Market& market) {
 }
 
 void MarketPanels::RemoveMarket(const std::string& marketId) {
-
     std::map<std::string, MarketPanel*>::iterator it = marketPanels.find(marketId);
     if (it != marketPanels.end()) {
         it->second->Destroy();
         marketPanels.erase(it);
         FitInside();
     }
-
 }
 
 }

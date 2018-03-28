@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef ENTITY_MARKET_H
 #define ENTITY_MARKET_H
@@ -30,6 +30,20 @@ class Market {
         const greentop::MarketCatalogue& GetMarketCatalogue() const;
 
         /**
+         * Sets the market book.
+         *
+         * @param marketBook The market book.
+         */
+        void SetMarketBook(const greentop::MarketBook& marketBook);
+
+        /**
+         * Gets the market book.
+         *
+         * @return The market book.
+         */
+        const greentop::MarketBook& GetMarketBook() const;
+
+        /**
          * Whether or not the market has a certain runner.
          *
          * @param selectionId The id of the runner.
@@ -53,10 +67,27 @@ class Market {
          */
         bool HasMarketCatalogue() const;
 
+        /**
+         * Returns information about the market's handicaps; each page consists of a selection id and a handicap.
+         *
+         * @return The handicap pages.
+         */
+        const std::vector<std::vector<std::pair<int64_t, double>>>& GetHandicapPages() const;
+
+        /**
+         * Returns the index of the handicap page with the most liquidity.
+         *
+         * @return The default handicap index.
+         */
+        unsigned GetDefaultHandicapIndex() const;
+
     private:
         greentop::MarketCatalogue marketCatalogue;
+        greentop::MarketBook marketBook;
         std::map<uint64_t, greentop::RunnerCatalog> runners;
         bool hasMarketCatalogue = false;
+        std::vector<std::vector<std::pair<int64_t, double>>> handicapPages;
+        unsigned defaultHandicapIndex;
 };
 
 }
