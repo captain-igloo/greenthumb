@@ -1,3 +1,9 @@
+greenthumb (0.7.0+xenial) xenial; urgency=medium
+
+  * asian handicap markets
+
+ -- Colin Doig <colindoig@gmail.com>  Wed, 04 Apr 2018 20:03:25 +1200
+
 greenthumb (0.6.0+xenial) xenial; urgency=medium
 
   * refresh menu - prevent nodes from being expanded during menu refresh
