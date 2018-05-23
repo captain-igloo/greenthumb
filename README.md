@@ -20,20 +20,28 @@ Requirements
 * [SOCI](http://soci.sourceforge.net/)
 * [SQLite](https://www.sqlite.org/)
 
-Build
------
+Build (Linux)
+-------------
+```
 export CPPFLAGS=-I/usr/include/jsoncpp
-
 ./configure --prefix=/usr
-
 make
-
 make install
+```
 
-Ubuntu Installation
--------------------
+Build (Windows)
+---------------
+Instructions for building on Windows using Visual Studio can be found [here](https://github.com/captain-igloo/greenthumb/wiki/Build-(Windows)).
+
+Ubuntu Binaries
+---------------
 
 Binaries for Ubuntu are available at [https://launchpad.net/~captain-igloo/+archive/ubuntu/greenthumb](https://launchpad.net/~captain-igloo/+archive/ubuntu/greenthumb).
+
+Windows Binaries
+----------------
+
+Windows binaries are available under [releases](https://github.com/captain-igloo/greenthumb/releases)
 
 Screenshots
 -----------

@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0B113035-555D-45E4-9C41-0B87F00703E2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\projects\sqlite-amalgamation-3230100;C:\projects\soci-3.2.3\core;C:\projects\soci-3.2.3\backends;C:\projects\jsoncpp-1.8.4\include;C:\projects\greentop\include;C:\projects\curl-7.59.0\include;C:\projects\wxWidgets-3.0.4\include;C:\projects\wxWidgets-3.0.4\include\msvc;C:\projects\greenthumb\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\projects\sqlite-amalgamation-3230100;C:\projects\jsoncpp-1.8.4\src\lib_json\Debug;C:\projects\curl-7.59.0\I386;C:\projects\soci-3.2.3\build\lib\Debug;C:\projects\greentop\Debug;C:\projects\wxWidgets-3.0.4\lib\vc_lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\projects\sqlite-amalgamation-3230100;C:\projects\soci-3.2.3\core;C:\projects\soci-3.2.3\backends;C:\projects\jsoncpp-1.8.4\include;C:\projects\greentop\include;C:\projects\curl-7.59.0\include;C:\projects\wxWidgets-3.0.4\include;C:\projects\wxWidgets-3.0.4\include\msvc;C:\projects\greenthumb\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\projects\sqlite-amalgamation-3230100;C:\projects\soci-3.2.3\build\lib\Release;C:\projects\jsoncpp-1.8.4\src\lib_json\Release;C:\projects\greentop\Release;C:\projects\wxWidgets-3.0.4\lib\vc_lib;C:\projects\curl-7.59.0\I386;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>greentop.lib;libsoci_core_3_2.lib;libsoci_sqlite3_3_2.lib;libcurl.lib;jsoncpp.lib;sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>greentop.lib;libsoci_core_3_2.lib;libsoci_sqlite3_3_2.lib;libcurl.lib;jsoncpp.lib;sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\AccountPanel.cpp" />
+    <ClCompile Include="src\AccountStatementFull.cpp" />
+    <ClCompile Include="src\AccountStatementSummary.cpp" />
+    <ClCompile Include="src\ArtProvider.cpp" />
+    <ClCompile Include="src\CurrentOrder.cpp" />
+    <ClCompile Include="src\CurrentOrdersGrid.cpp" />
+    <ClCompile Include="src\Db.cpp" />
+    <ClCompile Include="src\db\SchemaUpdater.cpp" />
+    <ClCompile Include="src\dialog\CurrentOrders.cpp" />
+    <ClCompile Include="src\dialog\Html.cpp" />
+    <ClCompile Include="src\dialog\LoginDialog.cpp" />
+    <ClCompile Include="src\dialog\PlaceBet.cpp" />
+    <ClCompile Include="src\dialog\PriceHistory.cpp" />
+    <ClCompile Include="src\dialog\Settings.cpp" />
+    <ClCompile Include="src\entity\AccountStatementItem.cpp" />
+    <ClCompile Include="src\entity\AccountStatementMarket.cpp" />
+    <ClCompile Include="src\entity\Config.cpp" />
+    <ClCompile Include="src\entity\Market.cpp" />
+    <ClCompile Include="src\EventTree.cpp" />
+    <ClCompile Include="src\GreenThumbFrame.cpp" />
+    <ClCompile Include="src\ImagePanel.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\MarketPanel.cpp" />
+    <ClCompile Include="src\MarketPanels.cpp" />
+    <ClCompile Include="src\MarketToolbar.cpp" />
+    <ClCompile Include="src\market\HandicapPanel.cpp" />
+    <ClCompile Include="src\MatchedOrder.cpp" />
+    <ClCompile Include="src\MenuTreeData.cpp" />
+    <ClCompile Include="src\OddsSpinCtrl.cpp" />
+    <ClCompile Include="src\PaginatedGrid.cpp" />
+    <ClCompile Include="src\PriceButton.cpp" />
+    <ClCompile Include="src\RunnerRow.cpp" />
+    <ClCompile Include="src\StakeSpinCtrl.cpp" />
+    <ClCompile Include="src\UnmatchedOrder.cpp" />
+    <ClCompile Include="src\Util.cpp" />
+    <ClCompile Include="src\worker\CancelOrders.cpp" />
+    <ClCompile Include="src\worker\GetAccountDetails.cpp" />
+    <ClCompile Include="src\worker\GetAccountFunds.cpp" />
+    <ClCompile Include="src\worker\GetAccountStatement.cpp" />
+    <ClCompile Include="src\worker\GetPriceHistoryGraph.cpp" />
+    <ClCompile Include="src\worker\ListCurrentOrders.cpp" />
+    <ClCompile Include="src\worker\ListMarketBook.cpp" />
+    <ClCompile Include="src\worker\ListMarketCatalogue.cpp" />
+    <ClCompile Include="src\worker\ListMarketProfitAndLoss.cpp" />
+    <ClCompile Include="src\worker\Login.cpp" />
+    <ClCompile Include="src\worker\PlaceOrders.cpp" />
+    <ClCompile Include="src\worker\RefreshMenu.cpp" />
+    <ClCompile Include="src\worker\ReplaceOrders.cpp" />
+    <ClCompile Include="src\worker\Worker.cpp" />
+    <ClCompile Include="src\worker\WorkerManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AccountPanel.h" />
+    <ClInclude Include="include\AccountStatementFull.h" />
+    <ClInclude Include="include\AccountStatementSummary.h" />
+    <ClInclude Include="include\ArtProvider.h" />
+    <ClInclude Include="include\CurrentOrder.h" />
+    <ClInclude Include="include\CurrentOrdersGrid.h" />
+    <ClInclude Include="include\Db.h" />
+    <ClInclude Include="include\db\SchemaUpdater.h" />
+    <ClInclude Include="include\dialog\CurrentOrders.h" />
+    <ClInclude Include="include\dialog\Html.h" />
+    <ClInclude Include="include\dialog\LoginDialog.h" />
+    <ClInclude Include="include\dialog\PlaceBet.h" />
+    <ClInclude Include="include\dialog\PriceHistory.h" />
+    <ClInclude Include="include\dialog\Settings.h" />
+    <ClInclude Include="include\entity\AccountStatementItem.h" />
+    <ClInclude Include="include\entity\AccountStatementMarket.h" />
+    <ClInclude Include="include\entity\Config.h" />
+    <ClInclude Include="include\entity\Market.h" />
+    <ClInclude Include="include\EventTree.h" />
+    <ClInclude Include="include\GreenThumb.h" />
+    <ClInclude Include="include\GreenThumbFrame.h" />
+    <ClInclude Include="include\ImagePanel.h" />
+    <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\MarketPanel.h" />
+    <ClInclude Include="include\MarketPanels.h" />
+    <ClInclude Include="include\MarketToolbar.h" />
+    <ClInclude Include="include\market\HandicapPanel.h" />
+    <ClInclude Include="include\MatchedOrder.h" />
+    <ClInclude Include="include\MenuTreeData.h" />
+    <ClInclude Include="include\OddsSpinCtrl.h" />
+    <ClInclude Include="include\PaginatedGrid.h" />
+    <ClInclude Include="include\PriceButton.h" />
+    <ClInclude Include="include\RunnerRow.h" />
+    <ClInclude Include="include\StakeSpinCtrl.h" />
+    <ClInclude Include="include\UnmatchedOrder.h" />
+    <ClInclude Include="include\Util.h" />
+    <ClInclude Include="include\worker\CancelOrders.h" />
+    <ClInclude Include="include\worker\GetAccountDetails.h" />
+    <ClInclude Include="include\worker\GetAccountFunds.h" />
+    <ClInclude Include="include\worker\GetAccountStatement.h" />
+    <ClInclude Include="include\worker\GetPriceHistoryGraph.h" />
+    <ClInclude Include="include\worker\ListCurrentOrders.h" />
+    <ClInclude Include="include\worker\ListMarketBook.h" />
+    <ClInclude Include="include\worker\ListMarketCatalogue.h" />
+    <ClInclude Include="include\worker\ListMarketProfitAndLoss.h" />
+    <ClInclude Include="include\worker\Login.h" />
+    <ClInclude Include="include\worker\PlaceOrders.h" />
+    <ClInclude Include="include\worker\RefreshMenu.h" />
+    <ClInclude Include="include\worker\ReplaceOrders.h" />
+    <ClInclude Include="include\worker\Worker.h" />
+    <ClInclude Include="include\worker\WorkerManager.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
