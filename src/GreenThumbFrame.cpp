@@ -1,7 +1,6 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
-
 #include <wx/wx.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
@@ -96,20 +95,19 @@ GreenThumbFrame::GreenThumbFrame()
 }
 
 void GreenThumbFrame::Login() {
-
     dialog::LoginDialog loginDialog(NULL, wxID_ANY, "Login");
 
     if (loginDialog.ShowModal() == wxID_OK) {
         eventTree->SyncMenu(false);
 
         // get account currency if we don't already have it.
-        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        wxString currencySymbol = GetCurrencySymbol(
+            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        );
         if (currencySymbol == "?") {
             workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));
         }
-
     }
-
 }
 
 void GreenThumbFrame::CreateMenuBar() {
@@ -214,7 +212,9 @@ void GreenThumbFrame::OnItemActivated(const wxTreeEvent& treeEvent) {
         } else {
             if (!eventTree->ListMarketCatalogueInProgress()) {
                 std::set<std::string> marketIds = { data->node.getId() };
-                workerManager.RunWorker(new worker::ListMarketCatalogue(&workerManager, marketIds));
+                workerManager.RunWorker(
+                    new worker::ListMarketCatalogue(&workerManager, marketIds)
+                );
             }
         }
     }

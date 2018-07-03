@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <iomanip>
 
@@ -11,12 +11,17 @@
 
 #include "worker/CancelOrders.h"
 #include "worker/ReplaceOrders.h"
+#include "Util.h"
 
 namespace greenthumb {
 
-UnmatchedOrder::UnmatchedOrder(wxWindow* parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name) : CurrentOrder(parent, id, pos, size, style, name), workerManager(this) {
-
+UnmatchedOrder::UnmatchedOrder(
+    wxWindow* parent,
+    const wxWindowID id,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name) : CurrentOrder(parent, id, pos, size, style, name), workerManager(this) {
     wxFlexGridSizer* sizer = new wxFlexGridSizer(8, 5, 5);
     sizer->AddGrowableCol(0, 1);
     SetSizer(sizer);
@@ -67,28 +72,27 @@ UnmatchedOrder::UnmatchedOrder(wxWindow* parent, const wxWindowID id, const wxPo
 }
 
 void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& cos) {
-
     currentOrderSummary = cos;
 
     if (market.HasRunner(currentOrderSummary.getSelectionId())) {
         greentop::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
 
-        wxString label(runner.getRunnerName().c_str(), wxConvUTF8);
-        runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " + label);
+        runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " +
+            GetSelectionName(market.GetMarketCatalogue(), runner, runner.getHandicap()));
 
         oddsSpin->SetValue(currentOrderSummary.getPriceSize().getPrice());
 
-        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        wxString currencySymbol = GetCurrencySymbol(
+            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        );
 
-        std::ostringstream stakeLabelStream;
         double sizeRemaining = 0;
         greentop::Optional<double> optionalSizeRemaining = currentOrderSummary.getSizeRemaining();
         if (optionalSizeRemaining.isValid()) {
             sizeRemaining = optionalSizeRemaining.getValue();
         }
-        stakeLabelStream << currencySymbol << std::fixed << std::setprecision(2)
-            << sizeRemaining;
-        wxString stakeLabel(stakeLabelStream.str().c_str(), wxConvUTF8);
+
+        wxString stakeLabel = currencySymbol + wxString::Format("%.2f", sizeRemaining);
 
         stake->SetLabel(stakeLabel);
 
@@ -108,10 +112,9 @@ void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary&
 }
 
 void UnmatchedOrder::UpdateProfitOrLiability() {
-
-    std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
-
-    std::ostringstream profitOrLiabilityStream;
+    wxString currencySymbol = GetCurrencySymbol(
+        entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+    );
 
     double profit;
 
@@ -127,9 +130,7 @@ void UnmatchedOrder::UpdateProfitOrLiability() {
         profit = sizeRemaining * (oddsSpin->GetValue() - 1);
     }
 
-    profitOrLiabilityStream << currencySymbol << std::fixed << std::setprecision(2) << profit;
-
-    wxString label(profitOrLiabilityStream.str().c_str(), wxConvUTF8);
+    wxString label = currencySymbol + wxString::Format("%.2f", profit);
     profitOrLiability->SetLabel(label);
 
 }

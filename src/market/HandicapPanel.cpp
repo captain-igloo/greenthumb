@@ -14,9 +14,13 @@ namespace market {
 
 wxDEFINE_EVENT(HANDICAP_CHANGED, wxCommandEvent);
 
-HandicapPanel::HandicapPanel(wxPanel* parent, const wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
+HandicapPanel::HandicapPanel(
+    wxPanel* parent,
+    const wxWindowID id,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
     const wxString& name) : wxPanel(parent, id, pos, size, style, name) {
-
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer);
 
@@ -45,14 +49,16 @@ HandicapPanel::HandicapPanel(wxPanel* parent, const wxWindowID id, const wxPoint
     Bind(wxEVT_BUTTON, &HandicapPanel::OnClickNext, this, nextButtonId);
 }
 
-void HandicapPanel::AddPages(const std::vector<std::vector<std::pair<int64_t, double>>>& pages, unsigned defaultHandicapIndex) {
+void HandicapPanel::AddPages(
+    const std::vector<std::vector<std::pair<int64_t, double>>>& pages,
+    unsigned defaultHandicapIndex
+) {
     handicapPages = pages;
-    // currentHandicap = handicapPages.begin();
     currentHandicapIndex = defaultHandicapIndex;
 
     auto page = handicapPages.at(defaultHandicapIndex);
     if (page.size() > 0) {
-        handicapText->SetLabel(DoubleToString(page.at(0).second, 1));
+        handicapText->SetLabel(wxString::Format(wxT("%.1f"), page.at(0).second));
     }
 
     wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
@@ -63,7 +69,9 @@ void HandicapPanel::OnClickPrevious(const wxCommandEvent& event) {
     if (currentHandicapIndex > 0) {
         --currentHandicapIndex;
         if (handicapPages.at(currentHandicapIndex).size() > 0) {
-            handicapText->SetLabel(DoubleToString(handicapPages.at(currentHandicapIndex).at(0).second, 1));
+            handicapText->SetLabel(
+                wxString::Format(wxT("%.1f"), handicapPages.at(currentHandicapIndex).at(0).second)
+            );
             wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
             QueueEvent(handicapEvent);
         }
@@ -73,7 +81,9 @@ void HandicapPanel::OnClickPrevious(const wxCommandEvent& event) {
 void HandicapPanel::OnClickNext(wxCommandEvent& event) {
     if (currentHandicapIndex < handicapPages.size() - 1) {
         ++currentHandicapIndex;
-        handicapText->SetLabel(DoubleToString(handicapPages.at(currentHandicapIndex).at(0).second, 1));
+        handicapText->SetLabel(
+            wxString::Format(wxT("%.1f"), handicapPages.at(currentHandicapIndex).at(0).second)
+        );
         wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
         QueueEvent(handicapEvent);
     }

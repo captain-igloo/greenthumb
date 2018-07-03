@@ -19,6 +19,7 @@
 #include <greentop/ExchangeApi.h>
 
 #include "dialog/PriceHistory.h"
+#include "Util.h"
 
 namespace greenthumb {
 namespace dialog {
@@ -71,27 +72,32 @@ void PriceHistory::SetLastPriceTraded(const double lastPriceTraded) {
 }
 
 void PriceHistory::SetRunner(const entity::Market& market, const greentop::Runner& runner) {
-
     if (market.HasRunner(runner.getSelectionId())) {
         greentop::RunnerCatalog rc = market.GetRunner(runner.getSelectionId());
-        bettingOn->SetLabel(rc.getRunnerName());
+        std::string runnerName = rc.getRunnerName();
+        if (runner.getHandicap().isValid()) {
+            runnerName = runnerName + " "
+                + wxString::Format(wxT("%.1f"), runner.getHandicap().getValue());
+        }
+        bettingOn->SetLabel(
+            GetSelectionName(market.GetMarketCatalogue(), rc, runner.getHandicap())
+        );
     }
 
     wxBitmap bitmap(GRAPH_WIDTH, GRAPH_HEIGHT);
-
     wxImage image = bitmap.ConvertToImage();
-
     wxString filename = GetGraphFilename(market, runner);
 
     if (image.LoadFile(filename, wxBITMAP_TYPE_JPEG)) {
         graph = wxBitmap(image);
         graphPanel->SetBitmap(graph);
     }
-
 }
 
-const wxString PriceHistory::GetGraphFilename(const entity::Market& market, const greentop::Runner& runner) {
-
+const wxString PriceHistory::GetGraphFilename(
+    const entity::Market& market,
+    const greentop::Runner& runner
+) {
     wxStandardPaths sp = wxStandardPaths::Get();
     wxString filename = sp.GetTempDir() + wxT("/graph.jpeg");
     wxString marketId(market.GetMarketCatalogue().getMarketId().substr(2));

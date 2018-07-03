@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
 #include <iomanip>
 #include <sstream>
@@ -65,12 +65,11 @@ time_t timegm(tm* t) {
 
 #endif
 
-std::string GetCurrencySymbol(const std::string& currencyCode) {
-
+wxString GetCurrencySymbol(const wxString& currencyCode) {
     if (currencyCode == "EUR") {
-        return "€";
+        return wxString("€", wxConvUTF8);
     } else if (currencyCode == "GBP") {
-        return "£";
+        return wxString("£", wxConvUTF8);
     } else if (currencyCode == "USD" || currencyCode == "AUD" || currencyCode == "CAD" ||
         currencyCode == "HKD" || currencyCode == "SGD") {
         return "$";
@@ -79,10 +78,21 @@ std::string GetCurrencySymbol(const std::string& currencyCode) {
     return currencyCode;
 }
 
-std::string DoubleToString(const double dble, const unsigned precision) {
-    std::ostringstream s;
-    s << std::fixed << std::setprecision(precision) << dble;
-    return s.str();
+wxString GetSelectionName(
+    const greentop::MarketCatalogue& marketCatalogue,
+    const greentop::RunnerCatalog& runnerCatalog,
+    const double handicap
+) {
+    wxString runnerName = runnerCatalog.getRunnerName();
+
+    if (marketCatalogue.getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+        wxString sign = "";
+        if (handicap > 0) {
+            sign = "+";
+        }
+        runnerName += " " + sign + wxString::Format(wxT("%.1f"), handicap);
+    }
+    return runnerName;
 }
 
 }

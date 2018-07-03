@@ -187,7 +187,7 @@ void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop
         if (placeInstruction.getHandicap() > 0) {
             sign = "+";
         }
-        runner = runner + " " + sign + DoubleToString(placeInstruction.getHandicap(), 1);
+        runner = runner + " " + sign + wxString::Format(wxT("%.1f"), placeInstruction.getHandicap().getValue());
     }
 
     selection->SetLabel(runner);

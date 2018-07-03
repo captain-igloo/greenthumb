@@ -102,11 +102,10 @@ class RunnerRow {
         PriceButton* bestLayPrice3;
         entity::Market market;
         greentop::MarketBook marketBook;
-        // greentop::Runner runner;
         int64_t handicap = 0;
         std::map<int64_t, greentop::Runner> runners;
         wxWindowID chartButtonId;
-        std::string currencySymbol;
+        wxString currencySymbol;
         int64_t selectionId = 0;
 
         /**
@@ -141,7 +140,11 @@ class RunnerRow {
          * @param colour The colour of the button.
          * @return The price button.
          */
-        PriceButton* CreateButton(wxWindow* parent, const greentop::Side& side, const wxColour& colour) const;
+        PriceButton* CreateButton(
+            wxWindow* parent,
+            const greentop::Side& side,
+            const wxColour& colour
+        ) const;
 
         /**
          * Gets the current runner, ie the runner associated with the currently selected handicap.
@@ -159,4 +162,3 @@ class RunnerRow {
 }
 
 #endif // RUNNERROW_H
-

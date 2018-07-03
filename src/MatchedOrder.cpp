@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ */
 #include <iomanip>
 #include <sstream>
 
@@ -11,8 +11,14 @@
 
 namespace greenthumb {
 
-MatchedOrder::MatchedOrder(wxWindow* parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name) : CurrentOrder(parent, id, pos, size, style, name) {
+MatchedOrder::MatchedOrder(
+    wxWindow* parent,
+    const wxWindowID id,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name
+) : CurrentOrder(parent, id, pos, size, style, name) {
 
     wxFlexGridSizer* sizer = new wxFlexGridSizer(6, 5, 5);
     sizer->AddGrowableCol(0, 1);
@@ -45,7 +51,7 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
     if (market.HasRunner(currentOrderSummary.getSelectionId())) {
         greentop::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
 
-        wxString label(runner.getRunnerName().c_str(), wxConvUTF8);
+        wxString label  = GetSelectionName(market.GetMarketCatalogue(), runner, cos.getHandicap());
         runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " + label);
 
         std::ostringstream priceLabelStream;
@@ -54,16 +60,17 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
         wxString priceLabel(priceLabelStream.str().c_str(), wxConvUTF8);
         price->SetLabel(priceLabel);
 
-        std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+        wxString currencySymbol = GetCurrencySymbol(
+            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        );
 
-        std::ostringstream stakeLabelStream;
         double sizeMatched = 0;
         greentop::Optional<double> optionalSizeMatched = currentOrderSummary.getSizeMatched();
         if (optionalSizeMatched.isValid()) {
             sizeMatched = optionalSizeMatched.getValue();
         }
-        stakeLabelStream << currencySymbol << std::fixed << std::setprecision(2) << sizeMatched;
-        wxString stakeLabel(stakeLabelStream.str().c_str(), wxConvUTF8);
+
+        wxString stakeLabel = currencySymbol + wxString::Format("%.2f", sizeMatched);
 
         stake->SetLabel(stakeLabel);
 
@@ -76,13 +83,13 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
         }
 
         UpdateProfitOrLiability();
-
     }
 }
 
 void MatchedOrder::UpdateProfitOrLiability() {
-
-    std::string currencySymbol = GetCurrencySymbol(entity::Config::GetConfigValue<std::string>("accountCurrency", "?"));
+    wxString currencySymbol = GetCurrencySymbol(
+        entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+    );
 
     std::ostringstream profitOrLiabilityStream;
 
@@ -95,16 +102,13 @@ void MatchedOrder::UpdateProfitOrLiability() {
     }
 
     if (currentOrderSummary.getSide() == greentop::Side::BACK) {
-        profit = sizeMatched * (currentOrderSummary.getPriceSize().getPrice() - 1);
+        profit = sizeMatched * (currentOrderSummary.getAveragePriceMatched() - 1);
     } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {
-        profit = sizeMatched * (currentOrderSummary.getPriceSize().getPrice() - 1);
+        profit = sizeMatched * (currentOrderSummary.getAveragePriceMatched() - 1);
     }
-
-    profitOrLiabilityStream << currencySymbol << std::fixed << std::setprecision(2) << profit;
-
-    wxString label(profitOrLiabilityStream.str().c_str(), wxConvUTF8);
+    
+    wxString label = currencySymbol + wxString::Format("%.2f", profit);
     profitOrLiability->SetLabel(label);
-
 }
 
 }
