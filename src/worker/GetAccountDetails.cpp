@@ -34,7 +34,8 @@ greentop::AccountDetailsResponse GetAccountDetails::DoGetAccountDetails() {
 
     greentop::AccountDetailsResponse adr = GreenThumb::GetBetfairApi().getAccountDetails();
     if (!TestDestroy() && adr.isSuccess()) {
-        entity::Config::SetConfigValue("accountCurrency", adr.getCurrencyCode());
+        wxString currencyCode(adr.getCurrencyCode().c_str(), wxConvUTF8);
+        entity::Config::SetConfigValue("accountCurrency", currencyCode);
     }
 
     return adr;

@@ -83,7 +83,7 @@ void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary&
         oddsSpin->SetValue(currentOrderSummary.getPriceSize().getPrice());
 
         wxString currencySymbol = GetCurrencySymbol(
-            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+            entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
         );
 
         double sizeRemaining = 0;
@@ -113,7 +113,7 @@ void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary&
 
 void UnmatchedOrder::UpdateProfitOrLiability() {
     wxString currencySymbol = GetCurrencySymbol(
-        entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
     );
 
     double profit;

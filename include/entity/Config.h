@@ -8,6 +8,8 @@
 #include <soci.h>
 #include <string>
 
+#include <wx/string.h>
+
 namespace greenthumb {
 namespace entity {
 
@@ -17,8 +19,8 @@ namespace entity {
 class Config {
 
     public:
-        const static std::string KEY_ACCOUNT_PAGE_SIZE;
-        const static std::string KEY_REFRESH_INTERVAL;
+        const static wxString KEY_ACCOUNT_PAGE_SIZE;
+        const static wxString KEY_REFRESH_INTERVAL;
 
         /**
          * Constructor.
@@ -31,7 +33,7 @@ class Config {
          * @param configKey The config key.
          * @throw std::out_of_range If the config is not found.
          */
-        static Config GetConfig(const std::string& configKey);
+        static Config GetConfig(const wxString& configKey);
 
         /**
          * Gets the specified config value
@@ -39,27 +41,27 @@ class Config {
          * @param configKey The config key.
          * @throw std::out_of_range If the config is not found.
          */
-        static std::string GetConfigValue(const std::string& configKey);
+        static wxString GetConfigValue(const wxString& configKey);
 
         /**
          * Gets the specified config value.  If it isn't found in the existing config, set to the
          * specified default and return that.
          *
          * @param configKey The config key.
-         * @param defaultValue The default value (std::string, int, bool).
+         * @param defaultValue The default value (wxString, int, bool).
          */
         template<typename T>
-        static T GetConfigValue(const std::string& configKey, const T& defaultValue);
+        static T GetConfigValue(const wxString& configKey, const T& defaultValue);
 
         /**
          * Sets the specified config key / value in the database and cache.  If it already exists
          * it is updated else it is inserted.
          *
          * @param configKey The config key.
-         * @param configValue The config value (std::string, int, bool).
+         * @param configValue The config value (wxString, int, bool).
          */
         template<typename T>
-        static void SetConfigValue(const std::string& configKey, const T& configValue);
+        static void SetConfigValue(const wxString& configKey, const T& configValue);
 
         /**
          * Inserts a row in the "config" table.
@@ -93,32 +95,32 @@ class Config {
          *
          * @param configKey The config key.
          */
-        void SetConfigKey(const std::string& configKey);
+        void SetConfigKey(const wxString& configKey);
 
         /**
          * Gets the config key.
          */
-        const std::string& GetConfigKey() const;
+        const wxString& GetConfigKey() const;
 
         /**
          * Sets the config value.
          *
          * @param configValue The config value.
          */
-        void SetConfigValue(const std::string& configValue);
+        void SetConfigValue(const wxString& configValue);
 
         /**
          * Gets the config value.
          */
-        const std::string& GetConfigValue() const;
+        const wxString& GetConfigValue() const;
 
     protected:
     private:
         unsigned id;
-        std::string configKey;
-        std::string configValue;
+        wxString configKey;
+        wxString configValue;
 
-        static std::map<std::string, Config> configCache;
+        static std::map<wxString, Config> configCache;
 };
 
 }
@@ -135,15 +137,17 @@ namespace soci
         static void from_base(values const & v, indicator ind, greenthumb::entity::Config & c)
         {
             c.SetId(v.get<int>("id"));
-            c.SetConfigKey(v.get<std::string>("config_key"));
-            c.SetConfigValue(v.get<std::string>("config_value"));
+            wxString key(v.get<std::string>("config_key"));
+            c.SetConfigKey(key);
+            wxString value(v.get<std::string>("config_value"));
+            c.SetConfigValue(value);
         }
 
         static void to_base(const greenthumb::entity::Config & c, values & v, indicator & ind)
         {
             v.set("id", c.GetId());
-            v.set("config_key", c.GetConfigKey());
-            v.set("config_value", c.GetConfigValue());
+            v.set("config_key", std::string(c.GetConfigKey().mb_str()));
+            v.set("config_value", std::string(c.GetConfigValue().mb_str()));
 
             ind = i_ok;
         }

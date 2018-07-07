@@ -6,16 +6,16 @@
 namespace greenthumb {
 namespace entity {
 
-const std::string Config::KEY_ACCOUNT_PAGE_SIZE = "accountPageSize";
-const std::string Config::KEY_REFRESH_INTERVAL = "refreshInterval";
+const wxString Config::KEY_ACCOUNT_PAGE_SIZE = "accountPageSize";
+const wxString Config::KEY_REFRESH_INTERVAL = "refreshInterval";
 
-std::map<std::string, Config> Config::configCache = std::map<std::string, Config>();
+std::map<wxString, Config> Config::configCache = std::map<wxString, Config>();
 
 Config::Config() : id(0) {
 }
 
 template <>
-void Config::SetConfigValue(const std::string& configKey, const std::string& configValue) {
+void Config::SetConfigValue(const wxString& configKey, const wxString& configValue) {
 
     try {
 
@@ -39,22 +39,19 @@ void Config::SetConfigValue(const std::string& configKey, const std::string& con
 }
 
 template <>
-void Config::SetConfigValue(const std::string& configKey, const bool& configValue) {
-    std::string strValue = configValue ? "true" : "false";
+void Config::SetConfigValue(const wxString& configKey, const bool& configValue) {
+    wxString strValue = configValue ? "true" : "false";
     SetConfigValue(configKey, strValue);
 }
 
 template <>
-void Config::SetConfigValue(const std::string& configKey, const int& configValue) {
-    std::ostringstream intStream;
-    intStream << configValue;
-    SetConfigValue(configKey, intStream.str());
-
+void Config::SetConfigValue(const wxString& configKey, const int& configValue) {
+    SetConfigValue(configKey, wxString::Format(wxT("%i"), configValue));
 }
 
-Config Config::GetConfig(const std::string& configKey) {
+Config Config::GetConfig(const wxString& configKey) {
 
-    std::map<std::string, Config>::iterator it = configCache.find(configKey);
+    std::map<wxString, Config>::iterator it = configCache.find(configKey);
 
     if (it == configCache.end()) {
 
@@ -63,7 +60,8 @@ Config Config::GetConfig(const std::string& configKey) {
 
         soci::session session(Db::GetConnectionPool());
 
-        session << "SELECT * FROM config WHERE config_key = :configKey LIMIT 1", soci::into(config, ind), soci::use(configKey);
+        session << "SELECT * FROM config WHERE config_key = :configKey LIMIT 1",
+            soci::into(config, ind), soci::use(std::string(configKey.mb_str()));
 
         if (config.id > 0) {
             configCache[configKey] = config;
@@ -78,59 +76,42 @@ Config Config::GetConfig(const std::string& configKey) {
 }
 
 template <>
-std::string Config::GetConfigValue(const std::string& configKey, const std::string& defaultValue) {
-
+wxString Config::GetConfigValue(const wxString& configKey, const wxString& defaultValue) {
     try {
         return GetConfigValue(configKey);
     } catch (const std::out_of_range& e) {
-
         Config config;
         config.configKey = configKey;
         config.configValue = defaultValue;
         config.Save();
-
         configCache[configKey] = config;
     }
 
     return defaultValue;
-
 }
 
 template <>
-int Config::GetConfigValue(const std::string& configKey, const int& defaultValue) {
+int Config::GetConfigValue(const wxString& configKey, const int& defaultValue) {
 
     try {
-        std::istringstream intStream(GetConfigValue(configKey));
-        int result;
-
-        if (!(intStream >> result)) {
-            return 0;
-        }
-
+        int result = wxAtoi(GetConfigValue(configKey));
         return result;
-
     } catch (const std::exception& e) {
-
-        std::ostringstream intStream;
-        intStream << defaultValue;
-
         Config config;
         config.configKey = configKey;
-        config.configValue = intStream.str();
+        config.configValue = wxString::Format(wxT("%i"), defaultValue);
         config.Save();
 
         configCache[configKey] = config;
-
     }
 
     return defaultValue;
 }
 
 template <>
-bool Config::GetConfigValue(const std::string& configKey, const bool& defaultValue) {
-
+bool Config::GetConfigValue(const wxString& configKey, const bool& defaultValue) {
     try {
-        std::string boolValue = GetConfigValue(configKey);
+        wxString boolValue = GetConfigValue(configKey);
         return boolValue == "true";
     } catch (std::exception const &e) {
 
@@ -143,22 +124,19 @@ bool Config::GetConfigValue(const std::string& configKey, const bool& defaultVal
     }
 
     return defaultValue;
-
 }
 
-std::string Config::GetConfigValue(const std::string& configKey) {
-
+wxString Config::GetConfigValue(const wxString& configKey) {
     Config config = GetConfig(configKey);
     return config.configValue;
-
 }
 
 void Config::Insert() {
-
     soci::session session(Db::GetConnectionPool());
 
     session << "INSERT INTO config (config_key, config_value) "
-            "VALUES (:config_key, :config_value)", soci::use(configKey), soci::use(configValue);
+        "VALUES (:config_key, :config_value)", soci::use(std::string(configKey.mb_str())),
+        soci::use(std::string(configValue.mb_str()));
 
     long lastInsertId;
 
@@ -168,23 +146,20 @@ void Config::Insert() {
     /* if (session.get_last_insert_id("config", lastInsertId)) {
         id = static_cast<unsigned>(lastInsertId);
     } */
-
 }
 
 void Config::Update() {
     soci::session session(Db::GetConnectionPool());
     session << "UPDATE config SET config_value = :config_value WHERE id = :id",
-        soci::use(configValue), soci::use(id);
+        soci::use(std::string(configValue.mb_str())), soci::use(id);
 }
 
 void Config::Save() {
-
     if (id > 0) {
         Update();
     } else {
         Insert();
     }
-
 }
 
 void Config::SetId(const unsigned id) {
@@ -194,20 +169,19 @@ const int Config::GetId() const {
     return id;
 }
 
-void Config::SetConfigKey(const std::string& configKey) {
+void Config::SetConfigKey(const wxString& configKey) {
     this->configKey = configKey;
 }
-const std::string& Config::GetConfigKey() const {
+const wxString& Config::GetConfigKey() const {
     return configKey;
 }
 
-void Config::SetConfigValue(const std::string& configValue) {
+void Config::SetConfigValue(const wxString& configValue) {
     this->configValue = configValue;
 }
-const std::string& Config::GetConfigValue() const {
+const wxString& Config::GetConfigValue() const {
     return configValue;
 }
 
 }
 }
-

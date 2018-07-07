@@ -24,8 +24,8 @@
 
 namespace greenthumb {
 
-const std::string GreenThumbFrame::VIEW_ACCOUNT = "account";
-const std::string GreenThumbFrame::VIEW_BETTING = "betting";
+const wxString GreenThumbFrame::VIEW_ACCOUNT = "account";
+const wxString GreenThumbFrame::VIEW_BETTING = "betting";
 
 GreenThumbFrame::GreenThumbFrame()
        : wxFrame(NULL, wxID_ANY, _T("Green Thumb"),
@@ -37,7 +37,7 @@ GreenThumbFrame::GreenThumbFrame()
     greenthumbIcon.CopyFromBitmap(ArtProvider::GetBitmap(ArtProvider::IconId::GREENTHUMB));
     SetIcon(greenthumbIcon);
 
-    mainView = entity::Config::GetConfigValue<std::string>("mainView", VIEW_BETTING);
+    mainView = entity::Config::GetConfigValue<wxString>("mainView", VIEW_BETTING);
 
     CreateMenuBar();
 
@@ -102,7 +102,7 @@ void GreenThumbFrame::Login() {
 
         // get account currency if we don't already have it.
         wxString currencySymbol = GetCurrencySymbol(
-            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+            entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
         );
         if (currencySymbol == "?") {
             workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));

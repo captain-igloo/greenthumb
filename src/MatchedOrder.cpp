@@ -61,7 +61,7 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
         price->SetLabel(priceLabel);
 
         wxString currencySymbol = GetCurrencySymbol(
-            entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+            entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
         );
 
         double sizeMatched = 0;
@@ -88,7 +88,7 @@ void MatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& c
 
 void MatchedOrder::UpdateProfitOrLiability() {
     wxString currencySymbol = GetCurrencySymbol(
-        entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
     );
 
     std::ostringstream profitOrLiabilityStream;

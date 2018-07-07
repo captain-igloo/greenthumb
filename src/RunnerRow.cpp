@@ -23,9 +23,8 @@
 namespace greenthumb {
 
 RunnerRow::RunnerRow(wxWindow* parent) : lastPriceTraded(-1), profitAndLossIfWin(0) {
-
     currencySymbol = GetCurrencySymbol(
-        entity::Config::GetConfigValue<std::string>("accountCurrency", "?")
+        entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
     );
 
     wxSizer* sizer = parent->GetSizer();

@@ -40,8 +40,8 @@ class GreenThumbFrame : public wxFrame {
 
     private:
 
-        const static std::string VIEW_ACCOUNT;
-        const static std::string VIEW_BETTING;
+        const static wxString VIEW_ACCOUNT;
+        const static wxString VIEW_BETTING;
 
         /** Displays the betfair events and markets. */
         EventTree* eventTree;
@@ -52,7 +52,7 @@ class GreenThumbFrame : public wxFrame {
         /** Displays the event / market navigation on the left and market prices on the right. */
         wxSplitterWindow* bettingPanel;
         /** The current view, either account or betting. */
-        std::string mainView;
+        wxString mainView;
         /** Manages the GetAccountDetails worker */
         worker::WorkerManager workerManager;
         /** Caches betfair market catalogues. */

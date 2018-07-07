@@ -57,9 +57,9 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
     password->SetMinSize(wxSize(300, -1));
     hbox3->Add(password, 1, wxEXPAND);
 
-    std::string savedAppKey = entity::Config::GetConfigValue<std::string>("applicationKey", "");
-    std::string savedUsername = entity::Config::GetConfigValue<std::string>("betfairUsername", "");
-    std::string savedPassword = entity::Config::GetConfigValue<std::string>("betfairPassword", "");
+    wxString savedAppKey = entity::Config::GetConfigValue<wxString>("applicationKey", "");
+    wxString savedUsername = entity::Config::GetConfigValue<wxString>("betfairUsername", "");
+    wxString savedPassword = entity::Config::GetConfigValue<wxString>("betfairPassword", "");
 
     if (savedAppKey != "") {
         appKey->SetValue(savedAppKey);
@@ -101,14 +101,14 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
 
 void LoginDialog::OnOk(const wxCommandEvent& event) {
 
-    entity::Config::SetConfigValue("applicationKey", std::string(appKey->GetValue().mb_str()));
+    entity::Config::SetConfigValue("applicationKey", appKey->GetValue());
 
     entity::Config::SetConfigValue("rememberBetfairPassword", remember->GetValue());
-    std::string usernameToSave = "";
-    std::string passwordToSave = "";
+    wxString usernameToSave = "";
+    wxString passwordToSave = "";
     if (remember->GetValue()) {
-        usernameToSave = std::string(username->GetValue().mb_str());
-        passwordToSave = std::string(password->GetValue().mb_str());
+        usernameToSave = username->GetValue();
+        passwordToSave = password->GetValue();
     }
     entity::Config::SetConfigValue("betfairUsername", usernameToSave);
     entity::Config::SetConfigValue("betfairPassword", passwordToSave);
