@@ -303,7 +303,6 @@ const wxString RunnerRow::GetRunnerName() const {
     wxString runnerName = market.GetRunner(selectionId).getRunnerName();
 
     if (handicap != 0 && (runners.find(handicap) != runners.end()) && market.HasRunner(selectionId)) {
-        std::cout << static_cast<std::string>(market.GetMarketCatalogue().getDescription().getBettingType()) << std::endl;
         runnerName = GetSelectionName(
             market.GetMarketCatalogue(),
             market.GetRunner(selectionId),
