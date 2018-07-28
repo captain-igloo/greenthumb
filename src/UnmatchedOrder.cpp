@@ -116,23 +116,16 @@ void UnmatchedOrder::UpdateProfitOrLiability() {
         entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
     );
 
-    double profit;
-
     double sizeRemaining = 0;
     greentop::Optional<double> optionalSizeRemaining = currentOrderSummary.getSizeRemaining();
     if (optionalSizeRemaining.isValid()) {
         sizeRemaining = optionalSizeRemaining.getValue();
     }
 
-    if (currentOrderSummary.getSide() == greentop::Side::BACK) {
-        profit = sizeRemaining * (oddsSpin->GetValue() - 1);
-    } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {
-        profit = sizeRemaining * (oddsSpin->GetValue() - 1);
-    }
+    double profit = sizeRemaining * (oddsSpin->GetValue() - 1);
 
     wxString label = currencySymbol + wxString::Format("%.2f", profit);
     profitOrLiability->SetLabel(label);
-
 }
 
 void UnmatchedOrder::OnSpin(wxSpinDoubleEvent& event) {

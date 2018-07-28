@@ -93,20 +93,14 @@ void MatchedOrder::UpdateProfitOrLiability() {
 
     std::ostringstream profitOrLiabilityStream;
 
-    double profit;
-
     double sizeMatched = 0;
     greentop::Optional<double> optionalSizeMatched = currentOrderSummary.getSizeMatched();
     if (optionalSizeMatched.isValid()) {
         sizeMatched = optionalSizeMatched.getValue();
     }
 
-    if (currentOrderSummary.getSide() == greentop::Side::BACK) {
-        profit = sizeMatched * (currentOrderSummary.getAveragePriceMatched() - 1);
-    } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {
-        profit = sizeMatched * (currentOrderSummary.getAveragePriceMatched() - 1);
-    }
-    
+    double profit = sizeMatched * (currentOrderSummary.getAveragePriceMatched() - 1);
+
     wxString label = currencySymbol + wxString::Format("%.2f", profit);
     profitOrLiability->SetLabel(label);
 }
