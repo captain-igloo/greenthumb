@@ -5,7 +5,7 @@
 #define UTIL_H
 
 #include <ctime>
-#include <string>
+#include <wx/wx.h>
 #include <wx/string.h>
 
 #include <greentop/sport/MarketCatalogue.h>
@@ -25,6 +25,8 @@ wxString GetSelectionName(
     const greentop::RunnerCatalog& runnerCatalog,
     const double handicap
 );
+
+bool DoubleEquals(double d1, double d2);
 
 }
 

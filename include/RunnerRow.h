@@ -24,7 +24,6 @@ namespace greenthumb {
  * Displays prices for a runner.
  */
 class RunnerRow {
-
     public:
 
         /**
@@ -41,15 +40,18 @@ class RunnerRow {
          * @param marketBook The market prices.
          * @param runner The runner.
          */
-        void SetRunner(const entity::Market& market, const greentop::MarketBook& marketBook,
-            const greentop::Runner& runner);
+        void SetRunner(
+            const entity::Market& market,
+            const greentop::MarketBook& marketBook,
+            const greentop::Runner& runner
+        );
 
         /**
          * Sets the profit / loss for this runner.
          *
          * @param profit The profit / loss.
          */
-        void SetProfit(double profit);
+        void SetProfit(double handicap, double profit);
 
         /**
          * Update the prices display.
@@ -107,6 +109,7 @@ class RunnerRow {
         wxWindowID chartButtonId;
         wxString currencySymbol;
         int64_t selectionId = 0;
+        std::map<int64_t, double> profits;
 
         /**
          * Sets a price button label.
@@ -116,7 +119,12 @@ class RunnerRow {
          * @param size The new size.
          * @param currencySymbol The currency symbol.
          */
-        void SetButtonLabel(PriceButton* button, const double price, const double size, const wxString& currencySymbol) const;
+        void SetButtonLabel(
+            PriceButton* button,
+            const double price,
+            const double size,
+            const wxString& currencySymbol
+        ) const;
 
         /**
          * Sets the button's label to an empty string and set its price to the default.
@@ -157,6 +165,11 @@ class RunnerRow {
          * Updates the runner name label.
          */
         void UpdateRunnerName();
+
+        /**
+         * Update profit / loss display.
+         */
+        void UpdateProfitAndLossIfWin();
 };
 
 }

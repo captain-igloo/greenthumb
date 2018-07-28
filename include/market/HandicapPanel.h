@@ -11,6 +11,8 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 
+#include "entity/Market.h"
+
 namespace greenthumb {
 namespace market {
 
@@ -42,7 +44,7 @@ class HandicapPanel : public wxPanel {
          * @param page The page to add.
          * @param defaultHandicapIndex The index of the page to start on.
          */
-        void AddPages(const std::vector<std::vector<std::pair<int64_t, double>>>& pages,
+        void AddPages(const std::vector<std::vector<entity::PageRunner>>& pages,
             unsigned defaultHandicapIndex);
 
         /**
@@ -62,7 +64,7 @@ class HandicapPanel : public wxPanel {
         /** Displays the current handicap. */
         wxStaticText* handicapText;
         /** The pages ie selection ids and handicaps */
-        std::vector<std::vector<std::pair<int64_t, double>>> handicapPages;
+        std::vector<std::vector<entity::PageRunner>> handicapPages;
         /** The current handicap. */
         ///std::vector<std::vector<std::pair<int64_t, double>>>::iterator currentHandicap;
         unsigned currentHandicapIndex;

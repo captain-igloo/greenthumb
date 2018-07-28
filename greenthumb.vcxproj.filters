@@ -147,9 +147,6 @@
     <ClCompile Include="src\worker\ListMarketCatalogue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\worker\ListMarketProfitAndLoss.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\worker\Login.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -300,9 +297,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\worker\ListMarketCatalogue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\worker\ListMarketProfitAndLoss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\worker\Login.h">

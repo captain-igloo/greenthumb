@@ -95,4 +95,8 @@ wxString GetSelectionName(
     return runnerName;
 }
 
+bool DoubleEquals(double d1, double d2) {
+    return std::abs((d2 - d1) * 1000) < 1;
+}
+
 }

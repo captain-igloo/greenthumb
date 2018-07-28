@@ -1,7 +1,9 @@
 /**
  * Copyright 2018 Colin Doig.  Distributed under the MIT license.
  */
+#include <wx/wx.h>
 #include "entity/Market.h"
+#include "Util.h"
 
 namespace greenthumb {
 namespace entity {
@@ -10,35 +12,10 @@ void Market::SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue
     this->marketCatalogue = marketCatalogue;
 
     runners.clear();
-    handicapPages.clear();
-    std::vector<std::pair<int64_t, double>> handicapPage;
-    std::set<int64_t> selectionIdsFound;
-
-    std::vector<greentop::RunnerCatalog> r = marketCatalogue.getRunners();
-    for (unsigned i = 0; i < r.size(); ++i) {
-        runners[r[i].getSelectionId()] = r[i];
-
-        if (marketCatalogue.getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
-
-            if (selectionIdsFound.find(r[i].getSelectionId()) == selectionIdsFound.end()) {
-                selectionIdsFound.insert(r[i].getSelectionId());
-                std::pair<int64_t, double> pageRunner(r[i].getSelectionId(), r[i].getHandicap());
-                handicapPage.push_back(pageRunner);
-            } else {
-                // new page
-                handicapPages.push_back(handicapPage);
-                handicapPage.clear();
-                selectionIdsFound.clear();
-                selectionIdsFound.insert(r[i].getSelectionId());
-                std::pair<int64_t, double> pageRunner(r[i].getSelectionId(), r[i].getHandicap());
-                handicapPage.push_back(pageRunner);
-            }
+    for (const greentop::RunnerCatalog& runner : marketCatalogue.getRunners()) {
+        if (runner.getSelectionId().isValid()) {
+            runners[runner.getSelectionId().getValue()] = runner;
         }
-    }
-
-    if (handicapPage.size() > 0) {
-        // add final page
-        handicapPages.push_back(handicapPage);
     }
 
     hasMarketCatalogue = true;
@@ -50,55 +27,44 @@ const greentop::MarketCatalogue& Market::GetMarketCatalogue() const {
 void Market::SetMarketBook(const greentop::MarketBook& marketBook) {
     this->marketBook = marketBook;
 
-    if (marketCatalogue.getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
-        double maxLiquidity = 0;
-        double totalLiquidity = 0;
-        handicapPages.clear();
-        std::vector<std::pair<int64_t, double>> handicapPage;
-        std::set<int64_t> selectionIdsFound;
+    handicapPages.clear();
+    std::vector<PageRunner> handicapPage;
+    std::set<int64_t> selectionIdsFound;
 
-        for (unsigned i = 0; i < marketBook.getRunners().size(); ++i) {
-            const greentop::Runner& runner = marketBook.getRunners()[i];
+    double otherRunnersProfit = 0;
 
-            if (selectionIdsFound.find(runner.getSelectionId()) == selectionIdsFound.end()) {
-                selectionIdsFound.insert(runner.getSelectionId());
-                std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
-                handicapPage.push_back(pageRunner);
-            } else {
+    for (const greentop::Runner& runner : marketBook.getRunners()) {
+        if (runner.getSelectionId().isValid()) {
+            int64_t selectionId = runner.getSelectionId();
+            double handicap = runner.getHandicap().isValid() ? runner.getHandicap().getValue() : 0;
+
+            if (selectionIdsFound.find(selectionId) != selectionIdsFound.end()) {
                 // new page
-                if (totalLiquidity > maxLiquidity) {
-                    maxLiquidity = totalLiquidity;
-                    defaultHandicapIndex = handicapPages.size();
-                }
-                totalLiquidity = 0;
+                SetKeyLineIndex(
+                    handicapPage,
+                    marketBook.getKeyLineDescription(),
+                    handicapPages.size()
+                );
                 handicapPages.push_back(handicapPage);
                 handicapPage.clear();
                 selectionIdsFound.clear();
-                selectionIdsFound.insert(runner.getSelectionId());
-                std::pair<int64_t, double> pageRunner(runner.getSelectionId(), runner.getHandicap());
-                handicapPage.push_back(pageRunner);
-
+                otherRunnersProfit = 0;
             }
-
-            std::vector<greentop::PriceSize> priceSize;
-            priceSize = runner.getEx().getAvailableToBack();
-            for (unsigned j = 0; j < priceSize.size(); ++j) {
-                totalLiquidity += priceSize[j].getSize();
+            selectionIdsFound.insert(selectionId);
+            std::pair<double, double> profitAndLoss = CalculateProfitAndLoss(runner.getMatches());
+            for (PageRunner& previousPageRunner : handicapPage) {
+                previousPageRunner.profitAndLoss += profitAndLoss.second;
             }
-            priceSize = runner.getEx().getAvailableToLay();
-            for (unsigned j = 0; j < priceSize.size(); ++j) {
-                totalLiquidity += priceSize[j].getSize();
-            }
+            PageRunner pageRunner(selectionId, handicap, profitAndLoss.first + otherRunnersProfit);
+            handicapPage.push_back(pageRunner);
+            otherRunnersProfit += profitAndLoss.second;
         }
+    }
 
-        if (handicapPage.size() > 0) {
-            // add final page
-            if (totalLiquidity > maxLiquidity) {
-                maxLiquidity = totalLiquidity;
-                defaultHandicapIndex = handicapPages.size();
-            }
-            handicapPages.push_back(handicapPage);
-        }
+    if (handicapPage.size() > 0) {
+        // add final page
+        SetKeyLineIndex(handicapPage, marketBook.getKeyLineDescription(), handicapPages.size());
+        handicapPages.push_back(handicapPage);
     }
 }
 
@@ -118,12 +84,61 @@ bool Market::HasMarketCatalogue() const {
     return hasMarketCatalogue;
 }
 
-const std::vector<std::vector<std::pair<int64_t, double>>>& Market::GetHandicapPages() const {
+const std::vector<std::vector<PageRunner>>& Market::GetHandicapPages() const {
     return handicapPages;
 }
 
 unsigned Market::GetDefaultHandicapIndex() const {
     return defaultHandicapIndex;
+}
+
+const std::set<int64_t>& Market::GetSelectionIds() const {
+    return selectionIds;
+}
+
+void Market::SetKeyLineIndex(
+    std::vector<PageRunner> handicapPage,
+    greentop::KeyLineDescription keyLineDescription,
+    unsigned handicapIndex
+) {
+    bool found = false;
+    if (keyLineDescription.isValid()) {
+        for (const greentop::KeyLineSelection& keyLine : keyLineDescription.getKeyLine()) {
+            for (const PageRunner& runner : handicapPage) {
+                if (DoubleEquals(keyLine.getHandicap(), runner.handicap) && keyLine.getSelectionId() == runner.selectionId) {
+                    defaultHandicapIndex = handicapIndex;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
+    }
+}
+
+std::pair<double, double> Market::CalculateProfitAndLoss(
+    const std::vector<greentop::Match>& matches
+) const {
+    double thisRunnerProfit = 0;
+    double otherRunnersProfit = 0;
+
+    for (const greentop::Match& match : matches) {
+        if (match.getPrice().isValid() && match.getSize().isValid()) {
+            double backProfit = (match.getPrice().getValue() - 1) * match.getSize().getValue();
+            double size = match.getSize().getValue();
+            if (match.getSide() == greentop::Side::BACK) {
+                thisRunnerProfit += backProfit;
+                otherRunnersProfit -= size;
+            } else {
+                thisRunnerProfit -= backProfit;
+                otherRunnersProfit += size;
+            }
+        }
+    }
+
+    return std::pair<double, double>(thisRunnerProfit, otherRunnersProfit);
 }
 
 }

@@ -21,7 +21,6 @@
 #include "market/HandicapPanel.h"
 
 #include "worker/ListMarketBook.h"
-#include "worker/ListMarketProfitAndLoss.h"
 #include "worker/WorkerManager.h"
 
 #include "CurrentOrder.h"
@@ -37,7 +36,6 @@ class MarketPanels;
  * Display market prices.
  */
 class MarketPanel : public wxPanel {
-
     public:
 
         /**
@@ -137,6 +135,11 @@ class MarketPanel : public wxPanel {
         void OnMarketUpdated(const wxThreadEvent& event);
 
         /**
+         * Calculate profit and loss for each runner and update display.
+         */
+        void UpdateProfitAndLoss();
+
+        /**
          * Close the market panel.
          *
          * @param event The click event.
@@ -147,13 +150,6 @@ class MarketPanel : public wxPanel {
          * Add / remove runners, update prices, update profit and loss.
          */
         void SyncRunnerRows();
-
-        /**
-         * Update market profit and loss.
-         *
-         * @param event The worker event.
-         */
-        void OnListMarketProfitAndLoss(const wxThreadEvent& event);
 
         /**
          * Display potential profit and loss before a bet is placed.

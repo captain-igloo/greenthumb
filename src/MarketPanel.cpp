@@ -56,8 +56,6 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 
     Bind(worker::LIST_MARKET_BOOK, &MarketPanel::OnMarketUpdated, this);
     workerManager.Bind(worker::LIST_MARKET_BOOK);
-    Bind(worker::LIST_MARKET_PROFIT_AND_LOSS, &MarketPanel::OnListMarketProfitAndLoss, this);
-    workerManager.Bind(worker::LIST_MARKET_PROFIT_AND_LOSS);
     Bind(worker::PLACE_ORDERS, &MarketPanel::OnPlaceBet, this);
     Bind(worker::CANCEL_ORDERS, &MarketPanel::OnCancelOrders, this);
     Bind(wxEVT_TIMER, &MarketPanel::RefreshPrices, this);
@@ -92,43 +90,18 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
         UpdateToolBar();
         UpdateMarketStatus();
 
-        worker::ListMarketProfitAndLoss* listMarketProfitAndLossWorker =
-            new worker::ListMarketProfitAndLoss(&workerManager, market.GetMarketCatalogue().getMarketId());
-        workerManager.RunWorker(listMarketProfitAndLossWorker);
+        UpdateProfitAndLoss();
     }
 }
 
-void MarketPanel::OnListMarketProfitAndLoss(const wxThreadEvent& event) {
-    greentop::ListMarketProfitAndLossResponse lmpalr = event.GetPayload<greentop::ListMarketProfitAndLossResponse>();
-
-    if (lmpalr.isSuccess()) {
-        std::vector<greentop::MarketProfitAndLoss> marketProfitAndLosses = lmpalr.getMarketProfitAndLosses();
-
-        std::vector<greentop::MarketProfitAndLoss>::iterator it1;
-        for (it1 = marketProfitAndLosses.begin(); it1 != marketProfitAndLosses.end(); ++it1) {
-
-            greentop::MarketProfitAndLoss marketProfitAndLoss = *it1;
-
-            if (marketProfitAndLoss.getMarketId() == market.GetMarketCatalogue().getMarketId()) {
-
-                std::vector<greentop::RunnerProfitAndLoss> profitAndLosses = marketProfitAndLoss.getProfitAndLosses();
-
-                std::vector<greentop::RunnerProfitAndLoss>::iterator it2;
-                for (it2 = profitAndLosses.begin(); it2 != profitAndLosses.end(); ++it2) {
-                    greentop::RunnerProfitAndLoss runnerProfitAndLoss = *it2;
-                    if (runnerRows.find(runnerProfitAndLoss.getSelectionId()) != runnerRows.end()) {
-                        greentop::Optional<double> optionalIfWin = runnerProfitAndLoss.getIfWin();
-                        double ifWin = 0;
-                        if (optionalIfWin.isValid()) {
-                            ifWin = optionalIfWin.getValue();
-                        }
-                        runnerRows[runnerProfitAndLoss.getSelectionId()]->SetProfit(ifWin);
-                    }
-                }
+void MarketPanel::UpdateProfitAndLoss() {
+    for (const std::vector<entity::PageRunner>& page : market.GetHandicapPages()) {
+        for (const entity::PageRunner& pageRunner : page) {
+            std::map<int64_t, RunnerRow*>::iterator it = runnerRows.find(pageRunner.selectionId);
+            if (it != runnerRows.end()) {
+                it->second->SetProfit(pageRunner.handicap, pageRunner.profitAndLoss);
             }
         }
-
-        GetParent()->Layout();
     }
 }
 
@@ -154,7 +127,6 @@ void MarketPanel::RefreshPrices(const wxEvent& event) {
 }
 
 void MarketPanel::SetMarket(const greentop::menu::Node& node) {
-
     marketId = node.getId();
     std::tm marketStartTime = node.getMarketStartTime();
     time_t startTime = timegm(&marketStartTime);
@@ -168,7 +140,6 @@ void MarketPanel::SetMarket(const greentop::menu::Node& node) {
         currentOrdersDialog->SetTitle(fullMarketName);
         marketToolbar->SetMarketName(label);
     }
-
 }
 
 void MarketPanel::SetMarket(const entity::Market& market) {
@@ -212,7 +183,6 @@ void MarketPanel::UpdateToolBar() {
 void MarketPanel::SyncRunnerRows() {
     std::vector<greentop::Runner> runners = marketBook.getRunners();
 
-
     for (unsigned i = 0; i < runners.size(); ++i) {
         greentop::Runner runner = runners[i];
 
@@ -221,11 +191,7 @@ void MarketPanel::SyncRunnerRows() {
             if (iter == runnerRows.end()) {
                 RunnerRow* runnerRow = new RunnerRow(pricesPanel);
                 runnerRows[runner.getSelectionId()] = runnerRow;
-
-                double profit = 0;
-
                 runnerRow->SetRunner(market, marketBook, runner);
-                runnerRow->SetProfit(profit);
             } else {
                 iter->second->SetRunner(market, marketBook, runner);
             }
@@ -245,7 +211,6 @@ void MarketPanel::OnCancelOrders(const wxThreadEvent& event) {
 }
 
 void MarketPanel::OnClick(const wxCommandEvent& event) {
-
     PriceButton* button = dynamic_cast<PriceButton*>(event.GetEventObject());
 
     if (button) {
@@ -273,7 +238,6 @@ void MarketPanel::OnClickClose(const wxCommandEvent& event) {
 }
 
 void MarketPanel::OnPlaceOrderPending(const wxCommandEvent& event) {
-
     greentop::PlaceInstruction* pi = static_cast<greentop::PlaceInstruction*>(event.GetClientData());
 
     for (const auto &it : runnerRows) {

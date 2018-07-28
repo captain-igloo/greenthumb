@@ -78,7 +78,7 @@ void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary&
         greentop::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
 
         runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " +
-            GetSelectionName(market.GetMarketCatalogue(), runner, runner.getHandicap()));
+            GetSelectionName(market.GetMarketCatalogue(), runner, currentOrderSummary.getHandicap()));
 
         oddsSpin->SetValue(currentOrderSummary.getPriceSize().getPrice());
 

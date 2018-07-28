@@ -91,25 +91,14 @@ const int64_t RunnerRow::GetSelectionId() const {
     return selectionId;
 }
 
-void RunnerRow::SetProfit(double profit) {
+void RunnerRow::SetProfit(double handicap, double profit) {
+    int64_t scaledHandicap = handicap * scaleFactor;
 
-    profitAndLossIfWin = profit;
+    profits[scaledHandicap] = profit;
 
-    if (profitAndLossIfWin > 0.001 || profitAndLossIfWin < -0.001) {
-        wxString profitLabel = currencySymbol +
-            wxString::Format("%.2f", std::abs(profitAndLossIfWin));
-
-        profitAndLossIfWinText->SetLabel(profitLabel);
-
-        if (profitAndLossIfWin > 0) {
-            profitAndLossIfWinText->SetForegroundColour(wxColour(0, 128, 0));
-        } else {
-            profitAndLossIfWinText->SetForegroundColour(wxColour("RED"));
-        }
-    } else {
-        profitAndLossIfWinText->SetLabel("");
+    if (scaledHandicap == this->handicap) {
+        UpdateProfitAndLossIfWin();
     }
-
 }
 
 void RunnerRow::SetRunner(
@@ -302,6 +291,7 @@ void RunnerRow::SetHandicap(const double handicap) {
         this->handicap = scaledHandicap;
         RefreshPrices();
         UpdateRunnerName();
+        UpdateProfitAndLossIfWin();
     }
 }
 
@@ -325,6 +315,30 @@ const wxString RunnerRow::GetRunnerName() const {
 
 void RunnerRow::UpdateRunnerName() {
     runnerName->SetLabel(GetRunnerName());
+}
+
+void RunnerRow::UpdateProfitAndLossIfWin() {
+    auto it = profits.find(handicap);
+    if (it != profits.end()) {
+        profitAndLossIfWin = it->second;
+
+        if (profitAndLossIfWin > 0.001 || profitAndLossIfWin < -0.001) {
+            wxString profitLabel = currencySymbol +
+                wxString::Format("%.2f", std::abs(profitAndLossIfWin));
+
+            profitAndLossIfWinText->SetLabel(profitLabel);
+
+            if (profitAndLossIfWin > 0) {
+                profitAndLossIfWinText->SetForegroundColour(wxColour(0, 128, 0));
+            } else {
+                profitAndLossIfWinText->SetForegroundColour(wxColour("RED"));
+            }
+        } else {
+            profitAndLossIfWinText->SetLabel("");
+        }
+    } else {
+        profitAndLossIfWinText->SetLabel("");
+    }
 }
 
 }

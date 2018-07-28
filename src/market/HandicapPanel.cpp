@@ -50,7 +50,7 @@ HandicapPanel::HandicapPanel(
 }
 
 void HandicapPanel::AddPages(
-    const std::vector<std::vector<std::pair<int64_t, double>>>& pages,
+    const std::vector<std::vector<entity::PageRunner>>& pages,
     unsigned defaultHandicapIndex
 ) {
     handicapPages = pages;
@@ -58,7 +58,7 @@ void HandicapPanel::AddPages(
 
     auto page = handicapPages.at(defaultHandicapIndex);
     if (page.size() > 0) {
-        handicapText->SetLabel(wxString::Format(wxT("%.1f"), page.at(0).second));
+        handicapText->SetLabel(wxString::Format(wxT("%.1f"), page.at(0).handicap));
     }
 
     wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
@@ -70,7 +70,10 @@ void HandicapPanel::OnClickPrevious(const wxCommandEvent& event) {
         --currentHandicapIndex;
         if (handicapPages.at(currentHandicapIndex).size() > 0) {
             handicapText->SetLabel(
-                wxString::Format(wxT("%.1f"), handicapPages.at(currentHandicapIndex).at(0).second)
+                wxString::Format(
+                    wxT("%.1f"),
+                    handicapPages.at(currentHandicapIndex).at(0).handicap
+                )
             );
             wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
             QueueEvent(handicapEvent);
@@ -82,7 +85,7 @@ void HandicapPanel::OnClickNext(wxCommandEvent& event) {
     if (currentHandicapIndex < handicapPages.size() - 1) {
         ++currentHandicapIndex;
         handicapText->SetLabel(
-            wxString::Format(wxT("%.1f"), handicapPages.at(currentHandicapIndex).at(0).second)
+            wxString::Format(wxT("%.1f"), handicapPages.at(currentHandicapIndex).at(0).handicap)
         );
         wxCommandEvent* handicapEvent = new wxCommandEvent(HANDICAP_CHANGED);
         QueueEvent(handicapEvent);
@@ -90,11 +93,11 @@ void HandicapPanel::OnClickNext(wxCommandEvent& event) {
 }
 
 const double HandicapPanel::GetHandicap(int64_t selectionId) const {
-    std::vector<std::pair<int64_t, double>> page = handicapPages.at(currentHandicapIndex);
+    std::vector<entity::PageRunner> page = handicapPages.at(currentHandicapIndex);
 
-    for (auto it = page.begin(); it != page.end(); ++it) {
-        if (it->first == selectionId) {
-            return it->second;
+    for (const entity::PageRunner& pageRunner : page) {
+        if (pageRunner.selectionId == selectionId) {
+            return pageRunner.handicap;
         }
     }
     return 0;

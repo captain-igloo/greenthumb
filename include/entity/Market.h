@@ -9,6 +9,15 @@
 namespace greenthumb {
 namespace entity {
 
+struct PageRunner {
+    PageRunner(int64_t selectionId, double handicap, double profitAndLoss) :
+        selectionId(selectionId), handicap(handicap), profitAndLoss(profitAndLoss) {
+    }
+    int64_t selectionId;
+    double handicap;
+    double profitAndLoss;
+};
+
 /**
  * Wraps greentop::MarketCatalogue.
  */
@@ -72,7 +81,7 @@ class Market {
          *
          * @return The handicap pages.
          */
-        const std::vector<std::vector<std::pair<int64_t, double>>>& GetHandicapPages() const;
+        const std::vector<std::vector<PageRunner>>& GetHandicapPages() const;
 
         /**
          * Returns the index of the handicap page with the most liquidity.
@@ -81,13 +90,26 @@ class Market {
          */
         unsigned GetDefaultHandicapIndex() const;
 
+        const std::set<int64_t>& GetSelectionIds() const;
+
     private:
         greentop::MarketCatalogue marketCatalogue;
         greentop::MarketBook marketBook;
         std::map<uint64_t, greentop::RunnerCatalog> runners;
         bool hasMarketCatalogue = false;
-        std::vector<std::vector<std::pair<int64_t, double>>> handicapPages;
-        unsigned defaultHandicapIndex;
+        std::vector <std::vector<PageRunner>> handicapPages;
+        unsigned defaultHandicapIndex = 0;
+        std::set<int64_t> selectionIds;
+
+        void SetKeyLineIndex(
+            std::vector<PageRunner> handicapPage,
+            greentop::KeyLineDescription keyLineDescription,
+            unsigned handicapIndex
+        );
+
+        std::pair<double, double> CalculateProfitAndLoss(
+            const std::vector<greentop::Match>& matches
+        ) const;
 };
 
 }

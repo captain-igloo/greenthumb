@@ -2,12 +2,9 @@
  * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
 #include "OddsSpinCtrl.h"
+#include "Util.h"
 
 namespace greenthumb {
-
-bool DoubleEquals(double d1, double d2) {
-    return std::abs((d2 - d1) * 1000) < 1;
-}
 
 /** The increment ranges.  Below 2 the increment is 0.01, between 2 and 3 the increment is 0.02 etc. */
 const std::map<unsigned, std::pair<double, double> > OddsSpinCtrl::ranges = {

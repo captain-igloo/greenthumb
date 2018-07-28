@@ -73,7 +73,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXDEBUG;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -147,7 +147,6 @@
     <ClCompile Include="src\worker\ListCurrentOrders.cpp" />
     <ClCompile Include="src\worker\ListMarketBook.cpp" />
     <ClCompile Include="src\worker\ListMarketCatalogue.cpp" />
-    <ClCompile Include="src\worker\ListMarketProfitAndLoss.cpp" />
     <ClCompile Include="src\worker\Login.cpp" />
     <ClCompile Include="src\worker\PlaceOrders.cpp" />
     <ClCompile Include="src\worker\RefreshMenu.cpp" />
@@ -200,7 +199,6 @@
     <ClInclude Include="include\worker\ListCurrentOrders.h" />
     <ClInclude Include="include\worker\ListMarketBook.h" />
     <ClInclude Include="include\worker\ListMarketCatalogue.h" />
-    <ClInclude Include="include\worker\ListMarketProfitAndLoss.h" />
     <ClInclude Include="include\worker\Login.h" />
     <ClInclude Include="include\worker\PlaceOrders.h" />
     <ClInclude Include="include\worker\RefreshMenu.h" />
