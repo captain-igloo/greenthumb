@@ -1,40 +1,46 @@
-greenthumb (0.8.0+bionic) bionic; urgency=medium
+greenthumb (0.9.0+xenial) xenial; urgency=medium
+
+  * get market profit and loss from listMarketBook instead of listMarketProfitAndLoss - works for asian handicap markets.
+
+ -- Colin Doig <colindoig@gmail.com>  Sun, 29 Jul 2018 12:00:23 +1200
+
+greenthumb (0.8.0+xenial) xenial; urgency=medium
 
   * use latest greentop
 
  -- Colin Doig <colindoig@gmail.com>  Mon, 09 Jul 2018 20:56:33 +1200
 
-greenthumb (0.7.0+bionic) bionic; urgency=medium
+greenthumb (0.7.0+xenial) xenial; urgency=medium
 
   * asian handicap markets
 
  -- Colin Doig <colindoig@gmail.com>  Wed, 04 Apr 2018 20:03:25 +1200
 
-greenthumb (0.6.0+bionic) bionic; urgency=medium
+greenthumb (0.6.0+xenial) xenial; urgency=medium
 
   * refresh menu - prevent nodes from being expanded during menu refresh
 
  -- Colin Doig <colindoig@gmail.com>  Mon, 12 Feb 2018 18:06:13 +1300
 
-greenthumb (0.5.1+bionic) bionic; urgency=medium
+greenthumb (0.5.1+xenial) xenial; urgency=medium
 
-  * bionic build
+  * xenial build
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:51:53 +1300
 
-greenthumb (0.5.0+bionic) bionic; urgency=medium
+greenthumb (0.5.0+xenial) xenial; urgency=medium
 
   * refresh menu - retrieve the menu in a worker thread and parse in the main thread in order to avoid different threads reading + updating the menu at the same time.
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:23:59 +1300
 
-greenthumb (0.4.1+bionic) bionic; urgency=medium
+greenthumb (0.4.1+xenial) xenial; urgency=medium
 
   * Rebuild for new version of greentop.
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 19 Jan 2018 20:29:13 +1300
 
-greenthumb (0.4.0+bionic) bionic; urgency=medium
+greenthumb (0.4.0+xenial) xenial; urgency=medium
 
   * Initial release.
 
