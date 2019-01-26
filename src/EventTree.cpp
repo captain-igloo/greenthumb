@@ -159,8 +159,9 @@ void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
 
     for (auto it = markets.begin(); it != markets.end(); ++it) {
         // check that the node is still in the tree, it could have been removed after menu refresh.
-        if (!it->second.HasMarketCatalogue() && marketNodes[it->first].IsOk()) {
-            // The market doesn't exist, so remove its node from the tree
+        if ((!it->second.HasMarketCatalogue() && marketNodes[it->first].IsOk()) ||
+            it->second.GetMarketCatalogue().getRunners().size() == 1) {
+            // The market doesn't exist or it's one of those weird ones with one runner, so remove its node from the tree
             wxTreeItemId parentId = GetItemParent(marketNodes[it->first]);
             Delete(marketNodes[it->first]);
             marketNodes.erase(it->first);
