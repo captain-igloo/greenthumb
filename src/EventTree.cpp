@@ -118,12 +118,18 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
         if (nodeIdsFound.find(it->getId()) == nodeIdsFound.end()) {
             wxString name(it->getName().c_str(), wxConvUTF8);
 
-            wxTreeItemId childItemId = AppendItem(itemId, name, -1, -1, new MenuTreeData(*it));
-            if (it->getChildren().size() > 0) {
-                AppendItem(childItemId, "", -1, -1, new MenuTreeData());
-            }
-            if (it->getType() == greentop::menu::Node::Type::MARKET) {
-                marketNodes[it->getId()] = childItemId;
+            bool exclude = betfairMarkets &&
+                betfairMarkets->exists(it->getId()) &&
+                betfairMarkets->get(it->getId()).GetMarketCatalogue().getRunners().size() == 1;
+
+            if (!exclude) {
+                wxTreeItemId childItemId = AppendItem(itemId, name, -1, -1, new MenuTreeData(*it));
+                if (it->getChildren().size() > 0) {
+                    AppendItem(childItemId, "", -1, -1, new MenuTreeData());
+                }
+                if (it->getType() == greentop::menu::Node::Type::MARKET) {
+                    marketNodes[it->getId()] = childItemId;
+                }
             }
         }
 
