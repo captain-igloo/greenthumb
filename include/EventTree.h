@@ -58,7 +58,7 @@ class EventTree : public wxTreeCtrl {
         std::map<std::string, wxTreeItemId> eventItemIds;
         worker::WorkerManager workerManager;
         wxString menuCacheFilename;
-        greentop::LRUCache<std::string, entity::Market>* betfairMarkets;
+        greentop::LRUCache<std::string, entity::Market>* betfairMarkets = NULL;
         bool listMarketCatalogueInProgress;
         std::map<std::string, wxTreeItemId> marketNodes;
 

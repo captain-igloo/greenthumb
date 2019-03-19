@@ -12,8 +12,7 @@
 
 namespace greenthumb {
 
-AccountPanel::AccountPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name) : wxNotebook(parent, id, pos, size, style, name) {
+AccountPanel::AccountPanel(wxWindow* parent, wxWindowID id) : wxNotebook(parent, id) {
 
     accountStatementFull = new AccountStatementFull(this);
     accountStatementSummary = new AccountStatementSummary(this);

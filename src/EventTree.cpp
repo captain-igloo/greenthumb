@@ -80,7 +80,6 @@ void EventTree::Refresh(const wxThreadEvent& event) {
 }
 
 void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse) {
-
     std::set<std::string> nodeIdsFound;
     std::set<wxTreeItemId> itemIdsToDelete;
 
@@ -88,7 +87,6 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     wxTreeItemId childId = GetFirstChild(itemId, cookie);
 
     while (childId.IsOk()) {
-
         MenuTreeData* childData = dynamic_cast<MenuTreeData*>(GetItemData(childId));
 
         if (childData && childData->valid) {
@@ -114,16 +112,19 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     std::set<std::string> marketIds;
 
     for (auto it = node.getChildren().begin(); it != node.getChildren().end(); ++it) {
-
         if (nodeIdsFound.find(it->getId()) == nodeIdsFound.end()) {
             wxString name(it->getName().c_str(), wxConvUTF8);
-
-            wxTreeItemId childItemId = AppendItem(itemId, name, -1, -1, new MenuTreeData(*it));
-            if (it->getChildren().size() > 0) {
-                AppendItem(childItemId, "", -1, -1, new MenuTreeData());
-            }
-            if (it->getType() == greentop::menu::Node::Type::MARKET) {
-                marketNodes[it->getId()] = childItemId;
+            bool exclude = betfairMarkets != NULL &&
+                betfairMarkets->exists(it->getId()) &&
+                betfairMarkets->get(it->getId()).GetMarketCatalogue().getRunners().size() == 1;
+            if (!exclude) {
+                wxTreeItemId childItemId = AppendItem(itemId, name, -1, -1, new MenuTreeData(*it));
+                if (it->getChildren().size() > 0) {
+                    AppendItem(childItemId, "", -1, -1, new MenuTreeData());
+                }
+                if (it->getType() == greentop::menu::Node::Type::MARKET) {
+                    marketNodes[it->getId()] = childItemId;
+                }
             }
         }
 
@@ -159,8 +160,9 @@ void EventTree::OnListMarketCatalogue(wxThreadEvent& event) {
 
     for (auto it = markets.begin(); it != markets.end(); ++it) {
         // check that the node is still in the tree, it could have been removed after menu refresh.
-        if (!it->second.HasMarketCatalogue() && marketNodes[it->first].IsOk()) {
-            // The market doesn't exist, so remove its node from the tree
+        if ((!it->second.HasMarketCatalogue() && marketNodes[it->first].IsOk()) ||
+            it->second.GetMarketCatalogue().getRunners().size() == 1) {
+            // The market doesn't exist or it's one of those weird ones with one runner, so remove its node from the tree
             wxTreeItemId parentId = GetItemParent(marketNodes[it->first]);
             Delete(marketNodes[it->first]);
             marketNodes.erase(it->first);
