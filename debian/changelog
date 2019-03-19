@@ -1,3 +1,9 @@
+greenthumb (0.13.0+xenial) xenial; urgency=medium
+
+  * put account tabs at the top, fix seg fault
+
+ -- Colin Doig <colindoig@gmail.com>  Tue, 19 Mar 2019 21:16:26 +1300
+
 greenthumb (0.11.0+xenial) xenial; urgency=medium
 
   * use latest libgreentop
