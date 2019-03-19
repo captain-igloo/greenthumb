@@ -32,10 +32,7 @@ class AccountPanel : public wxNotebook {
         * @param style The window style.
         * @param name The name of the control.
         */
-        AccountPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = wxNB_BOTTOM,
-            const wxString& name=wxNotebookNameStr);
-
+        AccountPanel(wxWindow* parent, wxWindowID id);
 
         void SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets);
 

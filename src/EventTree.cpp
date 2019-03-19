@@ -80,7 +80,6 @@ void EventTree::Refresh(const wxThreadEvent& event) {
 }
 
 void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node& node, bool recurse) {
-
     std::set<std::string> nodeIdsFound;
     std::set<wxTreeItemId> itemIdsToDelete;
 
@@ -88,7 +87,6 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     wxTreeItemId childId = GetFirstChild(itemId, cookie);
 
     while (childId.IsOk()) {
-
         MenuTreeData* childData = dynamic_cast<MenuTreeData*>(GetItemData(childId));
 
         if (childData && childData->valid) {
@@ -114,14 +112,11 @@ void EventTree::SyncNode(const wxTreeItemId& itemId, const greentop::menu::Node&
     std::set<std::string> marketIds;
 
     for (auto it = node.getChildren().begin(); it != node.getChildren().end(); ++it) {
-
         if (nodeIdsFound.find(it->getId()) == nodeIdsFound.end()) {
             wxString name(it->getName().c_str(), wxConvUTF8);
-
-            bool exclude = betfairMarkets &&
+            bool exclude = betfairMarkets != NULL &&
                 betfairMarkets->exists(it->getId()) &&
                 betfairMarkets->get(it->getId()).GetMarketCatalogue().getRunners().size() == 1;
-
             if (!exclude) {
                 wxTreeItemId childItemId = AppendItem(itemId, name, -1, -1, new MenuTreeData(*it));
                 if (it->getChildren().size() > 0) {

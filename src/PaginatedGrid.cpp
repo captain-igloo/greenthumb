@@ -21,7 +21,6 @@ PaginatedGrid::PaginatedGrid(wxWindow* parent, wxWindowID id, const wxPoint& pos
     lastPageButtonId = wxWindow::NewControlId();
 
     wxBitmap refreshBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::REFRESH);
-
     wxBitmap resultsetFirstBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::GO_FIRST);
     wxBitmap resultsetPreviousBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::GO_PREVIOUS);
     wxBitmap resultsetNextBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::GO_NEXT);
