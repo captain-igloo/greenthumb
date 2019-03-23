@@ -1,7 +1,7 @@
 /**
  * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
- #include <wx/wx.h>
+#include <wx/wx.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 
@@ -9,8 +9,8 @@
 #include "worker/CancelOrders.h"
 #include "worker/ListCurrentOrders.h"
 #include "worker/ReplaceOrders.h"
-#include "UnmatchedOrder.h"
 #include "MatchedOrder.h"
+#include "UnmatchedOrder.h"
 
 namespace greenthumb {
 namespace dialog {
@@ -112,7 +112,6 @@ void CurrentOrders::UpdateOrders(const greentop::OrderStatus& orderStatus, wxPan
     std::set<std::string> existingBetIds;
 
     for (wxWindowList::const_iterator it = ordersPanel->GetChildren().begin(); it != GetChildren().end(); ++it) {
-        // CurrentOrder* currentOrder = wxDynamicCast(*it, CurrentOrder);
         CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
         if (currentOrder) {
             existingBetIds.insert(currentOrder->GetCurrentOrderSummary().getBetId());

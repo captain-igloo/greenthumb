@@ -62,7 +62,7 @@ class HandicapPanel : public wxPanel {
         /** The set of allowed handicaps. */
         std::set<int64_t> runnerHandicaps;
         /** Displays the current handicap. */
-        wxStaticText* handicapText;
+        wxStaticText* handicapText = NULL;
         /** The pages ie selection ids and handicaps */
         std::vector<std::vector<entity::PageRunner>> handicapPages;
         /** The current handicap. */

@@ -28,7 +28,7 @@ class CurrentOrdersGrid : public PaginatedGrid {
         virtual void OnClickLast(wxCommandEvent& event);
 
     private:
-        greentop::LRUCache<std::string, entity::Market>* betfairMarkets;
+        greentop::LRUCache<std::string, entity::Market>* betfairMarkets = NULL;
         greentop::CurrentOrderSummaryReport currentOrderSummaryReport;
 
         void Refresh();

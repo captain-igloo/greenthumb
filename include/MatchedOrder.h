@@ -45,15 +45,15 @@ class MatchedOrder : public CurrentOrder {
     protected:
     private:
         /** Displays the runner name. */
-        wxStaticText* runnerName;
+        wxStaticText* runnerName = NULL;
         /** Displays the order's odds. */
-        wxStaticText* price;
+        wxStaticText* price = NULL;
         /** Displays the order's stake. */
-        wxStaticText* stake;
+        wxStaticText* stake = NULL;
         /** Displays either "profit" or "liability" */
-        wxStaticText* profitOrLiabilityLabel;
+        wxStaticText* profitOrLiabilityLabel = NULL;
         /** Displays the profit or liability. */
-        wxStaticText* profitOrLiability;
+        wxStaticText* profitOrLiability = NULL;
 
         /**
          * Calculate the profit (for back bets) or liability (for lay bets).

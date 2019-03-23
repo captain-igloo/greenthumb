@@ -63,17 +63,17 @@ class PlaceBet : public wxDialog {
     protected:
     private:
 
-        OddsSpinCtrl* oddsSpin;
-        wxTextCtrl* stakeSpin;
-        wxStaticText* profit;
-        wxStaticText* liability;
+        OddsSpinCtrl* oddsSpin = NULL;
+        wxTextCtrl* stakeSpin = NULL;
+        wxStaticText* profit = NULL;
+        wxStaticText* liability = NULL;
         greentop::Side side;
-        wxWindow* backLayButton;
-        wxWindow* cancelButton;
-        wxStaticText* selection;
-        wxStaticText* marketLabel;
-        wxRadioButton* persistKeep;
-        wxRadioButton* persistCancel;
+        wxWindow* backLayButton = NULL;
+        wxWindow* cancelButton = NULL;
+        wxStaticText* selection = NULL;
+        wxStaticText* marketLabel = NULL;
+        wxRadioButton* persistKeep = NULL;
+        wxRadioButton* persistCancel = NULL;
         entity::Market market;
         greentop::PlaceInstruction pendingPlaceInstruction;
         uint64_t selectionId;

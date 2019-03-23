@@ -20,7 +20,7 @@ class PaginatedGrid : public wxPanel {
         worker::WorkerManager workerManager;
         uint32_t numberPages;
         uint32_t currentPage;
-        wxGrid* grid;
+        wxGrid* grid = NULL;
 
         virtual void Render() = 0;
         void UpdateToolbar();

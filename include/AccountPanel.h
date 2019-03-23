@@ -40,11 +40,11 @@ class AccountPanel : public wxNotebook {
     private:
 
         /** The full account statement.  Displays details of each bet. */
-        AccountStatementFull* accountStatementFull;
+        AccountStatementFull* accountStatementFull = NULL;
         /** The account statement summary.  Displays a summary of bets grouped by event. */
-        AccountStatementSummary* accountStatementSummary;
+        AccountStatementSummary* accountStatementSummary = NULL;
 
-        CurrentOrdersGrid* currentOrdersGrid;
+        CurrentOrdersGrid* currentOrdersGrid = NULL;
 
         /**
          * Render the account statement pages.

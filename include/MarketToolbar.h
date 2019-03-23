@@ -91,15 +91,15 @@ class MarketToolbar : public wxPanel {
         /** The rules button id. */
         wxWindowID rulesButtonId;
         /** The in-play status.*/
-        wxButton* inPlayButton;
+        wxButton* inPlayButton = NULL;
         /** Displays the market name. */
-        wxStaticText* marketName;
+        wxStaticText* marketName = NULL;
         /** Displays the market status. */
-        wxStaticText* marketStatus;
+        wxStaticText* marketStatus = NULL;
         /** Click to open the current orders dialog. */
-        wxButton* currentOrdersButton;
+        wxButton* currentOrdersButton = NULL;
         /** Click to open the market's rules dialog. */
-        wxButton* rulesButton;
+        wxButton* rulesButton = NULL;
 
     DECLARE_NO_COPY_CLASS(MarketToolbar)
 };

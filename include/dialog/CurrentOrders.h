@@ -66,15 +66,15 @@ class CurrentOrders : public wxDialog {
         /** Manages worker threads. */
         worker::WorkerManager workerManager;
         /** Displays unmatched orders for the market */
-        wxPanel* unmatchedOrders;
+        wxPanel* unmatchedOrders = NULL;
         /** Displays matched orders for the market */
-        wxPanel* matchedOrders;
+        wxPanel* matchedOrders = NULL;
         /** Message displayed when there are no unmatched orders */
-        wxStaticText* noUnmatchedOrdersMessage;
+        wxStaticText* noUnmatchedOrdersMessage = NULL;
         /** Message displayed when there are no matched orders */
-        wxStaticText* noMatchedOrdersMessage;
+        wxStaticText* noMatchedOrdersMessage = NULL;
         /** A notebook with two pages - matched and unmatched orders. */
-        wxNotebook* notebook;
+        wxNotebook* notebook = NULL;
 
         /**
         * Synchronise orders with listCurrentOrders response from betfair.

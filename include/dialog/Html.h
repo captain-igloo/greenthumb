@@ -38,7 +38,7 @@ class Html : public wxDialog {
         void SetPage(const wxString& page);
 
     private:
-        wxHtmlWindow* htmlWindow;
+        wxHtmlWindow* htmlWindow = NULL;
 
         void OnLinkClicked(wxHtmlLinkEvent& event);
 };

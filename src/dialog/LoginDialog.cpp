@@ -31,7 +31,7 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
     wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
     vbox->Add(hbox1, 0, wxEXPAND | borderFlags, border);
 
-    wxStaticText* appKeyLabel = new wxStaticText(this, wxID_ANY, "Application key:", wxDefaultPosition, wxSize(100, -1));
+    wxStaticText* appKeyLabel = new wxStaticText(this, wxID_ANY, "Application key:", wxDefaultPosition, wxSize(120, -1));
     hbox1->Add(appKeyLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     appKey = new wxTextCtrl(this, wxID_ANY);
@@ -41,7 +41,7 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
     wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
     vbox->Add(hbox2, 0, wxEXPAND | borderFlags, border);
 
-    wxStaticText* usernameLabel = new wxStaticText(this, wxID_ANY, "Username:", wxDefaultPosition, wxSize(100, -1));
+    wxStaticText* usernameLabel = new wxStaticText(this, wxID_ANY, "Username:", wxDefaultPosition, wxSize(120, -1));
     hbox2->Add(usernameLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     username = new wxTextCtrl(this, wxID_ANY);
@@ -50,7 +50,7 @@ LoginDialog::LoginDialog(wxWindow *parent, wxWindowID id, const wxString &title,
 
     wxBoxSizer* hbox3 = new wxBoxSizer(wxHORIZONTAL);
     vbox->Add(hbox3, 0, wxEXPAND | borderFlags, border);
-    wxStaticText* passwordLabel = new wxStaticText(this, wxID_ANY, "Password:", wxDefaultPosition, wxSize(100, -1));
+    wxStaticText* passwordLabel = new wxStaticText(this, wxID_ANY, "Password:", wxDefaultPosition, wxSize(120, -1));
     hbox3->Add(passwordLabel, 0, wxALIGN_CENTRE_VERTICAL);
 
     password = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
