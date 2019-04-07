@@ -1,28 +1,24 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
 
-#include <greentop/sport/MarketBook.h>
 #include <greentop/sport/ListMarketBookRequest.h>
 #include <greentop/sport/ListMarketBookResponse.h>
+#include <greentop/sport/MarketBook.h>
 
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
 #include <wx/toolbar.h>
 
-#include "dialog/CurrentOrders.h"
+#include "dialog/CurrentOrdersDialog.h"
 #include "dialog/Html.h"
-
 #include "entity/Market.h"
-
 #include "market/HandicapPanel.h"
-
 #include "worker/ListMarketBook.h"
 #include "worker/WorkerManager.h"
-
 #include "CurrentOrder.h"
 #include "MarketPanels.h"
 #include "MarketToolbar.h"
@@ -79,7 +75,7 @@ class MarketPanel : public wxPanel {
         /** Worker manager. */
         worker::WorkerManager workerManager;
         /** Display matched and unmatched orders. */
-        dialog::CurrentOrders* currentOrdersDialog = NULL;
+        dialog::CurrentOrdersDialog* currentOrdersDialog = NULL;
         /** Display the market's rules. */
         dialog::Html* rulesDialog = NULL;
         /** The full market name. */

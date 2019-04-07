@@ -1,11 +1,10 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_LISTCURRENTORDERS_H
 #define WORKER_LISTCURRENTORDERS_H
 
 #include <greentop/ExchangeApi.h>
-
 #include <wx/event.h>
 #include <wx/thread.h>
 
@@ -33,14 +32,15 @@ class ListCurrentOrders : public Worker {
         ListCurrentOrders(
             wxEvtHandler* eventHandler,
             const entity::Market& market = entity::Market(),
+            const greentop::OrderProjection& = greentop::OrderProjection::ALL,
             const uint32_t currentPage = 1
         );
 
     protected:
         virtual ExitCode Entry();
     private:
-
         entity::Market market;
+        greentop::OrderProjection orderProjection;
         uint32_t currentPage;
 
         greentop::CurrentOrderSummaryReport DoListCurrentOrders();

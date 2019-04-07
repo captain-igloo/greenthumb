@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/sizer.h>
@@ -13,7 +13,6 @@
 #include "worker/ListMarketCatalogue.h"
 #include "worker/PlaceOrders.h"
 #include "worker/ReplaceOrders.h"
-
 #include "MarketPanel.h"
 #include "RunnerRow.h"
 #include "Util.h"
@@ -50,7 +49,7 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
     int refreshInterval = entity::Config::GetConfigValue(entity::Config::KEY_REFRESH_INTERVAL, 60);
     refreshTimer.Start(refreshInterval * 1000);
 
-    currentOrdersDialog = new dialog::CurrentOrders(this, wxID_ANY, "Current Bets");
+    currentOrdersDialog = new dialog::CurrentOrdersDialog(this, wxID_ANY, "Current Bets");
 
     rulesDialog = new dialog::Html(this, wxID_ANY, "Rules");
 
@@ -117,8 +116,7 @@ void MarketPanel::RefreshPrices() {
             market
         );
         workerManager.RunWorker(listMarketBookThread);
-
-        currentOrdersDialog->Refresh();
+        currentOrdersDialog->RefreshOrders();
     }
 }
 
@@ -150,7 +148,6 @@ void MarketPanel::SetMarket(const entity::Market& market) {
     RefreshPrices();
 
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
-
     currentOrdersDialog->SetMarket(market);
     wxString rules(market.GetMarketCatalogue().getDescription().getRules().c_str(), wxConvUTF8);
 
