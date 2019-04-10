@@ -1,3 +1,9 @@
+greenthumb (0.14.0+xenial) xenial; urgency=medium
+
+  * paginate current orders
+
+ -- Colin Doig <colindoig@gmail.com>  Wed, 10 Apr 2019 20:04:05 +1200
+
 greenthumb (0.13.0+xenial) xenial; urgency=medium
 
   * put account tabs at the top, fix seg fault
