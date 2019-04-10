@@ -57,10 +57,10 @@ class PriceHistory : public wxDialog {
         static const int GRAPH_WIDTH = 350;
         static const int GRAPH_HEIGHT = 255;
 
-        wxStaticText* lastPriceTraded;
+        wxStaticText* lastPriceTraded = NULL;
         wxBitmap graph;
-        ImagePanel* graphPanel;
-        wxStaticText* bettingOn;
+        ImagePanel* graphPanel = NULL;
+        wxStaticText* bettingOn = NULL;
 
         const wxString GetGraphFilename(const entity::Market& market, const greentop::Runner& runner);
         void OnClose(wxCommandEvent& event);

@@ -91,17 +91,17 @@ class RunnerRow {
         const static int chartButtonWidth = 30;
         const static int priceButtonWidth = 60;
 
-        wxStaticText* runnerName;
-        wxStaticText* profitAndLossIfWinText;
+        wxStaticText* runnerName = NULL;
+        wxStaticText* profitAndLossIfWinText = NULL;
         double lastPriceTraded;
         double profitAndLossIfWin;
-        wxStaticText* pendingProfit;
-        PriceButton* bestBackPrice1;
-        PriceButton* bestBackPrice2;
-        PriceButton* bestBackPrice3;
-        PriceButton* bestLayPrice1;
-        PriceButton* bestLayPrice2;
-        PriceButton* bestLayPrice3;
+        wxStaticText* pendingProfit = NULL;
+        PriceButton* bestBackPrice1 = NULL;
+        PriceButton* bestBackPrice2 = NULL;
+        PriceButton* bestBackPrice3 = NULL;
+        PriceButton* bestLayPrice1 = NULL;
+        PriceButton* bestLayPrice2 = NULL;
+        PriceButton* bestLayPrice3 = NULL;
         entity::Market market;
         greentop::MarketBook marketBook;
         int64_t handicap = 0;

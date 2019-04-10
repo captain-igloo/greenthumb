@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/log.h>
@@ -18,8 +18,9 @@ wxDEFINE_EVENT(LIST_CURRENT_ORDERS, wxThreadEvent);
 ListCurrentOrders::ListCurrentOrders(
     wxEvtHandler* eventHandler,
     const entity::Market& market,
+    const greentop::OrderProjection& orderProjection,
     const uint32_t currentPage) :
-    Worker(eventHandler), market(market), currentPage(currentPage) {
+    Worker(eventHandler), market(market), orderProjection(orderProjection), currentPage(currentPage) {
 }
 
 wxThread::ExitCode ListCurrentOrders::Entry() {
@@ -51,9 +52,8 @@ greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
     if (market.GetMarketCatalogue().isValid()) {
         marketIds.insert(market.GetMarketCatalogue().getMarketId());
     }
-    greentop::OrderProjection op(greentop::OrderProjection::ALL);
 
-    greentop::ListCurrentOrdersRequest lcor(std::set<std::string>(), marketIds, op);
+    greentop::ListCurrentOrdersRequest lcor(std::set<std::string>(), marketIds, orderProjection);
 
     int pageSize = entity::Config::GetConfigValue<int>(
         entity::Config::KEY_ACCOUNT_PAGE_SIZE,
@@ -61,9 +61,7 @@ greentop::CurrentOrderSummaryReport ListCurrentOrders::DoListCurrentOrders() {
     );
 
     lcor.setFromRecord((currentPage - 1) * pageSize);
-
     lcor.setRecordCount(pageSize);
-
     return GreenThumb::GetBetfairApi().listCurrentOrders(lcor);
 }
 

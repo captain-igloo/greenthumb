@@ -1,28 +1,24 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
 
-#include <greentop/sport/MarketBook.h>
 #include <greentop/sport/ListMarketBookRequest.h>
 #include <greentop/sport/ListMarketBookResponse.h>
+#include <greentop/sport/MarketBook.h>
 
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
 #include <wx/toolbar.h>
 
-#include "dialog/CurrentOrders.h"
+#include "dialog/CurrentOrdersDialog.h"
 #include "dialog/Html.h"
-
 #include "entity/Market.h"
-
 #include "market/HandicapPanel.h"
-
 #include "worker/ListMarketBook.h"
 #include "worker/WorkerManager.h"
-
 #include "CurrentOrder.h"
 #include "MarketPanels.h"
 #include "MarketToolbar.h"
@@ -67,21 +63,21 @@ class MarketPanel : public wxPanel {
 
     private:
         /** Display runners and their prices. */
-        wxPanel* pricesPanel;
+        wxPanel* pricesPanel = NULL;
         /** Market catalogue information from betfair. */
         entity::Market market;
         /** The market's runners and their prices. */
         std::map<int64_t, RunnerRow*> runnerRows;
         /** The parent panel. */
-        MarketPanels* marketPanels;
+        MarketPanels* marketPanels = NULL;
         /** A timer used to refresh the market's prices at intervals */
         wxTimer refreshTimer;
         /** Worker manager. */
         worker::WorkerManager workerManager;
         /** Display matched and unmatched orders. */
-        dialog::CurrentOrders* currentOrdersDialog;
+        dialog::CurrentOrdersDialog* currentOrdersDialog = NULL;
         /** Display the market's rules. */
-        dialog::Html* rulesDialog;
+        dialog::Html* rulesDialog = NULL;
         /** The full market name. */
         std::string fullMarketName;
         /** The market id. */
@@ -89,9 +85,9 @@ class MarketPanel : public wxPanel {
         /** The betfair market book information. */
         greentop::MarketBook marketBook;
         /** Displays market name and status, and buttons to refresh and close and display current orders. */
-        MarketToolbar* marketToolbar;
+        MarketToolbar* marketToolbar = NULL;
         /** Displays currently selected handicap and buttons to go backwards and forwards. */
-        market::HandicapPanel* handicapPanel;
+        market::HandicapPanel* handicapPanel = NULL;
         /** Whether or not the handicap panel has been initialised. */
         bool handicapInitialised = false;
         /**

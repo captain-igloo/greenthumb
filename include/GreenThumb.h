@@ -27,7 +27,7 @@ class GreenThumb : public wxApp {
     private:
 
         greenthumb::Logger logger;
-        greenthumb::GreenThumbFrame* frame;
+        greenthumb::GreenThumbFrame* frame = NULL;
 
         DECLARE_NO_COPY_CLASS(GreenThumb)
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 
@@ -56,7 +56,14 @@ void CurrentOrdersGrid::Refresh() {
     if (grid->GetNumberRows() > 0) {
         grid->DeleteRows(0, grid->GetNumberRows());
     }
-    workerManager.RunWorker(new worker::ListCurrentOrders(&workerManager, entity::Market(), currentPage));
+    workerManager.RunWorker(
+        new worker::ListCurrentOrders(
+            &workerManager,
+            entity::Market(),
+            greentop::OrderProjection::ALL,
+            currentPage
+        )
+    );
 }
 
 void CurrentOrdersGrid::OnClickFirst(wxCommandEvent& event) {

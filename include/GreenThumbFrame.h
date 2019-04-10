@@ -44,13 +44,13 @@ class GreenThumbFrame : public wxFrame {
         const static wxString VIEW_BETTING;
 
         /** Displays the betfair events and markets. */
-        EventTree* eventTree;
+        EventTree* eventTree = NULL;
         /** Displays market prices. */
-        MarketPanels* marketsPanel;
+        MarketPanels* marketsPanel = NULL;
         /** Displays the user's account statement. */
-        AccountPanel* accountPanel;
+        AccountPanel* accountPanel = NULL;
         /** Displays the event / market navigation on the left and market prices on the right. */
-        wxSplitterWindow* bettingPanel;
+        wxSplitterWindow* bettingPanel = NULL;
         /** The current view, either account or betting. */
         wxString mainView;
         /** Manages the GetAccountDetails worker */

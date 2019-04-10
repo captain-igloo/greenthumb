@@ -22,7 +22,7 @@ class Logger {
     private:
 
         std::fstream fs;
-        wxLogChain* logChain;
+        wxLogChain* logChain = NULL;
 
 };
 

@@ -38,9 +38,9 @@ class Settings : public wxDialog {
 
     private:
 
-        wxSpinCtrl* accountRowsPerPage;
-        wxSpinCtrl* defaultStake;
-        wxSpinCtrl* refreshInterval;
+        wxSpinCtrl* accountRowsPerPage = NULL;
+        wxSpinCtrl* defaultStake = NULL;
+        wxSpinCtrl* refreshInterval = NULL;
 
         void OnSave(const wxCommandEvent& event);
         void OnCancel(const wxCommandEvent& event);

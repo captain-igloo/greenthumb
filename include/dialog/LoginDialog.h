@@ -37,17 +37,17 @@ class LoginDialog : public wxDialog {
     protected:
     private:
         /** The betfair application key text control. */
-        wxTextCtrl* appKey;
+        wxTextCtrl* appKey = NULL;
         /** The betfair username text control. */
-        wxTextCtrl* username;
+        wxTextCtrl* username = NULL;
         /** The betfair password text control. */
-        wxTextCtrl* password;
+        wxTextCtrl* password = NULL;
         /** OK button. */
-        wxWindow* okButton;
+        wxWindow* okButton = NULL;
         /** Cancel button. */
-        wxWindow* cancelButton;
+        wxWindow* cancelButton = NULL;
         /** Whether or not to save the username and password */
-        wxCheckBox* remember;
+        wxCheckBox* remember = NULL;
         /** Manages worker threads. */
         worker::WorkerManager workerManager;
 

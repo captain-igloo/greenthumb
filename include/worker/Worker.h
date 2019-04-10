@@ -50,7 +50,7 @@ class Worker : public wxThread {
         void SetParentAlive(const bool parentAlive);
 
     protected:
-        wxEvtHandler* eventHandler;
+        wxEvtHandler* eventHandler = NULL;
         int managerId;
         bool parentAlive = true;
 
