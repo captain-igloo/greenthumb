@@ -42,11 +42,6 @@ class UnmatchedOrders: public CurrentOrdersPage {
          * @param event The worker event. 
          */
         void OnCancelOrders(wxThreadEvent& event);
-
-        /**
-         * An order has been replaced so call RefreshOrders().
-         */
-        void OnReplaceOrders(wxThreadEvent& event);
 };
 
 }

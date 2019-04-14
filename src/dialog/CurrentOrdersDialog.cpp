@@ -35,6 +35,7 @@ CurrentOrdersDialog::CurrentOrdersDialog(wxWindow* parent, wxWindowID id, const 
     }
 
     Fit();
+    SetExtraStyle(GetExtraStyle() & ~wxWS_EX_BLOCK_EVENTS);
 }
 
 void CurrentOrdersDialog::RefreshOrders() {

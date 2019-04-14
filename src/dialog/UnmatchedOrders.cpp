@@ -14,7 +14,6 @@ UnmatchedOrders::UnmatchedOrders(wxWindow* parent) : CurrentOrdersPage(parent) {
         noOrdersMessage->SetLabel("There are no unmatched orders.");
     }
     Bind(worker::CANCEL_ORDERS, &UnmatchedOrders::OnCancelOrders, this, wxID_ANY);
-    Bind(worker::REPLACE_ORDERS, &UnmatchedOrders::OnReplaceOrders, this, wxID_ANY);    
 }
 
 CurrentOrder* UnmatchedOrders::CreateOrder() {
@@ -51,14 +50,9 @@ void UnmatchedOrders::OnCancelOrders(wxThreadEvent& event) {
         }
 
         noOrdersMessage->Show(showNoUnmatchedOrdersMessage);
-        RefreshOrders();
     }
 
     event.Skip();
-}
-
-void UnmatchedOrders::OnReplaceOrders(wxThreadEvent& event) {
-    RefreshOrders();
 }
 
 }
