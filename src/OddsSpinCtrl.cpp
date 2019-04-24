@@ -1,6 +1,8 @@
 /**
  * Copyright 2017 Colin Doig.  Distributed under the MIT license.
  */
+#include <math.h>
+
 #include "OddsSpinCtrl.h"
 #include "Util.h"
 
@@ -25,7 +27,6 @@ OddsSpinCtrl::OddsSpinCtrl(wxWindow* parent, wxWindowID id, const wxString &valu
     double initial, double increment, const wxString& name) :
     wxSpinCtrlDouble(parent, id, value, pos, size, style, min, max, initial, increment, name) {
     previousValue = initial;
-    SetSnapToTicks(true);
 
     Bind(wxEVT_TEXT, &OddsSpinCtrl::OnTextChange, this, wxID_ANY);
     Bind(wxEVT_SPINCTRLDOUBLE, &OddsSpinCtrl::OnSpin, this, wxID_ANY);
@@ -48,17 +49,23 @@ void OddsSpinCtrl::OnSpin(wxSpinDoubleEvent& spinEvent) {
  * correctly.  Here we detect that the value has not changed correctly and fix it.
  */
 void OddsSpinCtrl::AdjustValue() {
+    double value = GetValue();
     std::map<unsigned, std::pair<double, double> >::const_iterator it;
     for (it = ranges.begin(); it != ranges.end(); ++it) {
         if (DoubleEquals(previousValue, it->first)) {
-            if (DoubleEquals(GetValue(), it->first - it->second.second)) {
+            if (DoubleEquals(value, it->first - it->second.second)) {
                 // eg previous value == 2, new value 1.98, adjust to 1.99
-                SetValue(it->first - it->second.first);
-            } else if (DoubleEquals(GetValue(), it->first + it->second.first)) {
+                value = it->first - it->second.first;
+            } else if (DoubleEquals(value, it->first + it->second.first)) {
                 // eg previous value == 2, new value 2.01, adjust to 2.02
-                SetValue(it->first + it->second.second);
+                value = it->first + it->second.second;
             }
         }
+    }
+    // snap to nearest tick
+    value = round(value / GetIncrement()) * GetIncrement();
+    if (!DoubleEquals(value, GetValue())) {
+        SetValue(value);
     }
 }
 
