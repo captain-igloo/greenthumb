@@ -1,3 +1,9 @@
+greenthumb (0.16.0+bionic) bionic; urgency=medium
+
+  * use latest libgreentop
+
+ -- Colin Doig <colindoig@gmail.com>  Sun, 05 May 2019 20:05:41 +1200
+
 greenthumb (0.15.0+bionic) bionic; urgency=medium
 
   * fix place bets snap to ticks under GTK

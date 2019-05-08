@@ -11,7 +11,8 @@ namespace dialog {
 
 wxDEFINE_EVENT(PAGE_CHANGED, wxCommandEvent);
 
-PaginationToolbar::PaginationToolbar(wxWindow* parent, wxWindowID id) : wxToolBar(parent, id) {
+PaginationToolbar::PaginationToolbar(wxWindow* parent, wxWindowID id) :
+    wxToolBar(parent, id, wxDefaultPosition, wxDefaultSize, wxTB_FLAT) {
     refreshId = wxWindow::NewControlId();
     previousId = wxWindow::NewControlId();
     nextId = wxWindow::NewControlId();
