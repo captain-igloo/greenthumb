@@ -19,7 +19,6 @@ namespace greenthumb {
 class UnmatchedOrder : public CurrentOrder {
 
     public:
-
         /**
          * Constructor.
          *
@@ -43,6 +42,8 @@ class UnmatchedOrder : public CurrentOrder {
 
     protected:
     private:
+        const static uint32_t CELL_WIDTH = 65;
+
         /** Displays the runner name */
         wxStaticText* runnerName = NULL;
         /** Displays the order's odds. */

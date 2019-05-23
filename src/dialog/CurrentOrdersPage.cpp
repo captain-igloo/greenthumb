@@ -13,7 +13,7 @@ CurrentOrdersPage::CurrentOrdersPage(wxWindow* parent) : wxPanel(parent), worker
     toolbar = new PaginationToolbar(this, wxID_ANY);
     sizer->Add(toolbar, 0, wxEXPAND);
     noOrdersMessage = new wxStaticText(this, wxID_ANY, "");
-    sizer->Add(noOrdersMessage, 1, wxEXPAND);
+    sizer->Add(noOrdersMessage, 1, wxTOP | wxBOTTOM | wxLEFT | wxEXPAND, 10);
     SetSizer(sizer);
 
     toolbar->Bind(wxEVT_TOOL, &CurrentOrdersPage::OnClickRefresh, this, toolbar->GetRefreshId());

@@ -35,14 +35,17 @@ UnmatchedOrder::UnmatchedOrder(
     sizer->Add(oddsSpin, 0, wxALIGN_CENTRE_VERTICAL);
 
     wxStaticText* stakeLabel = new wxStaticText(this, wxID_ANY, "Stake: ");
+    stakeLabel->SetMinSize(wxSize(CELL_WIDTH, -1));
     sizer->Add(stakeLabel, 0, wxALIGN_CENTRE_VERTICAL);
     stake = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    stake->SetMinSize(wxSize(CELL_WIDTH, -1));
     sizer->Add(stake, 0, wxALIGN_CENTRE_VERTICAL);
 
     profitOrLiabilityLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    profitOrLiabilityLabel->SetMinSize(wxSize(75, -1));
+    profitOrLiabilityLabel->SetMinSize(wxSize(CELL_WIDTH, -1));
     sizer->Add(profitOrLiabilityLabel, 0, wxALIGN_CENTRE_VERTICAL);
     profitOrLiability = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    profitOrLiability->SetMinSize(wxSize(CELL_WIDTH, -1));
     sizer->Add(profitOrLiability, 0, wxALIGN_CENTRE_VERTICAL);
 
     wxWindowID submitButtonId = wxWindow::NewControlId();
