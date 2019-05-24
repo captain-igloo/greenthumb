@@ -6,6 +6,7 @@
 #include <greentop/ExchangeApi.h>
 #include <greentop/sport/enum/MarketStatus.h>
 #include <greentop/sport/enum/RunnerStatus.h>
+#include <sstream>
 
 #include "dialog/PlaceBet.h"
 #include "entity/Config.h"
@@ -149,8 +150,13 @@ void MarketPanel::SetMarket(const entity::Market& market) {
 
     Bind(wxEVT_BUTTON, &MarketPanel::OnClick, this, wxID_ANY);
     currentOrdersDialog->SetMarket(market);
-    wxString rules(market.GetMarketCatalogue().getDescription().getRules().c_str(), wxConvUTF8);
 
+    std::ostringstream oss;
+    oss << market.GetMarketCatalogue().getDescription().getRules() <<
+        "<br />Commission on this market<br />" <<
+        market.GetMarketCatalogue().getDescription().getMarketBaseRate() <<
+        "% Market Base Rate (minus your discount if applicable)";
+    wxString rules(oss.str().c_str(), wxConvUTF8);
     rulesDialog->SetPage(rules);
 
     UpdateToolBar();

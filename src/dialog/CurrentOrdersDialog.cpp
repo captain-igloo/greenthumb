@@ -31,7 +31,7 @@ CurrentOrdersDialog::CurrentOrdersDialog(wxWindow* parent, wxWindowID id, const 
 
     wxSizer* buttonSizer = CreateButtonSizer(wxOK);
     if (buttonSizer) {
-        vbox->Add(buttonSizer, 0, wxALIGN_RIGHT);
+        vbox->Add(buttonSizer, 0, wxTOP | wxBOTTOM | wxALIGN_RIGHT, 10);
     }
 
     Fit();

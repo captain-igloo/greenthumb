@@ -1,3 +1,9 @@
+greenthumb (0.17.0+bionic) bionic; urgency=medium
+
+  * add market base rate commission to rules dialog
+
+ -- Colin Doig <colindoig@gmail.com>  Fri, 24 May 2019 18:29:12 +1200
+
 greenthumb (0.16.0+bionic) bionic; urgency=medium
 
   * use latest libgreentop
