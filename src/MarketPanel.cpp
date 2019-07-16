@@ -15,7 +15,7 @@
 #include "worker/PlaceOrders.h"
 #include "worker/ReplaceOrders.h"
 #include "MarketPanel.h"
-#include "RunnerRow.h"
+#include "widget/market/RunnerPrices.h"
 #include "Util.h"
 
 namespace greenthumb {
@@ -97,9 +97,17 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 void MarketPanel::UpdateProfitAndLoss() {
     for (const std::vector<entity::PageRunner>& page : market.GetHandicapPages()) {
         for (const entity::PageRunner& pageRunner : page) {
-            std::map<int64_t, RunnerRow*>::iterator it = runnerRows.find(pageRunner.selectionId);
+            std::map<int64_t, widget::market::RunnerPrices*>::iterator it = runnerRows.find(pageRunner.selectionId);
             if (it != runnerRows.end()) {
-                it->second->SetProfit(pageRunner.handicap, pageRunner.profitAndLoss);
+                if (market.GetMarketBook().getNumberOfWinners() > 1) {
+                    it->second->SetProfit(
+                        pageRunner.handicap,
+                        pageRunner.profitIfWin,
+                        pageRunner.profitIfLose
+                    );
+                } else {
+                    it->second->SetProfit(pageRunner.handicap, pageRunner.profitAndLossAggregate, 0);
+                }
             }
         }
     }
@@ -185,14 +193,16 @@ void MarketPanel::UpdateToolBar() {
 
 void MarketPanel::SyncRunnerRows() {
     std::vector<greentop::Runner> runners = marketBook.getRunners();
-
     for (unsigned i = 0; i < runners.size(); ++i) {
         greentop::Runner runner = runners[i];
 
         if (runner.getStatus() == greentop::RunnerStatus::ACTIVE) {
             auto iter = runnerRows.find(runner.getSelectionId());
             if (iter == runnerRows.end()) {
-                RunnerRow* runnerRow = new RunnerRow(pricesPanel);
+                widget::market::RunnerPrices* runnerRow = widget::market::RunnerPrices::GetInstance(
+                    pricesPanel,
+                    market.GetMarketBook().getNumberOfWinners() > 1
+                );
                 runnerRows[runner.getSelectionId()] = runnerRow;
                 runnerRow->SetRunner(market, marketBook, runner);
             } else {
@@ -244,7 +254,7 @@ void MarketPanel::OnPlaceOrderPending(const wxCommandEvent& event) {
     greentop::PlaceInstruction* pi = static_cast<greentop::PlaceInstruction*>(event.GetClientData());
 
     for (const auto &it : runnerRows) {
-        RunnerRow* runnerRow = it.second;
+        widget::market::RunnerPrices* runnerRow = it.second;
         runnerRow->SetPendingPlaceInstruction(*pi);
     }
 
@@ -262,7 +272,7 @@ void MarketPanel::ShowRules(const wxEvent& event) {
 void MarketPanel::OnHandicapChanged(const wxEvent& event) {
     if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
         for (const auto &it : runnerRows) {
-            RunnerRow* runnerRow = it.second;
+            widget::market::RunnerPrices* runnerRow = it.second;
             runnerRow->SetHandicap(handicapPanel->GetHandicap(it.first));
         }
     }

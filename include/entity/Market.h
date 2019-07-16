@@ -10,12 +10,25 @@ namespace greenthumb {
 namespace entity {
 
 struct PageRunner {
-    PageRunner(int64_t selectionId, double handicap, double profitAndLoss) :
-        selectionId(selectionId), handicap(handicap), profitAndLoss(profitAndLoss) {
+    PageRunner(
+        int64_t selectionId,
+        double handicap,
+        double profitAndLossAggregate,
+        double profitIfWin,
+        double profitIfLose
+    ) :
+        selectionId(selectionId),
+        handicap(handicap),
+        profitAndLossAggregate(profitAndLossAggregate),
+        profitIfWin(profitIfWin),
+        profitIfLose(profitIfLose)
+    {
     }
     int64_t selectionId;
     double handicap;
-    double profitAndLoss;
+    double profitAndLossAggregate;
+    double profitIfWin;
+    double profitIfLose;
 };
 
 /**

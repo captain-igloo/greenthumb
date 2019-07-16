@@ -53,9 +53,15 @@ void Market::SetMarketBook(const greentop::MarketBook& marketBook) {
             selectionIdsFound.insert(selectionId);
             std::pair<double, double> profitAndLoss = CalculateProfitAndLoss(runner.getMatches());
             for (PageRunner& previousPageRunner : handicapPage) {
-                previousPageRunner.profitAndLoss += profitAndLoss.second;
+                previousPageRunner.profitAndLossAggregate += profitAndLoss.second;
             }
-            PageRunner pageRunner(selectionId, handicap, profitAndLoss.first + otherRunnersProfit);
+            PageRunner pageRunner(
+                selectionId,
+                handicap,
+                profitAndLoss.first + otherRunnersProfit,
+                profitAndLoss.first,
+                profitAndLoss.second
+            );
             handicapPage.push_back(pageRunner);
             otherRunnersProfit += profitAndLoss.second;
         }
