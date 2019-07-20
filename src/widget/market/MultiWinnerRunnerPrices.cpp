@@ -106,11 +106,8 @@ void MultiWinnerRunnerPrices::SetProfitLabel(wxStaticText* profitText, double pr
 void MultiWinnerRunnerPrices::UpdateProfitAndLossIfWin() {
     auto it = profits.find(handicap);
     if (it != profits.end()) {
-        // profitAndLossIfWin = it->second.first;
-        // profitAndLossIfLose = it->second.second;
-        profitAndLossIfWin = 50;
-        profitAndLossIfLose = -100;
-
+        profitAndLossIfWin = it->second.first;
+        profitAndLossIfLose = it->second.second;
 
         if (profitAndLossIfWin > 0.001 || profitAndLossIfWin < -0.001 || profitAndLossIfLose > 0.001 || profitAndLossIfLose < -0.001) {
             SetProfitLabel(profitIfWinText, profitAndLossIfWin);
