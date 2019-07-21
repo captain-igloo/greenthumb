@@ -1,3 +1,9 @@
+greenthumb (0.18.0+bionic) bionic; urgency=medium
+
+  * multi winner markets
+
+ -- Colin Doig <colindoig@gmail.com>  Sun, 21 Jul 2019 15:41:25 +1200
+
 greenthumb (0.17.0+bionic) bionic; urgency=medium
 
   * add market base rate commission to rules dialog

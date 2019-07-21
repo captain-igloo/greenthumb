@@ -1,13 +1,13 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
-#ifndef RUNNERROW_H
-#define RUNNERROW_H
+#ifndef WIDGET_MARKET_RUNNERPRICES_H
+#define WIDGET_MARKET_RUNNERPRICES_H
 
-#include <greentop/sport/MarketBook.h>
-#include <greentop/sport/Runner.h>
-#include <greentop/sport/PlaceInstruction.h>
 #include <greentop/sport/enum/Side.h>
+#include <greentop/sport/MarketBook.h>
+#include <greentop/sport/PlaceInstruction.h>
+#include <greentop/sport/Runner.h>
 
 #include <wx/wx.h>
 #include <wx/button.h>
@@ -15,23 +15,23 @@
 #include <wx/stattext.h>
 
 #include "entity/Market.h"
-
 #include "PriceButton.h"
 
 namespace greenthumb {
+namespace widget {
+namespace market {
 
 /**
  * Displays prices for a runner.
  */
-class RunnerRow {
+class RunnerPrices {
     public:
-
         /**
-         * Constructor.
+         * Construct either MultiWinnerRunnerPrices or SingleWinnerRunnerPrices.
          *
          * @param parent The parent window.
          */
-        RunnerRow(wxWindow* parent);
+        static RunnerPrices* GetInstance(wxWindow* parent, bool multiWinner);
 
         /**
          * Sets the market catalogue, prices and runner information from betfair.
@@ -51,7 +51,7 @@ class RunnerRow {
          *
          * @param profit The profit / loss.
          */
-        void SetProfit(double handicap, double profit);
+        void SetProfit(double handicap, double profitIfWin, double profitIfLose);
 
         /**
          * Update the prices display.
@@ -70,7 +70,9 @@ class RunnerRow {
          *
          * @param placeInstruction The pending place instruction.
          */
-        void SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction);
+        virtual void SetPendingPlaceInstruction(
+            const greentop::PlaceInstruction& placeInstruction
+        ) = 0;
 
         /**
          * Sets the handicap.
@@ -86,16 +88,53 @@ class RunnerRow {
          */
         const wxString GetRunnerName() const;
 
-    private:
+    protected:
         const static unsigned scaleFactor = 100;
+        wxString currencySymbol;
+        int64_t handicap = 0;
+        std::map<int64_t, std::pair<double, double>> profits;
+
+        /**
+         * Constructor.
+         *
+         * @param parent The parent window.
+         */
+        RunnerPrices(wxWindow* parent);
+
+        /**
+         * Creates chart button.
+         *
+         * @param parent The parent window.
+         */
+        void CreateChartButton(wxWindow* parent);
+
+        /**
+         * Creates runner name.
+         *
+         * @param parent The parent window.
+         */
+        void CreateRunnerName(wxWindow* parent);
+
+        /**
+         * Creates prices buttons.
+         *
+         * @param parent The parent window.
+         */
+        void CreatePricesButtons(wxWindow* parent);
+
+        /**
+         * Gets the current runner, ie the runner associated with the currently selected handicap.
+         *
+         * @param The current runner.
+         */
+        const greentop::Runner& GetRunner();
+
+    private:
         const static int chartButtonWidth = 30;
         const static int priceButtonWidth = 60;
 
         wxStaticText* runnerName = NULL;
-        wxStaticText* profitAndLossIfWinText = NULL;
         double lastPriceTraded;
-        double profitAndLossIfWin;
-        wxStaticText* pendingProfit = NULL;
         PriceButton* bestBackPrice1 = NULL;
         PriceButton* bestBackPrice2 = NULL;
         PriceButton* bestBackPrice3 = NULL;
@@ -104,12 +143,9 @@ class RunnerRow {
         PriceButton* bestLayPrice3 = NULL;
         entity::Market market;
         greentop::MarketBook marketBook;
-        int64_t handicap = 0;
         std::map<int64_t, greentop::Runner> runners;
         wxWindowID chartButtonId;
-        wxString currencySymbol;
         int64_t selectionId = 0;
-        std::map<int64_t, double> profits;
 
         /**
          * Sets a price button label.
@@ -155,13 +191,6 @@ class RunnerRow {
         ) const;
 
         /**
-         * Gets the current runner, ie the runner associated with the currently selected handicap.
-         *
-         * @param The current runner.
-         */
-        const greentop::Runner& GetRunner();
-
-        /**
          * Updates the runner name label.
          */
         void UpdateRunnerName();
@@ -169,9 +198,12 @@ class RunnerRow {
         /**
          * Update profit / loss display.
          */
-        void UpdateProfitAndLossIfWin();
+        virtual void UpdateProfitAndLossIfWin() = 0;
+
 };
 
 }
+}
+}
 
-#endif // RUNNERROW_H
+#endif // WIDGET_MARKET_RUNNERPRICES_H

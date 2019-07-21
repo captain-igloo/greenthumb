@@ -17,12 +17,12 @@
 #include "dialog/Html.h"
 #include "entity/Market.h"
 #include "market/HandicapPanel.h"
+#include "widget/market/RunnerPrices.h"
 #include "worker/ListMarketBook.h"
 #include "worker/WorkerManager.h"
 #include "CurrentOrder.h"
 #include "MarketPanels.h"
 #include "MarketToolbar.h"
-#include "RunnerRow.h"
 
 namespace greenthumb {
 
@@ -67,7 +67,7 @@ class MarketPanel : public wxPanel {
         /** Market catalogue information from betfair. */
         entity::Market market;
         /** The market's runners and their prices. */
-        std::map<int64_t, RunnerRow*> runnerRows;
+        std::map<int64_t, widget::market::RunnerPrices*> runnerRows;
         /** The parent panel. */
         MarketPanels* marketPanels = NULL;
         /** A timer used to refresh the market's prices at intervals */
