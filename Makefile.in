@@ -29,8 +29,7 @@ all: $(OBJS) $(BIN)
 .PHONY: clean
 clean:
 	rm -f $(EXE)
-	rm -f $(OBJ)/*.o $(OBJ)/*.d
-	rm -f $(OBJ)/*/*.o $(OBJ)/*/*.d
+	rm -rf $(OBJ)
 
 .PHONY: install
 install: all
