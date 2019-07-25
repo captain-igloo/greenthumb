@@ -28,6 +28,14 @@ namespace greenthumb {
 namespace widget {
 namespace market {
 
+const wxColour RunnerPrices::backColour1 = wxColour(227, 235, 255);
+const wxColour RunnerPrices::backColour2 = wxColour(233, 241, 255);
+const wxColour RunnerPrices::backColour3 = wxColour(239, 247, 255);
+
+const wxColour RunnerPrices::layColour1 = wxColour(255, 224, 255);
+const wxColour RunnerPrices::layColour2 = wxColour(255, 230, 255);
+const wxColour RunnerPrices::layColour3 = wxColour(255, 236, 255);
+
 RunnerPrices* RunnerPrices::GetInstance(wxWindow* parent, bool multiWinner) {
     if (multiWinner) {
         return new MultiWinnerRunnerPrices(parent);
@@ -39,46 +47,6 @@ RunnerPrices::RunnerPrices(wxWindow* parent) : lastPriceTraded(-1) {
     currencySymbol = GetCurrencySymbol(
         entity::Config::GetConfigValue<wxString>("accountCurrency", "?")
     );
-
-    // wxSizer* sizer = parent->GetSizer();
-
-    /* chartButtonId = wxWindow::NewControlId();
-    wxBitmap chartBitmap = ArtProvider::GetBitmap(ArtProvider::IconId::CHART);
-    wxButton* chartButton = new wxButton(
-        parent,
-        chartButtonId,
-        wxEmptyString,
-        wxDefaultPosition,
-        wxSize(chartButtonWidth, -1),
-        wxBORDER_NONE
-    );
-    chartButton->SetBitmap(chartBitmap);
-    sizer->Add(chartButton, 0, wxALIGN_CENTRE_VERTICAL);
-    parent->Bind(wxEVT_BUTTON, &RunnerPrices::OnClickChart, this, chartButtonId); */
-
-    /* runnerName = new wxStaticText(parent, wxID_ANY, wxEmptyString);
-    runnerName->SetMinSize(wxSize(150, -1));
-    sizer->Add(runnerName, 0, wxALIGN_CENTRE_VERTICAL | wxLEFT, 10); */
-
-    /* profitAndLossIfWinText = new wxStaticText(parent, wxID_ANY, wxEmptyString);
-    profitAndLossIfWinText->SetMinSize(wxSize(150, -1));
-    sizer->Add(profitAndLossIfWinText, 0, wxALIGN_CENTRE_VERTICAL);
-
-    pendingProfit = new wxStaticText(parent, wxID_ANY, wxEmptyString);
-    pendingProfit->SetMinSize(wxSize(150, -1));
-    sizer->Add(pendingProfit, 0, wxALIGN_CENTRE_VERTICAL); */
-
-    /* wxFont font = parent->GetFont();
-    font.MakeSmaller();
-
-    bestBackPrice3 = CreateButton(parent, greentop::Side::BACK, wxColour(239, 247, 255));
-    bestBackPrice2 = CreateButton(parent, greentop::Side::BACK, wxColour(233, 241, 255));
-    bestBackPrice1 = CreateButton(parent, greentop::Side::BACK, wxColour(227, 235, 255));
-
-    bestLayPrice1 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 224, 255));
-    bestLayPrice2 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 230, 255));
-    bestLayPrice3 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 236, 255)); */
-
 }
 
 PriceButton* RunnerPrices::CreateButton(
@@ -103,42 +71,6 @@ PriceButton* RunnerPrices::CreateButton(
 const int64_t RunnerPrices::GetSelectionId() const {
     return selectionId;
 }
-
-/* void RunnerPrices::SetProfit(double handicap, double profitIfWin, double profitIfLose) {
-    int64_t scaledHandicap = handicap * scaleFactor;
-    profits[scaledHandicap] = std::pair<double, double>(profitIfWin, profitIfLose);
-    if (scaledHandicap == this->handicap) {
-        // profitAndLossIfWinText->SetLabel("100, 5");
-        if (profitIfWin < -0.001 || profitIfWin > 0.001 || profitIfLose < -0.001 || profitIfLose > 0.001) {
-            wxString winSign = profitIfWin < -0.001 ? "-" : "";
-            wxString loseSign = profitIfLose < -0.001 ? "-" : "";
-
-            wxString profitLabel = winSign + currencySymbol +
-                wxString::Format("%.2f", std::abs(profitIfWin)) +
-                ", " + loseSign + currencySymbol +
-                wxString::Format("%.2f", std::abs(profitIfLose));
-
-            // profitAndLossIfWinText->SetLabel(profitLabel);
-        } else {
-            // profitAndLossIfWinText->SetLabel("");
-        }
-        // if (profitAndLossIfWin > 0) {
-           //  profitAndLossIfWinText->SetForegroundColour(wxColour(0, 128, 0));
-        // } else {
-           //  profitAndLossIfWinText->SetForegroundColour(wxColour("RED"));
-        // } 
-    }
-}*/
-
-/*  void RunnerPrices::SetProfit(double handicap, double profit) {
-    int64_t scaledHandicap = handicap * scaleFactor;
-
-    profits[scaledHandicap] = std::pair<double, double>(profit, 0);
-
-    if (scaledHandicap == this->handicap) {
-        UpdateProfitAndLossIfWin();
-    }
-} */
 
 void RunnerPrices::SetRunner(
     const entity::Market& market,
@@ -177,6 +109,31 @@ void RunnerPrices::SetRunner(
     UpdateRunnerName();
 }
 
+void RunnerPrices::RefreshPrice(
+    bool marketOpen,
+    const greentop::Side& side,
+    unsigned index,
+    PriceButton* priceButton
+) {
+    std::vector<greentop::PriceSize> prices;
+    if (side == greentop::Side::BACK) {
+        prices = GetRunner().getEx().getAvailableToBack();
+    } else {
+        prices = GetRunner().getEx().getAvailableToLay();
+    }
+
+    if (marketOpen && prices.size() >= (index + 1)) {
+        SetButtonLabel(
+            priceButton,
+            prices[index].getPrice(),
+            prices[index].getSize(),
+            currencySymbol
+        );
+    } else {
+        ResetButton(priceButton);
+    }
+}
+
 void RunnerPrices::RefreshPrices() {
     if (GetRunner().getLastPriceTraded().isValid()) {
         lastPriceTraded = GetRunner().getLastPriceTraded().getValue();
@@ -184,111 +141,13 @@ void RunnerPrices::RefreshPrices() {
 
     bool marketOpen = marketBook.getStatus() == greentop::MarketStatus::OPEN;
 
-    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 3) {
-        SetButtonLabel(
-            bestBackPrice3,
-            GetRunner().getEx().getAvailableToBack()[2].getPrice(),
-            GetRunner().getEx().getAvailableToBack()[2].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestBackPrice3);
-    }
-
-    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 2) {
-        SetButtonLabel(
-            bestBackPrice2,
-            GetRunner().getEx().getAvailableToBack()[1].getPrice(),
-            GetRunner().getEx().getAvailableToBack()[1].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestBackPrice2);
-    }
-
-    if (marketOpen && GetRunner().getEx().getAvailableToBack().size() >= 1) {
-        SetButtonLabel(
-            bestBackPrice1,
-            GetRunner().getEx().getAvailableToBack()[0].getPrice(),
-            GetRunner().getEx().getAvailableToBack()[0].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestBackPrice1);
-    }
-
-    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 1) {
-        SetButtonLabel(
-            bestLayPrice1,
-            GetRunner().getEx().getAvailableToLay()[0].getPrice(),
-            GetRunner().getEx().getAvailableToLay()[0].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestLayPrice1);
-    }
-
-    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 2) {
-        SetButtonLabel(
-            bestLayPrice2,
-            GetRunner().getEx().getAvailableToLay()[1].getPrice(),
-            GetRunner().getEx().getAvailableToLay()[1].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestLayPrice2);
-    }
-
-    if (marketOpen && GetRunner().getEx().getAvailableToLay().size() >= 3) {
-        SetButtonLabel(
-            bestLayPrice3,
-            GetRunner().getEx().getAvailableToLay()[2].getPrice(),
-            GetRunner().getEx().getAvailableToLay()[2].getSize(),
-            currencySymbol
-        );
-    } else {
-        ResetButton(bestLayPrice3);
-    }
+    RefreshPrice(marketOpen, greentop::Side::BACK, 2, bestBackPrice3);
+    RefreshPrice(marketOpen, greentop::Side::BACK, 1, bestBackPrice2);
+    RefreshPrice(marketOpen, greentop::Side::BACK, 0, bestBackPrice1);
+    RefreshPrice(marketOpen, greentop::Side::LAY, 0, bestLayPrice1);
+    RefreshPrice(marketOpen, greentop::Side::LAY, 1, bestLayPrice2);
+    RefreshPrice(marketOpen, greentop::Side::LAY, 2, bestLayPrice3);
 }
-
-/* void RunnerPrices::SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction) {
-    double diff = 0;
-
-    if (GetRunner().getSelectionId() == placeInstruction.getSelectionId()) {
-        diff = placeInstruction.getLimitOrder().getSize() *
-            (placeInstruction.getLimitOrder().getPrice() - 1);
-        if (placeInstruction.getSide() == greentop::Side::LAY) {
-            // laying this selection
-            diff = diff * -1;
-        }
-    } else {
-
-        diff = placeInstruction.getLimitOrder().getSize();
-        if (placeInstruction.getSide() == greentop::Side::BACK) {
-            // backing some other selection
-            diff = diff * -1;
-        }
-
-    }
-
-    if (diff > 0.001 || diff < -0.001) {
-        // profitAndLossIfWin
-        double pendingProfitAndLoss = profitAndLossIfWin + diff;
-
-        wxString profitLabel = wxString("» ", wxConvUTF8) + currencySymbol
-            + wxString::Format("%.2f", std::abs(pendingProfitAndLoss));
-
-        // pendingProfit->SetLabel(profitLabel);
-
-        if (pendingProfitAndLoss > 0) {
-            // pendingProfit->SetForegroundColour(wxColour(0, 128, 0));
-        } else {
-            // pendingProfit->SetForegroundColour(wxColour("RED"));
-        }
-    } else {
-        // pendingProfit->SetLabel("");
-    }
-} */
 
 void RunnerPrices::SetButtonLabel(
     PriceButton* button,
@@ -338,7 +197,7 @@ const greentop::Runner& RunnerPrices::GetRunner() {
 }
 
 const wxString RunnerPrices::GetRunnerName() const {
-    wxString runnerName = market.GetRunner(selectionId).getRunnerName();
+    wxString runnerName(market.GetRunner(selectionId).getRunnerName().c_str(), wxConvUTF8);
 
     if (handicap != 0 && (runners.find(handicap) != runners.end()) && market.HasRunner(selectionId)) {
         runnerName = GetSelectionName(
@@ -370,20 +229,18 @@ void RunnerPrices::CreateChartButton(wxWindow* parent) {
 void RunnerPrices::CreateRunnerName(wxWindow* parent) {
     wxSizer* sizer = parent->GetSizer();
     runnerName = new wxStaticText(parent, wxID_ANY, wxEmptyString);
-    runnerName->SetMinSize(wxSize(150, -1));
-    sizer->Add(runnerName, 0, wxALIGN_CENTRE_VERTICAL | wxLEFT, 10);
+    runnerName->SetMinSize(wxSize(250, -1));
+    sizer->Add(runnerName, 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 10);
 }
 
 void RunnerPrices::CreatePricesButtons(wxWindow* parent) {
-    wxFont font = parent->GetFont();
-    font.MakeSmaller();
-    bestBackPrice3 = CreateButton(parent, greentop::Side::BACK, wxColour(239, 247, 255));
-    bestBackPrice2 = CreateButton(parent, greentop::Side::BACK, wxColour(233, 241, 255));
-    bestBackPrice1 = CreateButton(parent, greentop::Side::BACK, wxColour(227, 235, 255));
+    bestBackPrice3 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour3);
+    bestBackPrice2 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour2);
+    bestBackPrice1 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour1);
 
-    bestLayPrice1 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 224, 255));
-    bestLayPrice2 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 230, 255));
-    bestLayPrice3 = CreateButton(parent, greentop::Side::LAY, wxColour(255, 236, 255));
+    bestLayPrice1 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour1);
+    bestLayPrice2 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour2);
+    bestLayPrice3 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour3);
 }
 
 void RunnerPrices::UpdateRunnerName() {
@@ -399,30 +256,6 @@ void RunnerPrices::SetProfit(double handicap, double profitIfWin, double profitI
         UpdateProfitAndLossIfWin();
     }
 }
-
-/* void RunnerPrices::UpdateProfitAndLossIfWin() {
-    auto it = profits.find(handicap);
-    if (it != profits.end()) {
-        profitAndLossIfWin = it->second.first;
-
-        if (profitAndLossIfWin > 0.001 || profitAndLossIfWin < -0.001) {
-            wxString profitLabel = currencySymbol +
-                wxString::Format("%.2f", std::abs(profitAndLossIfWin));
-
-            // profitAndLossIfWinText->SetLabel(profitLabel);
-
-            if (profitAndLossIfWin > 0) {
-              //  profitAndLossIfWinText->SetForegroundColour(wxColour(0, 128, 0));
-            } else {
-                // profitAndLossIfWinText->SetForegroundColour(wxColour("RED"));
-            }
-        } else {
-            // profitAndLossIfWinText->SetLabel("");
-        }
-    } else {
-        // profitAndLossIfWinText->SetLabel("");
-    }
-} */
 
 }
 }
