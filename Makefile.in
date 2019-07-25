@@ -14,7 +14,7 @@ OBJ_DIRS := $(addprefix $(OBJ)/,$(SUBDIRS)) $(OBJ)
 EXE := $(BIN)/greenthumb
 LIBS := $(LIBS) -lsoci_core -lsoci_sqlite3 -lgreentop -lcurl -ljsoncpp
 ARTS := $(wildcard $(ART)/*.png)
-OBJS := $(patsubst %.cpp,%.o,$(subst $(SRC),$(OBJ),$(wildcard $(SRC)/*.cpp) $(wildcard $(SRC)/*/*.cpp)))
+OBJS := $(patsubst %.cpp,%.o,$(subst $(SRC),$(OBJ),$(wildcard $(SRC)/*.cpp) $(wildcard $(SRC)/*/*.cpp) $(wildcard $(SRC)/*/*/*.cpp)))
 
 define make-goal
 $1/%.o: $(subst $(OBJ),$(SRC),$1)/%.cpp | $1
@@ -29,8 +29,7 @@ all: $(OBJS) $(BIN)
 .PHONY: clean
 clean:
 	rm -f $(EXE)
-	rm -f $(OBJ)/*.o $(OBJ)/*.d
-	rm -f $(OBJ)/*/*.o $(OBJ)/*/*.d
+	rm -rf $(OBJ)
 
 .PHONY: install
 install: all

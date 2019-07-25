@@ -1,3 +1,15 @@
+greenthumb (0.20.0+xenial) xenial; urgency=medium
+
+  * fix build
+
+ -- Colin Doig <colindoig@gmail.com>  Tue, 23 Jul 2019 18:52:23 +1200
+
+greenthumb (0.19.0+xenial) xenial; urgency=medium
+
+  * fix build
+
+ -- Colin Doig <colindoig@gmail.com>  Mon, 22 Jul 2019 21:55:16 +1200
+
 greenthumb (0.18.0+xenial) xenial; urgency=medium
 
   * multi winner markets
