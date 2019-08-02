@@ -25,16 +25,6 @@ SingleWinnerRunnerPrices::SingleWinnerRunnerPrices(wxWindow* parent) : RunnerPri
     CreatePricesButtons(parent);
 }
 
-/* void SingleWinnerRunnerPrices::SetProfit(double handicap, double profitIfWin, double profitIfLose) {
-    int64_t scaledHandicap = handicap * scaleFactor;
-
-    profits[scaledHandicap] = std::pair<double, double>(profitIfWin, 0);
-
-    if (scaledHandicap == this->handicap) {
-        UpdateProfitAndLossIfWin();
-    }
-} */
-
 void SingleWinnerRunnerPrices::UpdateProfitAndLossIfWin() {
     auto it = profits.find(handicap);
     if (it != profits.end()) {

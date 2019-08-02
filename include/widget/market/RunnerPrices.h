@@ -132,6 +132,12 @@ class RunnerPrices {
     private:
         const static int chartButtonWidth = 30;
         const static int priceButtonWidth = 60;
+        const static wxColour backColour1;
+        const static wxColour backColour2;
+        const static wxColour backColour3;
+        const static wxColour layColour1;
+        const static wxColour layColour2;
+        const static wxColour layColour3;
 
         wxStaticText* runnerName = NULL;
         double lastPriceTraded;
@@ -194,6 +200,21 @@ class RunnerPrices {
          * Updates the runner name label.
          */
         void UpdateRunnerName();
+
+        /**
+         * Set price button label.
+         *
+         * @param marketOpen True if the market is open else false.
+         * @param side Either back or lay.
+         * @param index The button index.
+         * @param priceButton The button to update.
+         */
+        void RefreshPrice(
+            bool marketOpen,
+            const greentop::Side& side,
+            unsigned index,
+            PriceButton* priceButton
+        );
 
         /**
          * Update profit / loss display.

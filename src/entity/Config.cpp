@@ -1,3 +1,6 @@
+/**
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ */
 #include <sstream>
 
 #include "entity/Config.h"
@@ -45,8 +48,13 @@ void Config::SetConfigValue(const wxString& configKey, const bool& configValue) 
 }
 
 template <>
-void Config::SetConfigValue(const wxString& configKey, const int& configValue) {
+void Config::SetConfigValue(const wxString& configKey, const int64_t& configValue) {
     SetConfigValue(configKey, wxString::Format(wxT("%i"), configValue));
+}
+
+template <>
+void Config::SetConfigValue(const wxString& configKey, const int& configValue) {
+    SetConfigValue<int64_t>(configKey, configValue);
 }
 
 Config Config::GetConfig(const wxString& configKey) {
@@ -91,21 +99,23 @@ wxString Config::GetConfigValue(const wxString& configKey, const wxString& defau
 }
 
 template <>
-int Config::GetConfigValue(const wxString& configKey, const int& defaultValue) {
-
+int64_t Config::GetConfigValue(const wxString& configKey, const int64_t& defaultValue) {
     try {
-        int result = wxAtoi(GetConfigValue(configKey));
+        int64_t result = wxAtol(GetConfigValue(configKey));
         return result;
     } catch (const std::exception& e) {
         Config config;
         config.configKey = configKey;
-        config.configValue = wxString::Format(wxT("%i"), defaultValue);
+        config.configValue = wxString::Format(wxT("%lld"), defaultValue);
         config.Save();
-
         configCache[configKey] = config;
     }
-
     return defaultValue;
+}
+
+template <>
+int Config::GetConfigValue(const wxString& configKey, const int& defaultValue) {
+    return GetConfigValue<int64_t>(configKey, defaultValue);
 }
 
 template <>

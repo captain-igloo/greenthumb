@@ -112,6 +112,7 @@ void LoginDialog::OnOk(const wxCommandEvent& event) {
     }
     entity::Config::SetConfigValue("betfairUsername", usernameToSave);
     entity::Config::SetConfigValue("betfairPassword", passwordToSave);
+    entity::Config::SetConfigValue("ssoid", wxString(""));
 
     if (okButton != NULL) {
         okButton->Disable();

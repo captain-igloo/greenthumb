@@ -1,6 +1,8 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
+#include <time.h>
+
 #include <wx/wx.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
@@ -26,6 +28,7 @@ namespace greenthumb {
 
 const wxString GreenThumbFrame::VIEW_ACCOUNT = "account";
 const wxString GreenThumbFrame::VIEW_BETTING = "betting";
+const uint32_t GreenThumbFrame::MAX_SESSION_AGE_SECONDS = 86400;
 
 GreenThumbFrame::GreenThumbFrame()
        : wxFrame(NULL, wxID_ANY, _T("Green Thumb"),
@@ -94,7 +97,7 @@ GreenThumbFrame::GreenThumbFrame()
 
 }
 
-void GreenThumbFrame::Login() {
+void GreenThumbFrame::OpenLoginDialog() {
     dialog::LoginDialog loginDialog(NULL, wxID_ANY, "Login");
 
     if (loginDialog.ShowModal() == wxID_OK) {
@@ -107,6 +110,19 @@ void GreenThumbFrame::Login() {
         if (currencySymbol == "?") {
             workerManager.RunWorker(new worker::GetAccountDetails(&workerManager));
         }
+    }
+}
+
+void GreenThumbFrame::Login() {
+    wxString ssoid = entity::Config::GetConfigValue<wxString>("ssoid", "");
+    int64_t loginTime = entity::Config::GetConfigValue<int64_t>("loginTime", 0);
+    wxString appKey = greenthumb::entity::Config::GetConfigValue<wxString>("applicationKey", "");
+
+    if (appKey == "" || ssoid == "" || (time(NULL) - loginTime > MAX_SESSION_AGE_SECONDS)) {
+        OpenLoginDialog();
+    } else {
+        GreenThumb::GetBetfairApi().setApplicationKey(appKey.ToStdString());
+        GreenThumb::GetBetfairApi().setSsoid(ssoid.ToStdString());
     }
 }
 
@@ -159,7 +175,7 @@ void GreenThumbFrame::CreateMenuBar() {
 }
 
 void GreenThumbFrame::OnMenuFileLogin(const wxCommandEvent& menuEvent) {
-    Login();
+    OpenLoginDialog();
 }
 
 void GreenThumbFrame::OnMenuFileLogout(const wxCommandEvent& menuEvent) {
