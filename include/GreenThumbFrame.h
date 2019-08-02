@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef GREENTOPFRAME_H
 #define GREENTOPFRAME_H
@@ -42,6 +42,7 @@ class GreenThumbFrame : public wxFrame {
 
         const static wxString VIEW_ACCOUNT;
         const static wxString VIEW_BETTING;
+        const static uint32_t MAX_SESSION_AGE_SECONDS;
 
         /** Displays the betfair events and markets. */
         EventTree* eventTree = NULL;
@@ -132,6 +133,11 @@ class GreenThumbFrame : public wxFrame {
          * @param event The worker event.
          */
         void OnListMarketCatalogue(const wxThreadEvent& event);
+
+        /**
+         * Opens login dialog.
+         */
+        void OpenLoginDialog();
 
         DECLARE_NO_COPY_CLASS(GreenThumbFrame)
 };

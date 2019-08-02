@@ -1,6 +1,7 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ */
+#include "entity/Config.h"
 #include "worker/Login.h"
 
 #include "GreenThumb.h"
@@ -22,7 +23,22 @@ wxThread::ExitCode Login::Entry() {
         GreenThumb::GetBetfairApi().setApplicationKey(applicationKey);
         loginResult = GreenThumb::GetBetfairApi().login(username, password);
 
-        if (!loginResult) {
+        if (loginResult) {
+            bool rememberBetfairPassword = entity::Config::GetConfigValue(
+                "rememberBetfairPassword",
+                false
+            );
+            if (rememberBetfairPassword) {
+                entity::Config::SetConfigValue(
+                    "ssoid",
+                    wxString(GreenThumb::GetBetfairApi().getSsoid().c_str(), wxConvUTF8)
+                );
+                entity::Config::SetConfigValue(
+                    "loginTime",
+                    wxString(std::to_string(time(NULL)).c_str(), wxConvUTF8)
+                );
+            }
+        } else {
             wxLogError("Failed to log in");
         }
 
