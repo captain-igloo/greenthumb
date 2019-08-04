@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #include <iomanip>
 #include <iostream>
@@ -32,7 +32,6 @@ PriceHistory::PriceHistory(wxWindow *parent, wxWindowID id, const wxString &titl
     int borderFlags = wxTOP | wxRIGHT | wxLEFT;
 
     wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
-    lastPriceTraded = new wxStaticText(this, wxID_ANY, "");
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer(2, borderWidth, borderWidth);
     wxStaticText* bettingOnLabel = new wxStaticText(this, wxID_ANY, "Betting on:");

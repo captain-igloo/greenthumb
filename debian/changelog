@@ -1,3 +1,9 @@
+greenthumb (0.22.0+xenial) xenial; urgency=medium
+
+  * price history dialog - fix last price traded
+
+ -- Colin Doig <colindoig@gmail.com>  Sun, 04 Aug 2019 18:38:37 +1200
+
 greenthumb (0.21.1+xenial) xenial; urgency=medium
 
   * fix build dependency

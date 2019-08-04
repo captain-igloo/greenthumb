@@ -137,6 +137,8 @@ void RunnerPrices::RefreshPrice(
 void RunnerPrices::RefreshPrices() {
     if (GetRunner().getLastPriceTraded().isValid()) {
         lastPriceTraded = GetRunner().getLastPriceTraded().getValue();
+    } else {
+        lastPriceTraded = -1;
     }
 
     bool marketOpen = marketBook.getStatus() == greentop::MarketStatus::OPEN;
