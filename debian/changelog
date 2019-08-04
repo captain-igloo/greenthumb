@@ -1,3 +1,9 @@
+greenthumb (0.21.1+bionic) bionic; urgency=medium
+
+  * fix build dependency
+
+ -- Colin Doig <colindoig@gmail.com>  Fri, 02 Aug 2019 17:45:50 +1200
+
 greenthumb (0.21.0+bionic) bionic; urgency=medium
 
   * persist betfair ssoid and use for up to one day instead of logging in again.
