@@ -19,26 +19,18 @@ Config::Config() : id(0) {
 
 template <>
 void Config::SetConfigValue(const wxString& configKey, const wxString& configValue) {
-
     try {
-
         Config config = GetConfig(configKey);
-
         config.configValue = configValue;
         config.Update();
-
         configCache[configKey] = config;
-
     } catch (std::exception const &e) {
-
         Config config;
         config.configKey = configKey;
         config.configValue = configValue;
         config.Insert();
-
         configCache[configKey] = config;
     }
-
 }
 
 template <>
@@ -49,7 +41,7 @@ void Config::SetConfigValue(const wxString& configKey, const bool& configValue) 
 
 template <>
 void Config::SetConfigValue(const wxString& configKey, const int64_t& configValue) {
-    SetConfigValue(configKey, wxString::Format(wxT("%i"), configValue));
+    SetConfigValue(configKey, wxString::Format(wxT("%lld"), configValue));
 }
 
 template <>
