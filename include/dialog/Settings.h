@@ -1,10 +1,11 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_SETTINGS_H
 #define DIALOG_SETTINGS_H
 
 #include <wx/wx.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 
@@ -41,6 +42,7 @@ class Settings : public wxDialog {
         wxSpinCtrl* accountRowsPerPage = NULL;
         wxSpinCtrl* defaultStake = NULL;
         wxSpinCtrl* refreshInterval = NULL;
+        wxCheckBox* useStream = NULL;
 
         void OnSave(const wxCommandEvent& event);
         void OnCancel(const wxCommandEvent& event);

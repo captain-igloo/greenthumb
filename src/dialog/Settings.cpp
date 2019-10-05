@@ -1,3 +1,6 @@
+/**
+ * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ */
 #include <wx/wx.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
@@ -27,6 +30,7 @@ Settings::Settings(wxWindow* parent, wxWindowID id, const wxString& title, const
         entity::Config::KEY_REFRESH_INTERVAL,
         REFRESH_INTERVAL
     );
+    bool streamMarketPrices = entity::Config::GetConfigValue<bool>("streamMarketPrices", false);
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -41,12 +45,19 @@ Settings::Settings(wxWindow* parent, wxWindowID id, const wxString& title, const
     wxStaticText* defaultStakeLabel = new wxStaticText(this, wxID_ANY, "Default stake");
     gridSizer->Add(defaultStakeLabel, 0, wxALIGN_CENTRE_VERTICAL, border);
     defaultStake = new wxSpinCtrl(this, wxID_ANY, std::to_string(stake));
+    defaultStake->SetRange(1, 10000);
     gridSizer->Add(defaultStake, 0, wxALIGN_CENTRE_VERTICAL, border);
 
     wxStaticText* refreshIntervalLabel = new wxStaticText(this, wxID_ANY, "Refresh interval (seconds)");
     gridSizer->Add(refreshIntervalLabel, 0, wxALIGN_CENTRE_VERTICAL, border);
     refreshInterval = new wxSpinCtrl(this, wxID_ANY, std::to_string(interval));
     gridSizer->Add(refreshInterval, 0, wxALIGN_CENTRE_VERTICAL, border);
+
+    wxStaticText* useStreamLabel = new wxStaticText(this, wxID_ANY, "Stream market prices");
+    gridSizer->Add(useStreamLabel, 0, wxALIGN_CENTRE_VERTICAL, border);
+    useStream = new wxCheckBox(this, wxID_ANY, "");
+    useStream->SetValue(streamMarketPrices);
+    gridSizer->Add(useStream, 0, wxALIGN_CENTRE_VERTICAL, border);
 
     sizer->Add(gridSizer, 0, wxEXPAND | wxTOP | wxRIGHT | wxLEFT, border);
 
@@ -79,6 +90,7 @@ void Settings::OnSave(const wxCommandEvent& event) {
             interval
         );
     }
+    entity::Config::SetConfigValue("streamMarketPrices", useStream->GetValue());
     EndModal(wxID_OK);
 }
 
