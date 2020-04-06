@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_UNMATCHEDORDERS_H
 #define DIALOG_UNMATCHEDORDERS_H
@@ -34,7 +34,7 @@ class UnmatchedOrders: public CurrentOrdersPage {
          *
          * @return The EXECUTABLE order projection.
          */
-        greentop::OrderProjection GetOrderProjection() const;
+        greentop::sport::OrderProjection GetOrderProjection() const;
 
         /**
          * An order has been cancelled so remove it.

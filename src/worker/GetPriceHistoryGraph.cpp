@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <sstream>
 #include <wx/file.h>
@@ -18,7 +18,7 @@ wxDEFINE_EVENT(GET_PRICE_HISTORY_GRAPH, wxThreadEvent);
 GetPriceHistoryGraph::GetPriceHistoryGraph(
     wxEvtHandler* eventHandler,
     const entity::Market& market,
-    const greentop::Runner& runner
+    const greentop::sport::Runner& runner
 ) : Worker(eventHandler),
     market(market),
     runner(runner) {

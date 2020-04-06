@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef ENTITY_MARKET_H
 #define ENTITY_MARKET_H
@@ -32,7 +32,7 @@ struct PageRunner {
 };
 
 /**
- * Wraps greentop::MarketCatalogue.
+ * Wraps greentop::sport::MarketCatalogue.
  */
 class Market {
     public:
@@ -42,28 +42,28 @@ class Market {
          *
          * @param marketCatalogue The market catalogue.
          */
-        void SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue);
+        void SetMarketCatalogue(const greentop::sport::MarketCatalogue& marketCatalogue);
 
         /**
          * Gets the market catalogue.
          *
          * @return The market catalogue.
          */
-        const greentop::MarketCatalogue& GetMarketCatalogue() const;
+        const greentop::sport::MarketCatalogue& GetMarketCatalogue() const;
 
         /**
          * Sets the market book.
          *
          * @param marketBook The market book.
          */
-        void SetMarketBook(const greentop::MarketBook& marketBook);
+        void SetMarketBook(const greentop::sport::MarketBook& marketBook);
 
         /**
          * Gets the market book.
          *
          * @return The market book.
          */
-        const greentop::MarketBook& GetMarketBook() const;
+        const greentop::sport::MarketBook& GetMarketBook() const;
 
         /**
          * Whether or not the market has a certain runner.
@@ -80,7 +80,7 @@ class Market {
          * @throw std::out_of_range If the market doesn't have the specified runner.
          * @return The runner.
          */
-        const greentop::RunnerCatalog& GetRunner(uint64_t selectionId) const;
+        const greentop::sport::RunnerCatalog& GetRunner(uint64_t selectionId) const;
 
         /**
          * Whether or not the market catalogue has been set.
@@ -106,9 +106,9 @@ class Market {
         const std::set<int64_t>& GetSelectionIds() const;
 
     private:
-        greentop::MarketCatalogue marketCatalogue;
-        greentop::MarketBook marketBook;
-        std::map<uint64_t, greentop::RunnerCatalog> runners;
+        greentop::sport::MarketCatalogue marketCatalogue;
+        greentop::sport::MarketBook marketBook;
+        std::map<uint64_t, greentop::sport::RunnerCatalog> runners;
         bool hasMarketCatalogue = false;
         std::vector <std::vector<PageRunner>> handicapPages;
         unsigned defaultHandicapIndex = 0;
@@ -116,12 +116,12 @@ class Market {
 
         void SetKeyLineIndex(
             std::vector<PageRunner> handicapPage,
-            greentop::KeyLineDescription keyLineDescription,
+            greentop::sport::KeyLineDescription keyLineDescription,
             unsigned handicapIndex
         );
 
         std::pair<double, double> CalculateProfitAndLoss(
-            const std::vector<greentop::Match>& matches
+            const std::vector<greentop::sport::Match>& matches
         ) const;
 };
 

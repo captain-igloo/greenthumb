@@ -191,7 +191,6 @@ void EventTree::OnItemExpanded(const wxTreeEvent& treeEvent) {
 }
 
 void EventTree::ReadMenuCache() {
-
     std::string line;
     std::string fileContents;
     std::ifstream fs(menuCacheFilename.mb_str());
@@ -201,10 +200,12 @@ void EventTree::ReadMenuCache() {
             fileContents += line;
         }
         fs.close();
-
-        GreenThumb::GetBetfairApi().getMenu().fromJson(fileContents);
+        try {
+            GreenThumb::GetBetfairApi().getMenu().fromJson(fileContents);
+        } catch(const std::exception& e) {
+            wxLogStatus("Failed to read menu cache");
+        }
     }
-
 }
 
 void EventTree::SetBetfairMarketsCache(greentop::LRUCache<std::string, entity::Market>* betfairMarkets) {

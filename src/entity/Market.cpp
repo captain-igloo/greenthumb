@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include "entity/Market.h"
@@ -8,11 +8,11 @@
 namespace greenthumb {
 namespace entity {
 
-void Market::SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue) {
+void Market::SetMarketCatalogue(const greentop::sport::MarketCatalogue& marketCatalogue) {
     this->marketCatalogue = marketCatalogue;
 
     runners.clear();
-    for (const greentop::RunnerCatalog& runner : marketCatalogue.getRunners()) {
+    for (const greentop::sport::RunnerCatalog& runner : marketCatalogue.getRunners()) {
         if (runner.getSelectionId().isValid()) {
             runners[runner.getSelectionId().getValue()] = runner;
         }
@@ -20,11 +20,11 @@ void Market::SetMarketCatalogue(const greentop::MarketCatalogue& marketCatalogue
 
     hasMarketCatalogue = true;
 }
-const greentop::MarketCatalogue& Market::GetMarketCatalogue() const {
+const greentop::sport::MarketCatalogue& Market::GetMarketCatalogue() const {
     return marketCatalogue;
 }
 
-void Market::SetMarketBook(const greentop::MarketBook& marketBook) {
+void Market::SetMarketBook(const greentop::sport::MarketBook& marketBook) {
     this->marketBook = marketBook;
 
     handicapPages.clear();
@@ -33,7 +33,7 @@ void Market::SetMarketBook(const greentop::MarketBook& marketBook) {
 
     double otherRunnersProfit = 0;
 
-    for (const greentop::Runner& runner : marketBook.getRunners()) {
+    for (const greentop::sport::Runner& runner : marketBook.getRunners()) {
         if (runner.getSelectionId().isValid()) {
             int64_t selectionId = runner.getSelectionId();
             double handicap = runner.getHandicap().isValid() ? runner.getHandicap().getValue() : 0;
@@ -74,7 +74,7 @@ void Market::SetMarketBook(const greentop::MarketBook& marketBook) {
     }
 }
 
-const greentop::MarketBook& Market::GetMarketBook() const {
+const greentop::sport::MarketBook& Market::GetMarketBook() const {
     return marketBook;
 }
 
@@ -82,7 +82,7 @@ bool Market::HasRunner(uint64_t selectionId) const {
     return runners.find(selectionId) != runners.end();
 }
 
-const greentop::RunnerCatalog& Market::GetRunner(uint64_t selectionId) const {
+const greentop::sport::RunnerCatalog& Market::GetRunner(uint64_t selectionId) const {
     return runners.at(selectionId);
 }
 
@@ -104,12 +104,12 @@ const std::set<int64_t>& Market::GetSelectionIds() const {
 
 void Market::SetKeyLineIndex(
     std::vector<PageRunner> handicapPage,
-    greentop::KeyLineDescription keyLineDescription,
+    greentop::sport::KeyLineDescription keyLineDescription,
     unsigned handicapIndex
 ) {
     bool found = false;
     if (keyLineDescription.isValid()) {
-        for (const greentop::KeyLineSelection& keyLine : keyLineDescription.getKeyLine()) {
+        for (const greentop::sport::KeyLineSelection& keyLine : keyLineDescription.getKeyLine()) {
             for (const PageRunner& runner : handicapPage) {
                 if (DoubleEquals(keyLine.getHandicap(), runner.handicap) && keyLine.getSelectionId() == runner.selectionId) {
                     defaultHandicapIndex = handicapIndex;
@@ -125,16 +125,16 @@ void Market::SetKeyLineIndex(
 }
 
 std::pair<double, double> Market::CalculateProfitAndLoss(
-    const std::vector<greentop::Match>& matches
+    const std::vector<greentop::sport::Match>& matches
 ) const {
     double thisRunnerProfit = 0;
     double otherRunnersProfit = 0;
 
-    for (const greentop::Match& match : matches) {
+    for (const greentop::sport::Match& match : matches) {
         if (match.getPrice().isValid() && match.getSize().isValid()) {
             double backProfit = (match.getPrice().getValue() - 1) * match.getSize().getValue();
             double size = match.getSize().getValue();
-            if (match.getSide() == greentop::Side::BACK) {
+            if (match.getSide() == greentop::sport::Side::BACK) {
                 thisRunnerProfit += backProfit;
                 otherRunnersProfit -= size;
             } else {

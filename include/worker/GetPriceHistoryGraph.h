@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_GETPRICEHISTORYGRAPH_H
 #define WORKER_GETPRICEHISTORYGRAPH_H
@@ -22,7 +22,7 @@ class GetPriceHistoryGraph : public Worker {
         GetPriceHistoryGraph(
             wxEvtHandler* eventHandler,
             const entity::Market& market,
-            const greentop::Runner& runner
+            const greentop::sport::Runner& runner
         );
 
     protected:
@@ -31,7 +31,7 @@ class GetPriceHistoryGraph : public Worker {
 
     private:
         entity::Market market;
-        greentop::Runner runner;
+        greentop::sport::Runner runner;
 };
 
 }

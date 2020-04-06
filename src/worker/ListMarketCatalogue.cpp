@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <set>
 
@@ -61,18 +61,18 @@ wxThread::ExitCode ListMarketCatalogue::Entry() {
 
 bool ListMarketCatalogue::DoListMarketCatalogue(const std::set<std::string>& marketIdsPage) {
 
-    greentop::MarketFilter filter;
+    greentop::sport::MarketFilter filter;
     filter.setMarketIds(marketIdsPage);
 
-    std::set<greentop::MarketProjection> marketProjection;
-    marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::RUNNER_DESCRIPTION));
-    marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::MARKET_START_TIME));
-    marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::MARKET_DESCRIPTION));
-    marketProjection.insert(greentop::MarketProjection(greentop::MarketProjection::EVENT));
+    std::set<greentop::sport::MarketProjection> marketProjection;
+    marketProjection.insert(greentop::sport::MarketProjection(greentop::sport::MarketProjection::RUNNER_DESCRIPTION));
+    marketProjection.insert(greentop::sport::MarketProjection(greentop::sport::MarketProjection::MARKET_START_TIME));
+    marketProjection.insert(greentop::sport::MarketProjection(greentop::sport::MarketProjection::MARKET_DESCRIPTION));
+    marketProjection.insert(greentop::sport::MarketProjection(greentop::sport::MarketProjection::EVENT));
 
-    greentop::ListMarketCatalogueRequest lmcRequest(filter, marketProjection, greentop::MarketSort(), 1000);
+    greentop::sport::ListMarketCatalogueRequest lmcRequest(filter, marketProjection, greentop::sport::MarketSort(), 1000);
 
-    greentop::ListMarketCatalogueResponse lmcResponse =
+    greentop::sport::ListMarketCatalogueResponse lmcResponse =
         GreenThumb::GetBetfairApi().listMarketCatalogue(lmcRequest);
 
     if (!TestDestroy() && lmcResponse.isSuccess()) {
@@ -82,7 +82,7 @@ bool ListMarketCatalogue::DoListMarketCatalogue(const std::set<std::string>& mar
             betfairMarkets[*it] = market;
         }
 
-        std::vector<greentop::MarketCatalogue> bfMarkets = lmcResponse.getMarketCatalogues();
+        std::vector<greentop::sport::MarketCatalogue> bfMarkets = lmcResponse.getMarketCatalogues();
 
         for (unsigned i = 0; i < bfMarkets.size(); ++i) {
             entity::Market market;

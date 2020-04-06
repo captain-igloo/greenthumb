@@ -1,3 +1,6 @@
+/**
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
+ */
 #ifndef WORKER_REPLACEORDERS_H
 #define WORKER_REPLACEORDERS_H
 
@@ -25,7 +28,7 @@ class ReplaceOrders : public Worker {
         std::string betId;
         double newPrice;
 
-        greentop::ReplaceExecutionReport DoReplaceOrders();
+        greentop::sport::ReplaceExecutionReport DoReplaceOrders();
 };
 
 }

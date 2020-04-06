@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_PLACEBET_H
 #define DIALOG_PLACEBET_H
@@ -50,7 +50,7 @@ class PlaceBet : public wxDialog {
          * @param runnerName The runner name.
          * @param placeInstruction The place instruction.
          */
-        void SetPlaceInstruction(const std::string& runnerName, const greentop::PlaceInstruction& pi);
+        void SetPlaceInstruction(const std::string& runnerName, const greentop::sport::PlaceInstruction& pi);
 
         /**
          * Sets the market to place a bet on.
@@ -67,7 +67,7 @@ class PlaceBet : public wxDialog {
         wxTextCtrl* stakeSpin = NULL;
         wxStaticText* profit = NULL;
         wxStaticText* liability = NULL;
-        greentop::Side side;
+        greentop::sport::Side side;
         wxWindow* backLayButton = NULL;
         wxWindow* cancelButton = NULL;
         wxStaticText* selection = NULL;
@@ -75,7 +75,7 @@ class PlaceBet : public wxDialog {
         wxRadioButton* persistKeep = NULL;
         wxRadioButton* persistCancel = NULL;
         entity::Market market;
-        greentop::PlaceInstruction pendingPlaceInstruction;
+        greentop::sport::PlaceInstruction pendingPlaceInstruction;
         uint64_t selectionId;
         worker::WorkerManager workerManager;
         greentop::Optional<double> handicap;

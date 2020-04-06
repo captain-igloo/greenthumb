@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_LISTCURRENTORDERS_H
 #define WORKER_LISTCURRENTORDERS_H
@@ -32,7 +32,7 @@ class ListCurrentOrders : public Worker {
         ListCurrentOrders(
             wxEvtHandler* eventHandler,
             const entity::Market& market = entity::Market(),
-            const greentop::OrderProjection& = greentop::OrderProjection::ALL,
+            const greentop::sport::OrderProjection& = greentop::sport::OrderProjection::ALL,
             const uint32_t currentPage = 1
         );
 
@@ -40,10 +40,10 @@ class ListCurrentOrders : public Worker {
         virtual ExitCode Entry();
     private:
         entity::Market market;
-        greentop::OrderProjection orderProjection;
+        greentop::sport::OrderProjection orderProjection;
         uint32_t currentPage;
 
-        greentop::CurrentOrderSummaryReport DoListCurrentOrders();
+        greentop::sport::CurrentOrderSummaryReport DoListCurrentOrders();
 };
 
 }

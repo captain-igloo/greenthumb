@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_CURRENTORDERSPAGE_H
 #define DIALOG_CURRENTORDERSPAGE_H
@@ -55,7 +55,7 @@ class CurrentOrdersPage : public wxPanel {
          *
          * @return The OrderProjection for this page.
          */
-        virtual greentop::OrderProjection GetOrderProjection() const = 0;
+        virtual greentop::sport::OrderProjection GetOrderProjection() const = 0;
     private:
         /** Manages worker threads. */
         worker::WorkerManager workerManager;

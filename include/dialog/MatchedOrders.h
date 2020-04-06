@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_MATCHEDORDERS_H
 #define DIALOG_MATCHEDORDERS_H
@@ -34,7 +34,7 @@ class MatchedOrders: public CurrentOrdersPage {
          *
          * @return The EXECUTION_COMPLETE order projection.
          */
-        greentop::OrderProjection GetOrderProjection() const;
+        greentop::sport::OrderProjection GetOrderProjection() const;
 };
 
 }

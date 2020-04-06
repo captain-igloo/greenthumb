@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef DIALOG_PRICEHISTORY_H
 #define DIALOG_PRICEHISTORY_H
@@ -43,7 +43,7 @@ class PriceHistory : public wxDialog {
          * @param market The market.
          * @param runner The runner.
          */
-        void SetRunner(const entity::Market& market, const greentop::Runner& runner);
+        void SetRunner(const entity::Market& market, const greentop::sport::Runner& runner);
 
         /**
          * Sets the last price traded.
@@ -62,7 +62,7 @@ class PriceHistory : public wxDialog {
         ImagePanel* graphPanel = NULL;
         wxStaticText* bettingOn = NULL;
 
-        const wxString GetGraphFilename(const entity::Market& market, const greentop::Runner& runner);
+        const wxString GetGraphFilename(const entity::Market& market, const greentop::sport::Runner& runner);
         void OnClose(wxCommandEvent& event);
 };
 

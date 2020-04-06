@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef MARKETPANEL_H
 #define MARKETPANEL_H
@@ -83,7 +83,7 @@ class MarketPanel : public wxPanel {
         /** The market id. */
         std::string marketId;
         /** The betfair market book information. */
-        greentop::MarketBook marketBook;
+        greentop::sport::MarketBook marketBook;
         /** Displays market name and status, and buttons to refresh and close and display current orders. */
         MarketToolbar* marketToolbar = NULL;
         /** Displays currently selected handicap and buttons to go backwards and forwards. */

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_GETACCOUNTFUNDS_H
 #define WORKER_GETACCOUNTFUNDS_H
@@ -33,7 +33,7 @@ class GetAccountFunds : public Worker {
         virtual ExitCode Entry();
     private:
 
-        greentop::AccountFundsResponse DoGetAccountFunds();
+        greentop::account::AccountFundsResponse DoGetAccountFunds();
 };
 
 }

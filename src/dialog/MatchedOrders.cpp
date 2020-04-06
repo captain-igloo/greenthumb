@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 
 #include "dialog/MatchedOrders.h"
@@ -19,8 +19,8 @@ CurrentOrder* MatchedOrders::CreateOrder() {
     return new MatchedOrder(this, wxID_ANY);
 }
 
-greentop::OrderProjection MatchedOrders::GetOrderProjection() const {
-    return greentop::OrderProjection::EXECUTION_COMPLETE;
+greentop::sport::OrderProjection MatchedOrders::GetOrderProjection() const {
+    return greentop::sport::OrderProjection::EXECUTION_COMPLETE;
 }
 
 }

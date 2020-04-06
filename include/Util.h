@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef UTIL_H
 #define UTIL_H
@@ -21,8 +21,8 @@ time_t timegm(tm* t);
 wxString GetCurrencySymbol(const wxString& currencyCode);
 
 wxString GetSelectionName(
-    const greentop::MarketCatalogue& marketCatalogue,
-    const greentop::RunnerCatalog& runnerCatalog,
+    const greentop::sport::MarketCatalogue& marketCatalogue,
+    const greentop::sport::RunnerCatalog& runnerCatalog,
     const double handicap
 );
 

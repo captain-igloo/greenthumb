@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef CURRENTORDER_H
 #define CURRENTORDER_H
@@ -43,12 +43,12 @@ class CurrentOrder : public wxPanel {
          *
          * @param currentOrderSummary The order, received from betfair.
          */
-        virtual void SetCurrentOrderSummary(const greentop::CurrentOrderSummary& currentOrderSummary) = 0;
+        virtual void SetCurrentOrderSummary(const greentop::sport::CurrentOrderSummary& currentOrderSummary) = 0;
 
         /** 
          * Gets the betfair CurrentOrderSummary.
          */
-        greentop::CurrentOrderSummary GetCurrentOrderSummary();
+        greentop::sport::CurrentOrderSummary GetCurrentOrderSummary();
 
         /**
          * Set the order's market.
@@ -61,7 +61,7 @@ class CurrentOrder : public wxPanel {
         /** The order's market. */
         entity::Market market;
         /** The order. */
-        greentop::CurrentOrderSummary currentOrderSummary;
+        greentop::sport::CurrentOrderSummary currentOrderSummary;
 
 };
 

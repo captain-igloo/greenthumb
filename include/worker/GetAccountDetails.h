@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_GETACCOUNTDETAILS_H
 #define WORKER_GETACCOUNTDETAILS_H
@@ -28,7 +28,7 @@ class GetAccountDetails : public Worker {
     protected:
         virtual ExitCode Entry();
     private:
-        greentop::AccountDetailsResponse DoGetAccountDetails();
+        greentop::account::AccountDetailsResponse DoGetAccountDetails();
 };
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/sizer.h>
@@ -172,7 +172,7 @@ PlaceBet::PlaceBet(wxWindow *parent, wxWindowID id, const wxString &title,
 
 }
 
-void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop::PlaceInstruction& placeInstruction) {
+void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop::sport::PlaceInstruction& placeInstruction) {
 
     side = placeInstruction.getSide();
     selectionId = placeInstruction.getSelectionId();
@@ -182,7 +182,7 @@ void PlaceBet::SetPlaceInstruction(const std::string& runnerName, const greentop
 
     wxString runner(runnerName.c_str(), wxConvUTF8);
 
-    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::sport::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
         wxString sign = "";
         if (placeInstruction.getHandicap() > 0) {
             sign = "+";
@@ -209,7 +209,7 @@ void PlaceBet::UpdateProfitAndLiability() {
         std::ostringstream profitLabelStream;
         std::ostringstream liabilityLabelStream;
 
-        if (side == greentop::Side::BACK) {
+        if (side == greentop::sport::Side::BACK) {
 
             profitLabelStream << std::fixed << std::setprecision(2) <<
                 ((oddsSpin->GetValue() * stake) - stake);
@@ -247,7 +247,7 @@ void PlaceBet::UpdateProfitAndLiability() {
 }
 
 void PlaceBet::PlaceOrderPending(const double stake, const double odds) {
-    greentop::LimitOrder limitOrder(stake, odds, greentop::PersistenceType::LAPSE);
+    greentop::sport::LimitOrder limitOrder(stake, odds, greentop::sport::PersistenceType::LAPSE);
     pendingPlaceInstruction.setSide(side);
     pendingPlaceInstruction.setSelectionId(selectionId);
     pendingPlaceInstruction.setLimitOrder(limitOrder);
@@ -270,12 +270,12 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
 
     double stake;
     if (stakeSpin->GetValue().ToDouble(&stake)) {
-        greentop::OrderType orderType(greentop::OrderType::LIMIT);
-        greentop::PersistenceType persistenceType(
-            persistKeep->GetValue() ? greentop::PersistenceType::PERSIST : greentop::PersistenceType::LAPSE
+        greentop::sport::OrderType orderType(greentop::sport::OrderType::LIMIT);
+        greentop::sport::PersistenceType persistenceType(
+            persistKeep->GetValue() ? greentop::sport::PersistenceType::PERSIST : greentop::sport::PersistenceType::LAPSE
         );
-        greentop::LimitOrder limitOrder(stake, oddsSpin->GetValue(), persistenceType);
-        greentop::PlaceInstruction placeInstruction(
+        greentop::sport::LimitOrder limitOrder(stake, oddsSpin->GetValue(), persistenceType);
+        greentop::sport::PlaceInstruction placeInstruction(
             orderType,
             selectionId,
             handicap,
@@ -283,10 +283,10 @@ void PlaceBet::OnSubmit(const wxCommandEvent& event) {
             limitOrder
         );
 
-        std::vector<greentop::PlaceInstruction> instructions;
+        std::vector<greentop::sport::PlaceInstruction> instructions;
         instructions.push_back(placeInstruction);
 
-        greentop::PlaceOrdersRequest placeOrdersRequest(
+        greentop::sport::PlaceOrdersRequest placeOrdersRequest(
             market.GetMarketCatalogue().getMarketId(),
             instructions
         );

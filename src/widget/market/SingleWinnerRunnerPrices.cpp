@@ -1,7 +1,6 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
-
 #include "widget/market/SingleWinnerRunnerPrices.h"
 
 namespace greenthumb {
@@ -49,19 +48,19 @@ void SingleWinnerRunnerPrices::UpdateProfitAndLossIfWin() {
     }
 }
 
-void SingleWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction) {
+void SingleWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::sport::PlaceInstruction& placeInstruction) {
     double diff = 0;
 
     if (GetRunner().getSelectionId() == placeInstruction.getSelectionId()) {
         diff = placeInstruction.getLimitOrder().getSize() *
             (placeInstruction.getLimitOrder().getPrice() - 1);
-        if (placeInstruction.getSide() == greentop::Side::LAY) {
+        if (placeInstruction.getSide() == greentop::sport::Side::LAY) {
             // laying this selection
             diff = diff * -1;
         }
     } else {
         diff = placeInstruction.getLimitOrder().getSize();
-        if (placeInstruction.getSide() == greentop::Side::BACK) {
+        if (placeInstruction.getSide() == greentop::sport::Side::BACK) {
             // backing some other selection
             diff = diff * -1;
         }

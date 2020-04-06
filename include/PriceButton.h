@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef PRICEBUTTON_H
 #define PRICEBUTTON_H
@@ -41,14 +41,14 @@ class PriceButton : public wxButton {
          *
          * @param side The side.
          */
-        void SetSide(const greentop::Side& side);
+        void SetSide(const greentop::sport::Side& side);
 
         /**
          * Gets the side, either back or lay.
          *
          * @return The side.
          */
-        const greentop::Side& GetSide() const;
+        const greentop::sport::Side& GetSide() const;
 
         /**
          * Sets the selection id.
@@ -76,7 +76,7 @@ class PriceButton : public wxButton {
          *
          * @return The place instruction.
          */
-        const greentop::PlaceInstruction& GetPlaceInstruction() const;
+        const greentop::sport::PlaceInstruction& GetPlaceInstruction() const;
 
     protected:
     private:
@@ -84,7 +84,7 @@ class PriceButton : public wxButton {
         const static int priceButtonWidth = 60;
         const static int priceButtonHeight = 40;
 
-        greentop::PlaceInstruction placeInstruction;
+        greentop::sport::PlaceInstruction placeInstruction;
 
 };
 

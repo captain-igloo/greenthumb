@@ -1,8 +1,10 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <iomanip>
 #include <sstream>
+
+#include <greentop/sport/enum/MarketBettingType.h>
 
 #include "Util.h"
 
@@ -79,13 +81,13 @@ wxString GetCurrencySymbol(const wxString& currencyCode) {
 }
 
 wxString GetSelectionName(
-    const greentop::MarketCatalogue& marketCatalogue,
-    const greentop::RunnerCatalog& runnerCatalog,
+    const greentop::sport::MarketCatalogue& marketCatalogue,
+    const greentop::sport::RunnerCatalog& runnerCatalog,
     const double handicap
 ) {
     wxString runnerName = runnerCatalog.getRunnerName();
 
-    if (marketCatalogue.getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+    if (marketCatalogue.getDescription().getBettingType() == greentop::sport::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
         wxString sign = "";
         if (handicap > 0) {
             sign = "+";

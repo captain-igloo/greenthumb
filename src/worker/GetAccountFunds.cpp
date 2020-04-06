@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include "GreenThumb.h"
 #include "worker/GetAccountFunds.h"
@@ -17,7 +17,7 @@ wxThread::ExitCode GetAccountFunds::Entry() {
 
     event = new wxThreadEvent(GET_ACCOUNT_FUNDS);
 
-    greentop::AccountFundsResponse afr;
+    greentop::account::AccountFundsResponse afr;
 
     wxLogStatus("Get account funds ...");
     try {
@@ -27,17 +27,17 @@ wxThread::ExitCode GetAccountFunds::Entry() {
         wxLogStatus("Get account funds ... Failed: " + _(e.what()));
     }
 
-    event->SetPayload<greentop::AccountFundsResponse>(afr);
+    event->SetPayload<greentop::account::AccountFundsResponse>(afr);
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
 }
 
-greentop::AccountFundsResponse GetAccountFunds::DoGetAccountFunds() {
+greentop::account::AccountFundsResponse GetAccountFunds::DoGetAccountFunds() {
 
-    greentop::GetAccountFundsRequest req;
+    greentop::account::GetAccountFundsRequest req;
 
-    greentop::AccountFundsResponse afr = GreenThumb::GetBetfairApi().getAccountFunds(req);
+    greentop::account::AccountFundsResponse afr = GreenThumb::GetBetfairApi().getAccountFunds(req);
 
     return afr;
 }

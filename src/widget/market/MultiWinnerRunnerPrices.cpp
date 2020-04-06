@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 
 #include "widget/market/MultiWinnerRunnerPrices.h"
@@ -41,12 +41,12 @@ MultiWinnerRunnerPrices::MultiWinnerRunnerPrices(wxWindow* parent) : RunnerPrice
     CreatePricesButtons(parent);
 }
 
-void MultiWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction) {
+void MultiWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::sport::PlaceInstruction& placeInstruction) {
     if (GetRunner().getSelectionId() == placeInstruction.getSelectionId()) {                
         double winDiff = placeInstruction.getLimitOrder().getSize() *
             (placeInstruction.getLimitOrder().getPrice() - 1);
         double loseDiff = placeInstruction.getLimitOrder().getSize() * -1;
-        if (placeInstruction.getSide() == greentop::Side::LAY) {
+        if (placeInstruction.getSide() == greentop::sport::Side::LAY) {
             winDiff *= -1;
             loseDiff *= -1; 
         }

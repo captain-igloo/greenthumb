@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/sizer.h>
@@ -65,14 +65,14 @@ MarketPanel::MarketPanel(MarketPanels* parent, const wxWindowID id, const wxPoin
 }
 
 void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
-    greentop::MarketBook tempMarketBook = event.GetPayload<greentop::MarketBook>();
+    greentop::sport::MarketBook tempMarketBook = event.GetPayload<greentop::sport::MarketBook>();
 
     if (tempMarketBook.isValid()) {
         marketBook = tempMarketBook;
 
         market.SetMarketBook(marketBook);
 
-        if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE &&
+        if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::sport::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE &&
             !handicapPanel->IsShown()) {
             handicapPanel->Show(true);
             handicapPanel->AddPages(market.GetHandicapPages(), market.GetDefaultHandicapIndex());
@@ -80,8 +80,8 @@ void MarketPanel::OnMarketUpdated(const wxThreadEvent& event) {
 
         SyncRunnerRows();
 
-        if (marketBook.getStatus() == greentop::MarketStatus::OPEN ||
-            marketBook.getStatus() == greentop::MarketStatus::SUSPENDED) {
+        if (marketBook.getStatus() == greentop::sport::MarketStatus::OPEN ||
+            marketBook.getStatus() == greentop::sport::MarketStatus::SUSPENDED) {
             refreshTimer.Start();
         } else {
             refreshTimer.Stop();
@@ -172,8 +172,8 @@ void MarketPanel::SetMarket(const entity::Market& market) {
 }
 
 void MarketPanel::UpdateMarketStatus() {
-    if (marketBook.getStatus() == greentop::MarketStatus::SUSPENDED ||
-        marketBook.getStatus() == greentop::MarketStatus::CLOSED) {
+    if (marketBook.getStatus() == greentop::sport::MarketStatus::SUSPENDED ||
+        marketBook.getStatus() == greentop::sport::MarketStatus::CLOSED) {
         std::string status = marketBook.getStatus();
         marketToolbar->SetMarketStatus("(" + status + ")");
     } else {
@@ -192,11 +192,11 @@ void MarketPanel::UpdateToolBar() {
 }
 
 void MarketPanel::SyncRunnerRows() {
-    std::vector<greentop::Runner> runners = marketBook.getRunners();
+    std::vector<greentop::sport::Runner> runners = marketBook.getRunners();
     for (unsigned i = 0; i < runners.size(); ++i) {
-        greentop::Runner runner = runners[i];
+        greentop::sport::Runner runner = runners[i];
 
-        if (runner.getStatus() == greentop::RunnerStatus::ACTIVE) {
+        if (runner.getStatus() == greentop::sport::RunnerStatus::ACTIVE) {
             auto iter = runnerRows.find(runner.getSelectionId());
             if (iter == runnerRows.end()) {
                 widget::market::RunnerPrices* runnerRow = widget::market::RunnerPrices::GetInstance(
@@ -227,13 +227,13 @@ void MarketPanel::OnClick(const wxCommandEvent& event) {
     PriceButton* button = dynamic_cast<PriceButton*>(event.GetEventObject());
 
     if (button) {
-        greentop::PlaceInstruction pi = button->GetPlaceInstruction();
+        greentop::sport::PlaceInstruction pi = button->GetPlaceInstruction();
 
         if (market.HasRunner(pi.getSelectionId())) {
 
             auto it = runnerRows.find(pi.getSelectionId());
             if (it != runnerRows.end()) {
-                greentop::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
+                greentop::sport::RunnerCatalog runner = market.GetRunner(pi.getSelectionId());
                 wxString placeBetTitle = pi.getSide().getValue() + " " + it->second->GetRunnerName();
 
                 dialog::PlaceBet* placeBet = new dialog::PlaceBet(this, wxID_ANY, placeBetTitle);
@@ -251,7 +251,7 @@ void MarketPanel::OnClickClose(const wxCommandEvent& event) {
 }
 
 void MarketPanel::OnPlaceOrderPending(const wxCommandEvent& event) {
-    greentop::PlaceInstruction* pi = static_cast<greentop::PlaceInstruction*>(event.GetClientData());
+    greentop::sport::PlaceInstruction* pi = static_cast<greentop::sport::PlaceInstruction*>(event.GetClientData());
 
     for (const auto &it : runnerRows) {
         widget::market::RunnerPrices* runnerRow = it.second;
@@ -270,7 +270,7 @@ void MarketPanel::ShowRules(const wxEvent& event) {
 }
 
 void MarketPanel::OnHandicapChanged(const wxEvent& event) {
-    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
+    if (market.GetMarketCatalogue().getDescription().getBettingType() == greentop::sport::MarketBettingType::ASIAN_HANDICAP_DOUBLE_LINE) {
         for (const auto &it : runnerRows) {
             widget::market::RunnerPrices* runnerRow = it.second;
             runnerRow->SetHandicap(handicapPanel->GetHandicap(it.first));

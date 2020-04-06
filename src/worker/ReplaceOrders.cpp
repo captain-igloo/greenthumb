@@ -1,3 +1,6 @@
+/**
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
+ */
 #include "worker/ReplaceOrders.h"
 #include "GreenThumb.h"
 
@@ -18,7 +21,7 @@ ReplaceOrders::ReplaceOrders(
 }
 
 wxThread::ExitCode ReplaceOrders::Entry() {
-    greentop::ReplaceExecutionReport report;
+    greentop::sport::ReplaceExecutionReport report;
 
     wxLogStatus("Replace orders ...");
     try {
@@ -30,23 +33,23 @@ wxThread::ExitCode ReplaceOrders::Entry() {
 
     wxThreadEvent* event = new wxThreadEvent(REPLACE_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
-    event->SetPayload<greentop::ReplaceExecutionReport>(report);
+    event->SetPayload<greentop::sport::ReplaceExecutionReport>(report);
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
 }
 
-greentop::ReplaceExecutionReport ReplaceOrders::DoReplaceOrders() {
+greentop::sport::ReplaceExecutionReport ReplaceOrders::DoReplaceOrders() {
 
-    std::vector<greentop::ReplaceInstruction> instructions;
+    std::vector<greentop::sport::ReplaceInstruction> instructions;
 
-    greentop::ReplaceInstruction instruction;
+    greentop::sport::ReplaceInstruction instruction;
     instruction.setBetId(betId);
     instruction.setNewPrice(newPrice);
 
     instructions.push_back(instruction);
 
-    greentop::ReplaceOrdersRequest replaceOrdersRequest(marketId, instructions);
+    greentop::sport::ReplaceOrdersRequest replaceOrdersRequest(marketId, instructions);
 
     return GreenThumb::GetBetfairApi().replaceOrders(replaceOrdersRequest);
 }

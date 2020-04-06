@@ -1,6 +1,6 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
-*/
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
+ */
 
 #include <wx/log.h>
 
@@ -13,7 +13,7 @@ namespace worker {
 
 wxDEFINE_EVENT(PLACE_ORDERS, wxThreadEvent);
 
-PlaceOrders::PlaceOrders(wxEvtHandler* eventHandler, const greentop::PlaceOrdersRequest& placeOrdersRequest)
+PlaceOrders::PlaceOrders(wxEvtHandler* eventHandler, const greentop::sport::PlaceOrdersRequest& placeOrdersRequest)
     : Worker(eventHandler), placeOrdersRequest(placeOrdersRequest) {
 }
 
@@ -41,7 +41,7 @@ wxThread::ExitCode PlaceOrders::Entry() {
 
 bool PlaceOrders::DoPlaceOrder() {
 
-    greentop::PlaceExecutionReport resp =
+    greentop::sport::PlaceExecutionReport resp =
         GreenThumb::GetBetfairApi().placeOrders(placeOrdersRequest);
 
     return resp.isSuccess();

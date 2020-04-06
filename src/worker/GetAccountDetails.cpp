@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 
 #include "GreenThumb.h"
@@ -30,9 +30,9 @@ wxThread::ExitCode GetAccountDetails::Entry() {
     return (wxThread::ExitCode) 0;
 }
 
-greentop::AccountDetailsResponse GetAccountDetails::DoGetAccountDetails() {
+greentop::account::AccountDetailsResponse GetAccountDetails::DoGetAccountDetails() {
 
-    greentop::AccountDetailsResponse adr = GreenThumb::GetBetfairApi().getAccountDetails();
+    greentop::account::AccountDetailsResponse adr = GreenThumb::GetBetfairApi().getAccountDetails();
     if (!TestDestroy() && adr.isSuccess()) {
         wxString currencyCode(adr.getCurrencyCode().c_str(), wxConvUTF8);
         entity::Config::SetConfigValue("accountCurrency", currencyCode);

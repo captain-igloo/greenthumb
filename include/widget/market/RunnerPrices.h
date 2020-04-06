@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WIDGET_MARKET_RUNNERPRICES_H
 #define WIDGET_MARKET_RUNNERPRICES_H
@@ -42,8 +42,8 @@ class RunnerPrices {
          */
         void SetRunner(
             const entity::Market& market,
-            const greentop::MarketBook& marketBook,
-            const greentop::Runner& runner
+            const greentop::sport::MarketBook& marketBook,
+            const greentop::sport::Runner& runner
         );
 
         /**
@@ -71,7 +71,7 @@ class RunnerPrices {
          * @param placeInstruction The pending place instruction.
          */
         virtual void SetPendingPlaceInstruction(
-            const greentop::PlaceInstruction& placeInstruction
+            const greentop::sport::PlaceInstruction& placeInstruction
         ) = 0;
 
         /**
@@ -127,7 +127,7 @@ class RunnerPrices {
          *
          * @param The current runner.
          */
-        const greentop::Runner& GetRunner();
+        const greentop::sport::Runner& GetRunner();
 
     private:
         const static int chartButtonWidth = 30;
@@ -148,8 +148,8 @@ class RunnerPrices {
         PriceButton* bestLayPrice2 = NULL;
         PriceButton* bestLayPrice3 = NULL;
         entity::Market market;
-        greentop::MarketBook marketBook;
-        std::map<int64_t, greentop::Runner> runners;
+        greentop::sport::MarketBook marketBook;
+        std::map<int64_t, greentop::sport::Runner> runners;
         wxWindowID chartButtonId;
         int64_t selectionId = 0;
 
@@ -192,7 +192,7 @@ class RunnerPrices {
          */
         PriceButton* CreateButton(
             wxWindow* parent,
-            const greentop::Side& side,
+            const greentop::sport::Side& side,
             const wxColour& colour
         ) const;
 
@@ -211,7 +211,7 @@ class RunnerPrices {
          */
         void RefreshPrice(
             bool marketOpen,
-            const greentop::Side& side,
+            const greentop::sport::Side& side,
             unsigned index,
             PriceButton* priceButton
         );

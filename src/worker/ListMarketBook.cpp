@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <set>
 
@@ -32,7 +32,7 @@ wxThread::ExitCode ListMarketBook::Entry() {
     }
 
     wxThreadEvent* event = new wxThreadEvent(LIST_MARKET_BOOK);
-    event->SetPayload<greentop::MarketBook>(betfairMarketBook);
+    event->SetPayload<greentop::sport::MarketBook>(betfairMarketBook);
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
@@ -42,16 +42,16 @@ bool ListMarketBook::DoListMarketBook() {
 
     std::vector<std::string> marketIds;
     marketIds.push_back(market.GetMarketCatalogue().getMarketId());
-    std::set<greentop::PriceData> priceData;
-    priceData.insert(greentop::PriceData(greentop::PriceData::EX_BEST_OFFERS));
-    greentop::PriceProjection priceProjection(priceData);
+    std::set<greentop::sport::PriceData> priceData;
+    priceData.insert(greentop::sport::PriceData(greentop::sport::PriceData::EX_BEST_OFFERS));
+    greentop::sport::PriceProjection priceProjection(priceData);
     // show "virtual" bets
     priceProjection.setVirtualise(true);
-    greentop::OrderProjection orderProjection(greentop::OrderProjection::EXECUTABLE);
-    greentop::MatchProjection matchProjection(greentop::MatchProjection::ROLLED_UP_BY_AVG_PRICE);
-    greentop::ListMarketBookRequest listMarketBookRequest(marketIds, priceProjection, orderProjection, matchProjection);
+    greentop::sport::OrderProjection orderProjection(greentop::sport::OrderProjection::EXECUTABLE);
+    greentop::sport::MatchProjection matchProjection(greentop::sport::MatchProjection::ROLLED_UP_BY_AVG_PRICE);
+    greentop::sport::ListMarketBookRequest listMarketBookRequest(marketIds, priceProjection, orderProjection, matchProjection);
 
-    greentop::ListMarketBookResponse lmbResp = GreenThumb::GetBetfairApi().listMarketBook(listMarketBookRequest);
+    greentop::sport::ListMarketBookResponse lmbResp = GreenThumb::GetBetfairApi().listMarketBook(listMarketBookRequest);
 
     if (TestDestroy()) {
         return false;

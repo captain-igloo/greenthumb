@@ -70,9 +70,9 @@ void PriceHistory::SetLastPriceTraded(const double lastPriceTraded) {
     }
 }
 
-void PriceHistory::SetRunner(const entity::Market& market, const greentop::Runner& runner) {
+void PriceHistory::SetRunner(const entity::Market& market, const greentop::sport::Runner& runner) {
     if (market.HasRunner(runner.getSelectionId())) {
-        greentop::RunnerCatalog rc = market.GetRunner(runner.getSelectionId());
+        greentop::sport::RunnerCatalog rc = market.GetRunner(runner.getSelectionId());
         std::string runnerName = rc.getRunnerName();
         if (runner.getHandicap().isValid()) {
             runnerName = runnerName + " "
@@ -95,7 +95,7 @@ void PriceHistory::SetRunner(const entity::Market& market, const greentop::Runne
 
 const wxString PriceHistory::GetGraphFilename(
     const entity::Market& market,
-    const greentop::Runner& runner
+    const greentop::sport::Runner& runner
 ) {
     wxStandardPaths sp = wxStandardPaths::Get();
     wxString filename = sp.GetTempDir() + wxT("/graph.jpeg");

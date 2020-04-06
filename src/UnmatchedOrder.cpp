@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <iomanip>
 
@@ -74,11 +74,11 @@ UnmatchedOrder::UnmatchedOrder(
 
 }
 
-void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary& cos) {
+void UnmatchedOrder::SetCurrentOrderSummary(const greentop::sport::CurrentOrderSummary& cos) {
     currentOrderSummary = cos;
 
     if (market.HasRunner(currentOrderSummary.getSelectionId())) {
-        greentop::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
+        greentop::sport::RunnerCatalog runner = market.GetRunner(currentOrderSummary.getSelectionId());
 
         runnerName->SetLabel(currentOrderSummary.getSide().getValue() + " " +
             GetSelectionName(market.GetMarketCatalogue(), runner, currentOrderSummary.getHandicap()));
@@ -99,10 +99,10 @@ void UnmatchedOrder::SetCurrentOrderSummary(const greentop::CurrentOrderSummary&
 
         stake->SetLabel(stakeLabel);
 
-        if (currentOrderSummary.getSide() == greentop::Side::BACK) {
+        if (currentOrderSummary.getSide() == greentop::sport::Side::BACK) {
             profitOrLiabilityLabel->SetLabel(_("Profit: "));
             SetBackgroundColour(wxColour(227, 235, 255));
-        } else if (currentOrderSummary.getSide() == greentop::Side::LAY) {
+        } else if (currentOrderSummary.getSide() == greentop::sport::Side::LAY) {
             profitOrLiabilityLabel->SetLabel(_("Liability: "));
             SetBackgroundColour(wxColour(255, 224, 255));
         }

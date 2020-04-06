@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_CANCELORDERS_H
 #define WORKER_CANCELORDERS_H
@@ -41,7 +41,7 @@ class CancelOrders : public Worker {
         std::string marketId;
         std::string betId;
 
-        greentop::CancelExecutionReport DoCancelOrders();
+        greentop::sport::CancelExecutionReport DoCancelOrders();
 };
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 
@@ -60,7 +60,7 @@ void CurrentOrdersGrid::Refresh() {
         new worker::ListCurrentOrders(
             &workerManager,
             entity::Market(),
-            greentop::OrderProjection::ALL,
+            greentop::sport::OrderProjection::ALL,
             currentPage
         )
     );
@@ -102,7 +102,7 @@ void CurrentOrdersGrid::Render() {
         for (unsigned i = 0; i < currentOrderSummaryReport.getCurrentOrders().size(); ++i) {
             grid->AppendRows();
 
-            greentop::CurrentOrderSummary cos = currentOrderSummaryReport.getCurrentOrders()[i];
+            greentop::sport::CurrentOrderSummary cos = currentOrderSummaryReport.getCurrentOrders()[i];
             std::string marketName = cos.getMarketId();
             std::string selection = "";
             if (betfairMarkets->exists(cos.getMarketId())) {
@@ -156,7 +156,7 @@ void CurrentOrdersGrid::OnListMarketCatalogue(const wxThreadEvent& event) {
 }
 
 void CurrentOrdersGrid::OnListCurrentOrders(const wxThreadEvent& event) {
-    currentOrderSummaryReport = event.GetPayload<greentop::CurrentOrderSummaryReport>();
+    currentOrderSummaryReport = event.GetPayload<greentop::sport::CurrentOrderSummaryReport>();
 
     if (currentOrderSummaryReport.getMoreAvailable() && currentPage == numberPages) {
         // we aren't really on the last page because there are more current orders.
@@ -169,7 +169,7 @@ void CurrentOrdersGrid::OnListCurrentOrders(const wxThreadEvent& event) {
         std::set<std::string> marketIds;
 
         for (unsigned i = 0; i < currentOrderSummaryReport.getCurrentOrders().size(); ++i) {
-            greentop::CurrentOrderSummary cos = currentOrderSummaryReport.getCurrentOrders()[i];
+            greentop::sport::CurrentOrderSummary cos = currentOrderSummaryReport.getCurrentOrders()[i];
             if (!betfairMarkets->exists(cos.getMarketId())) {
                 marketIds.insert(cos.getMarketId());
             }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <greentop/sport/enum/MarketStatus.h>
 #include <greentop/sport/RunnerCatalog.h>
@@ -51,7 +51,7 @@ RunnerPrices::RunnerPrices(wxWindow* parent) : lastPriceTraded(-1) {
 
 PriceButton* RunnerPrices::CreateButton(
     wxWindow* parent,
-    const greentop::Side& side,
+    const greentop::sport::Side& side,
     const wxColour& colour
 ) const {
     PriceButton* button = new PriceButton(parent);
@@ -74,8 +74,8 @@ const int64_t RunnerPrices::GetSelectionId() const {
 
 void RunnerPrices::SetRunner(
     const entity::Market& market,
-    const greentop::MarketBook& marketBook,
-    const greentop::Runner& runner
+    const greentop::sport::MarketBook& marketBook,
+    const greentop::sport::Runner& runner
 ) {
     selectionId = runner.getSelectionId();
 
@@ -89,7 +89,7 @@ void RunnerPrices::SetRunner(
     }
 
     if (market.GetMarketCatalogue().getDescription().getBettingType() ==
-            greentop::MarketBettingType::ASIAN_HANDICAP_SINGLE_LINE) {
+            greentop::sport::MarketBettingType::ASIAN_HANDICAP_SINGLE_LINE) {
         handicap = runnerHandicap;
     }
 
@@ -111,12 +111,12 @@ void RunnerPrices::SetRunner(
 
 void RunnerPrices::RefreshPrice(
     bool marketOpen,
-    const greentop::Side& side,
+    const greentop::sport::Side& side,
     unsigned index,
     PriceButton* priceButton
 ) {
-    std::vector<greentop::PriceSize> prices;
-    if (side == greentop::Side::BACK) {
+    std::vector<greentop::sport::PriceSize> prices;
+    if (side == greentop::sport::Side::BACK) {
         prices = GetRunner().getEx().getAvailableToBack();
     } else {
         prices = GetRunner().getEx().getAvailableToLay();
@@ -141,14 +141,14 @@ void RunnerPrices::RefreshPrices() {
         lastPriceTraded = -1;
     }
 
-    bool marketOpen = marketBook.getStatus() == greentop::MarketStatus::OPEN;
+    bool marketOpen = marketBook.getStatus() == greentop::sport::MarketStatus::OPEN;
 
-    RefreshPrice(marketOpen, greentop::Side::BACK, 2, bestBackPrice3);
-    RefreshPrice(marketOpen, greentop::Side::BACK, 1, bestBackPrice2);
-    RefreshPrice(marketOpen, greentop::Side::BACK, 0, bestBackPrice1);
-    RefreshPrice(marketOpen, greentop::Side::LAY, 0, bestLayPrice1);
-    RefreshPrice(marketOpen, greentop::Side::LAY, 1, bestLayPrice2);
-    RefreshPrice(marketOpen, greentop::Side::LAY, 2, bestLayPrice3);
+    RefreshPrice(marketOpen, greentop::sport::Side::BACK, 2, bestBackPrice3);
+    RefreshPrice(marketOpen, greentop::sport::Side::BACK, 1, bestBackPrice2);
+    RefreshPrice(marketOpen, greentop::sport::Side::BACK, 0, bestBackPrice1);
+    RefreshPrice(marketOpen, greentop::sport::Side::LAY, 0, bestLayPrice1);
+    RefreshPrice(marketOpen, greentop::sport::Side::LAY, 1, bestLayPrice2);
+    RefreshPrice(marketOpen, greentop::sport::Side::LAY, 2, bestLayPrice3);
 }
 
 void RunnerPrices::SetButtonLabel(
@@ -168,7 +168,7 @@ void RunnerPrices::ResetButton(PriceButton* button) const {
     button->SetLabel("");
 
     double price;
-    if (button->GetSide() == greentop::Side::BACK) {
+    if (button->GetSide() == greentop::sport::Side::BACK) {
         price = 100;
     } else {
         price = 1.01;
@@ -194,7 +194,7 @@ void RunnerPrices::SetHandicap(const double handicap) {
     }
 }
 
-const greentop::Runner& RunnerPrices::GetRunner() {
+const greentop::sport::Runner& RunnerPrices::GetRunner() {
     return runners[handicap];
 }
 
@@ -236,13 +236,13 @@ void RunnerPrices::CreateRunnerName(wxWindow* parent) {
 }
 
 void RunnerPrices::CreatePricesButtons(wxWindow* parent) {
-    bestBackPrice3 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour3);
-    bestBackPrice2 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour2);
-    bestBackPrice1 = CreateButton(parent, greentop::Side::BACK, RunnerPrices::backColour1);
+    bestBackPrice3 = CreateButton(parent, greentop::sport::Side::BACK, RunnerPrices::backColour3);
+    bestBackPrice2 = CreateButton(parent, greentop::sport::Side::BACK, RunnerPrices::backColour2);
+    bestBackPrice1 = CreateButton(parent, greentop::sport::Side::BACK, RunnerPrices::backColour1);
 
-    bestLayPrice1 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour1);
-    bestLayPrice2 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour2);
-    bestLayPrice3 = CreateButton(parent, greentop::Side::LAY, RunnerPrices::layColour3);
+    bestLayPrice1 = CreateButton(parent, greentop::sport::Side::LAY, RunnerPrices::layColour1);
+    bestLayPrice2 = CreateButton(parent, greentop::sport::Side::LAY, RunnerPrices::layColour2);
+    bestLayPrice3 = CreateButton(parent, greentop::sport::Side::LAY, RunnerPrices::layColour3);
 }
 
 void RunnerPrices::UpdateRunnerName() {

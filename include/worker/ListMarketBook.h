@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_LISTMARKETBOOK_H
 #define WORKER_LISTMARKETBOOK_H
@@ -36,7 +36,7 @@ class ListMarketBook : public Worker {
     private:
 
         entity::Market market;
-        greentop::MarketBook betfairMarketBook;
+        greentop::sport::MarketBook betfairMarketBook;
 
         bool DoListMarketBook();
 

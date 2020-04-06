@@ -1,7 +1,6 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
-
 #include <vector>
 
 #include "worker/CancelOrders.h"
@@ -24,7 +23,7 @@ CancelOrders::CancelOrders(
 wxThread::ExitCode CancelOrders::Entry() {
     wxLogStatus("Cancel order ...");
 
-    greentop::CancelExecutionReport cer;
+    greentop::sport::CancelExecutionReport cer;
 
     try {
         cer = DoCancelOrders();
@@ -35,20 +34,20 @@ wxThread::ExitCode CancelOrders::Entry() {
 
     wxThreadEvent* event = new wxThreadEvent(CANCEL_ORDERS);
     event->ResumePropagation(wxEVENT_PROPAGATE_MAX);
-    event->SetPayload<greentop::CancelExecutionReport>(cer);
+    event->SetPayload<greentop::sport::CancelExecutionReport>(cer);
 
     QueueEvent(event);
 
     return (wxThread::ExitCode) 0;
 }
 
-greentop::CancelExecutionReport CancelOrders::DoCancelOrders() {
+greentop::sport::CancelExecutionReport CancelOrders::DoCancelOrders() {
 
-    std::vector<greentop::CancelInstruction> instructions;
-    greentop::CancelInstruction ci(betId);
+    std::vector<greentop::sport::CancelInstruction> instructions;
+    greentop::sport::CancelInstruction ci(betId);
     instructions.push_back(ci);
 
-    greentop::CancelOrdersRequest cor(marketId, instructions);
+    greentop::sport::CancelOrdersRequest cor(marketId, instructions);
     return GreenThumb::GetBetfairApi().cancelOrders(cor);
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WORKER_GETACCOUNTSTATEMENT_H
 #define WORKER_GETACCOUNTSTATEMENT_H
@@ -38,7 +38,7 @@ class GetAccountStatement : public Worker {
         int exchangeId;
 
         void DoGetAccountStatement();
-        bool GetAccountStatementPage(const greentop::GetAccountStatementRequest& gasr);
+        bool GetAccountStatementPage(const greentop::account::GetAccountStatementRequest& gasr);
         void PopulateAccountStatementMarket() const;
 
 };

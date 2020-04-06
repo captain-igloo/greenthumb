@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include <wx/wx.h>
 #include <wx/log.h>
@@ -39,17 +39,17 @@ wxThread::ExitCode GetAccountStatement::Entry() {
 
 void GetAccountStatement::DoGetAccountStatement() {
     uint32_t fromRecord = 0;
-    greentop::GetAccountStatementRequest gasr;
+    greentop::account::GetAccountStatementRequest gasr;
 
     std::tm fromDate;
     fromDate = entity::AccountStatementItem::GetMostRecentItemDate();
     fromDate.tm_sec++;
     // mktime will correct overflow - if tm_sec is 60 it will be changed to 0 and tm_min incremented.
     mktime(&fromDate);
-    greentop::TimeRange timeRange(fromDate);
+    greentop::common::TimeRange timeRange(fromDate);
     gasr.setItemDateRange(timeRange);
 
-    gasr.setWallet(greentop::Wallet::UK);
+    gasr.setWallet(greentop::account::Wallet::UK);
     gasr.setFromRecord(fromRecord);
     gasr.setRecordCount(PAGE_SIZE);
 
@@ -75,8 +75,8 @@ void GetAccountStatement::DoGetAccountStatement() {
 
 }
 
-bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStatementRequest& gasr) {
-    greentop::AccountStatementReport asr = GreenThumb::GetBetfairApi().getAccountStatement(gasr);
+bool GetAccountStatement::GetAccountStatementPage(const greentop::account::GetAccountStatementRequest& gasr) {
+    greentop::account::AccountStatementReport asr = GreenThumb::GetBetfairApi().getAccountStatement(gasr);
 
     if (TestDestroy()) {
         return false;
@@ -84,13 +84,13 @@ bool GetAccountStatement::GetAccountStatementPage(const greentop::GetAccountStat
 
     if (asr.isSuccess()) {
 
-        std::vector<greentop::StatementItem> items = asr.getAccountStatement();
+        std::vector<greentop::account::StatementItem> items = asr.getAccountStatement();
 
         for (int32_t i = items.size() - 1; i >= 0; --i) {
-            greentop::StatementLegacyData data = items[i].getLegacyData();
+            greentop::account::StatementLegacyData data = items[i].getLegacyData();
 
             entity::AccountStatementItem asi;
-            if (gasr.getWallet() == greentop::Wallet::AUSTRALIAN) {
+            if (gasr.getWallet() == greentop::account::Wallet::AUSTRALIAN) {
                 asi.SetExchangeId(static_cast<int>(greentop::Exchange::AUS));
             } else {
                 asi.SetExchangeId(static_cast<int>(greentop::Exchange::UK));

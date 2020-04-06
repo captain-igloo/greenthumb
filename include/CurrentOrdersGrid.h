@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef CURRENTORDERS_H
 #define CURRENTORDERS_H
@@ -29,7 +29,7 @@ class CurrentOrdersGrid : public PaginatedGrid {
 
     private:
         greentop::LRUCache<std::string, entity::Market>* betfairMarkets = NULL;
-        greentop::CurrentOrderSummaryReport currentOrderSummaryReport;
+        greentop::sport::CurrentOrderSummaryReport currentOrderSummaryReport;
 
         void Refresh();
         void OnClickRefresh(wxCommandEvent& event);

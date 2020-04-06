@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 
 #include "dialog/CurrentOrdersPage.h"
@@ -49,7 +49,7 @@ void CurrentOrdersPage::RefreshOrders() {
 }
 
 void CurrentOrdersPage::OnListCurrentOrders(const wxThreadEvent& event) {
-    greentop::CurrentOrderSummaryReport currentOrderSummaryReport = event.GetPayload<greentop::CurrentOrderSummaryReport>();
+    greentop::sport::CurrentOrderSummaryReport currentOrderSummaryReport = event.GetPayload<greentop::sport::CurrentOrderSummaryReport>();
     if (currentOrderSummaryReport.isSuccess()) {
         std::set<std::string> betIdsFound;
         std::set<std::string> existingBetIds;

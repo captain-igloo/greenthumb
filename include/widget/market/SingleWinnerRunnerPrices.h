@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #ifndef WIDGET_MARKET_SINGLEWINNERRUNNERPRICES_H
 #define WIDGET_MARKET_SINGLEWINNERRUNNERPRICES_H
@@ -14,9 +14,7 @@ class SingleWinnerRunnerPrices : public RunnerPrices {
     public:
         SingleWinnerRunnerPrices(wxWindow* parent);
 
-        virtual void SetPendingPlaceInstruction(const greentop::PlaceInstruction& placeInstruction);
-
-        // virtual void SetProfit(double handicap, double profitIfWin, double profitIfLose);
+        virtual void SetPendingPlaceInstruction(const greentop::sport::PlaceInstruction& placeInstruction);
 
     private:
         wxStaticText* profitAndLossIfWinText = NULL;

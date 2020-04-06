@@ -1,5 +1,5 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+* Copyright 2020 Colin Doig.  Distributed under the MIT license.
 */
 #include <wx/wx.h>
 #include <wx/button.h>
@@ -20,7 +20,7 @@ void CurrentOrder::SetMarket(const entity::Market& market) {
     this->market = market;
 }
 
-greentop::CurrentOrderSummary CurrentOrder::GetCurrentOrderSummary() {
+greentop::sport::CurrentOrderSummary CurrentOrder::GetCurrentOrderSummary() {
     return currentOrderSummary;
 }
 

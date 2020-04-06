@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
 #include "dialog/UnmatchedOrders.h"
 #include "worker/CancelOrders.h"
@@ -20,17 +20,17 @@ CurrentOrder* UnmatchedOrders::CreateOrder() {
     return new UnmatchedOrder(this, wxID_ANY);
 };
 
-greentop::OrderProjection UnmatchedOrders::GetOrderProjection() const {
-    return greentop::OrderProjection::EXECUTABLE;
+greentop::sport::OrderProjection UnmatchedOrders::GetOrderProjection() const {
+    return greentop::sport::OrderProjection::EXECUTABLE;
 }
 
 void UnmatchedOrders::OnCancelOrders(wxThreadEvent& event) {
-    greentop::CancelExecutionReport cer = event.GetPayload<greentop::CancelExecutionReport>();
+    greentop::sport::CancelExecutionReport cer = event.GetPayload<greentop::sport::CancelExecutionReport>();
 
-    if (cer.isSuccess() && cer.getStatus() == greentop::ExecutionReportStatus::SUCCESS) {
+    if (cer.isSuccess() && cer.getStatus() == greentop::sport::ExecutionReportStatus::SUCCESS) {
         bool showNoUnmatchedOrdersMessage = true;
         for (unsigned i = 0; i < cer.getInstructionReports().size(); ++i) {
-            greentop::CancelInstructionReport cir = cer.getInstructionReports()[i];
+            greentop::sport::CancelInstructionReport cir = cer.getInstructionReports()[i];
 
             wxWindowList::iterator it = GetChildren().begin();
             while (it != GetChildren().end()) {

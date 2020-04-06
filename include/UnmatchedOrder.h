@@ -1,5 +1,5 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+* Copyright 2020 Colin Doig.  Distributed under the MIT license.
 */
 #ifndef UNMATCHEDORDER_H
 #define UNMATCHEDORDER_H
@@ -38,7 +38,7 @@ class UnmatchedOrder : public CurrentOrder {
          *
          * @param currentOrderSummary The order, received from betfair.
          */
-        void SetCurrentOrderSummary(const greentop::CurrentOrderSummary& currentOrderSummary);
+        void SetCurrentOrderSummary(const greentop::sport::CurrentOrderSummary& currentOrderSummary);
 
     protected:
     private:

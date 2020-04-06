@@ -1,5 +1,5 @@
 /**
-* Copyright 2016 Colin Doig.  Distributed under the MIT license.
+* Copyright 2020 Colin Doig.  Distributed under the MIT license.
 */
 #ifndef WORKER_PLACEORDERS_H
 #define WORKER_PLACEORDERS_H
@@ -19,14 +19,14 @@ wxDECLARE_EVENT(PLACE_ORDERS, wxThreadEvent);
 class PlaceOrders : public Worker {
     public:
 
-        PlaceOrders(wxEvtHandler* eventHandler, const greentop::PlaceOrdersRequest& placeOrdersRequest);
+        PlaceOrders(wxEvtHandler* eventHandler, const greentop::sport::PlaceOrdersRequest& placeOrdersRequest);
 
     protected:
 
         virtual ExitCode Entry();
 
     private:
-        greentop::PlaceOrdersRequest placeOrdersRequest;
+        greentop::sport::PlaceOrdersRequest placeOrdersRequest;
 
         bool DoPlaceOrder();
 
