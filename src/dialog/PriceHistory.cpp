@@ -1,6 +1,7 @@
 /**
- * Copyright 2019 Colin Doig.  Distributed under the MIT license.
+ * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
+#include <curl/curl.h>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -10,7 +11,7 @@
 #include <wx/dcmemory.h>
 #include <wx/file.h>
 #include <wx/sizer.h>
-#include <wx/sstream.h>
+#include <wx/mstream.h>
 #include <wx/stdpaths.h>
 #include <wx/stattext.h>
 #include <wx/wfstream.h>
@@ -23,6 +24,12 @@
 
 namespace greenthumb {
 namespace dialog {
+
+size_t writeToStream(char* buffer, size_t size, size_t nitems, wxMemoryOutputStream* stream) {
+    size_t realwrote = size * nitems;
+    stream->Write(buffer, realwrote);
+    return realwrote;
+}
 
 PriceHistory::PriceHistory(wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &pos, const wxSize &size, long style, const wxString &name) :
@@ -45,9 +52,14 @@ PriceHistory::PriceHistory(wxWindow *parent, wxWindowID id, const wxString &titl
     gridSizer->Add(lastPriceTraded);
     vbox->Add(gridSizer, 0, borderFlags, borderWidth);
 
-    graphPanel = new ImagePanel(this, wxID_ANY, wxDefaultPosition,
-        wxSize(GRAPH_WIDTH, GRAPH_HEIGHT), wxSUNKEN_BORDER);
-    vbox->Add(graphPanel, 0, borderFlags, borderWidth);
+    chartPanel = new ImagePanel(
+        this,
+        wxID_ANY,
+        wxDefaultPosition,
+        wxSize(CHART_WIDTH, CHART_HEIGHT),
+        wxSUNKEN_BORDER
+    );
+    vbox->Add(chartPanel, 0, borderFlags, borderWidth);
 
     wxSizer* buttonSizer = CreateButtonSizer(wxCLOSE);
     if (buttonSizer) {
@@ -58,7 +70,6 @@ PriceHistory::PriceHistory(wxWindow *parent, wxWindowID id, const wxString &titl
     vbox->Fit(this);
 
     Bind(wxEVT_BUTTON, &PriceHistory::OnClose, this, wxID_CLOSE);
-
 }
 
 void PriceHistory::SetLastPriceTraded(const double lastPriceTraded) {
@@ -83,22 +94,13 @@ void PriceHistory::SetRunner(const entity::Market& market, const greentop::sport
         );
     }
 
-    wxBitmap bitmap(GRAPH_WIDTH, GRAPH_HEIGHT);
-    wxImage image = bitmap.ConvertToImage();
-    wxString filename = GetGraphFilename(market, runner);
-
-    if (image.LoadFile(filename, wxBITMAP_TYPE_JPEG)) {
-        graph = wxBitmap(image);
-        graphPanel->SetBitmap(graph);
-    }
+    LoadChart(market, runner);
 }
 
-const wxString PriceHistory::GetGraphFilename(
+void PriceHistory::LoadChart(
     const entity::Market& market,
     const greentop::sport::Runner& runner
 ) {
-    wxStandardPaths sp = wxStandardPaths::Get();
-    wxString filename = sp.GetTempDir() + wxT("/graph.jpeg");
     wxString marketId(market.GetMarketCatalogue().getMarketId().substr(2));
 
     std::ostringstream oStream;
@@ -113,24 +115,30 @@ const wxString PriceHistory::GetGraphFilename(
         handicap = handicapStream.str();
     }
 
-    wxURL url(wxT("http://sportsiteexweb.betfair.com.au/betting/LoadRunnerInfoChartAction.do?marketId=") +
-        marketId +
-        wxT("&selectionId=") +
-        selectionId + "&handicap=" + handicap);
+    wxString chartUrl = "https://xtsd.betfair.com/LoadRunnerInfoChartAction/?marketId=" +
+        market.GetMarketCatalogue().getMarketId().substr(2) +
+        "&selectionId=" +
+        selectionId +
+        "&handicap=" +
+        handicap;
 
-    if (url.GetError() == wxURL_NOERR) {
-        wxString imageData;
-        wxInputStream* in = url.GetInputStream();
-
-        if (in && in->IsOk()) {
-            wxFileOutputStream out(filename);
-            in->Read(out);
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    CURL* curl = curl_easy_init();
+    if (curl) {
+        wxMemoryOutputStream out;
+        curl_easy_setopt(curl, CURLOPT_URL, static_cast<const char*>(chartUrl.c_str()));
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeToStream);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
+        CURLcode res = curl_easy_perform(curl);
+        if (res == CURLE_OK) {
+            wxMemoryInputStream in(out);
+            wxImage image(in, wxBITMAP_TYPE_JPEG);
+            wxBitmap chart = wxBitmap(image);
+            chartPanel->SetBitmap(chart);
         }
-
-        delete in;
+        curl_easy_cleanup(curl);
     }
-
-    return filename;
+    curl_global_cleanup();
 }
 
 void PriceHistory::OnClose(wxCommandEvent& event) {

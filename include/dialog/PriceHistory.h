@@ -16,7 +16,7 @@ namespace greenthumb {
 namespace dialog {
 
 /**
- * Show a graph of the matched price of a runner over time.
+ * Show a chart of the matched price of a runner over time.
  */
 class PriceHistory : public wxDialog {
     public:
@@ -54,15 +54,14 @@ class PriceHistory : public wxDialog {
 
     protected:
     private:
-        static const int GRAPH_WIDTH = 350;
-        static const int GRAPH_HEIGHT = 255;
+        static const int CHART_WIDTH = 350;
+        static const int CHART_HEIGHT = 255;
 
         wxStaticText* lastPriceTraded = NULL;
-        wxBitmap graph;
-        ImagePanel* graphPanel = NULL;
+        ImagePanel* chartPanel = NULL;
         wxStaticText* bettingOn = NULL;
 
-        const wxString GetGraphFilename(const entity::Market& market, const greentop::sport::Runner& runner);
+        void LoadChart(const entity::Market& market, const greentop::sport::Runner& runner);
         void OnClose(wxCommandEvent& event);
 };
 
