@@ -38,7 +38,7 @@ class OddsSpinCtrl : public wxSpinCtrlDouble {
             wxWindowID id,
             const wxString &value = wxEmptyString,
             const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxSize(75, -1),
+            const wxSize& size = wxDefaultSize,
             long style = 0,
             double min = 1.0,
             double max = 1000.0,
