@@ -1,154 +1,160 @@
-greenthumb (0.26.0+bionic) bionic; urgency=medium
+greenthumb (0.26.1+focal) focal; urgency=medium
+
+  * fix build dependencies
+
+ -- Colin Doig <colindoig@gmail.com>  Mon, 10 Aug 2020 07:46:02 +1200
+
+greenthumb (0.26.0+focal) focal; urgency=medium
 
   * update url for price history charts
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 09 Aug 2020 20:07:35 +1200
 
-greenthumb (0.25.0+bionic) bionic; urgency=medium
+greenthumb (0.25.0+focal) focal; urgency=medium
 
   * bump version
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 14 Jun 2020 18:26:21 +1200
 
-greenthumb (0.24.0+bionic) bionic; urgency=medium
+greenthumb (0.24.0+focal) focal; urgency=medium
 
   * use latest libgreentop
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 05 Apr 2020 11:12:28 +1200
 
-greenthumb (0.23.1+bionic) bionic; urgency=medium
+greenthumb (0.23.1+focal) focal; urgency=medium
 
   * use latest libgreentop
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 20 Oct 2019 16:36:36 +1300
 
-greenthumb (0.23.0+bionic) bionic; urgency=medium
+greenthumb (0.23.0+focal) focal; urgency=medium
 
   * fix save settings error
 
  -- Colin Doig <colindoig@gmail.com>  Sat, 05 Oct 2019 16:49:37 +1300
 
-greenthumb (0.22.0+bionic) bionic; urgency=medium
+greenthumb (0.22.0+focal) focal; urgency=medium
 
   * price history dialog - fix last price traded
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 04 Aug 2019 18:38:37 +1200
 
-greenthumb (0.21.1+bionic) bionic; urgency=medium
+greenthumb (0.21.1+focal) focal; urgency=medium
 
   * fix build dependency
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 02 Aug 2019 17:45:50 +1200
 
-greenthumb (0.21.0+bionic) bionic; urgency=medium
+greenthumb (0.21.0+focal) focal; urgency=medium
 
   * persist betfair ssoid and use for up to one day instead of logging in again.
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 02 Aug 2019 13:04:35 +1200
 
-greenthumb (0.20.0+bionic) bionic; urgency=medium
+greenthumb (0.20.0+focal) focal; urgency=medium
 
   * fix build
 
  -- Colin Doig <colindoig@gmail.com>  Tue, 23 Jul 2019 18:52:23 +1200
 
-greenthumb (0.19.0+bionic) bionic; urgency=medium
+greenthumb (0.19.0+focal) focal; urgency=medium
 
   * fix build
 
  -- Colin Doig <colindoig@gmail.com>  Mon, 22 Jul 2019 21:55:16 +1200
 
-greenthumb (0.18.0+bionic) bionic; urgency=medium
+greenthumb (0.18.0+focal) focal; urgency=medium
 
   * multi winner markets
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 21 Jul 2019 15:41:25 +1200
 
-greenthumb (0.17.0+bionic) bionic; urgency=medium
+greenthumb (0.17.0+focal) focal; urgency=medium
 
   * add market base rate commission to rules dialog
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 24 May 2019 18:29:12 +1200
 
-greenthumb (0.16.0+bionic) bionic; urgency=medium
+greenthumb (0.16.0+focal) focal; urgency=medium
 
   * use latest libgreentop
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 05 May 2019 20:05:41 +1200
 
-greenthumb (0.15.0+bionic) bionic; urgency=medium
+greenthumb (0.15.0+focal) focal; urgency=medium
 
   * fix place bets snap to ticks under GTK
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 03 May 2019 19:10:28 +1200
 
-greenthumb (0.14.0+bionic) bionic; urgency=medium
+greenthumb (0.14.0+focal) focal; urgency=medium
 
   * paginate current orders
 
  -- Colin Doig <colindoig@gmail.com>  Wed, 10 Apr 2019 20:04:05 +1200
 
-greenthumb (0.13.0+bionic) bionic; urgency=medium
+greenthumb (0.13.0+focal) focal; urgency=medium
 
   * put account tabs at the top, fix seg fault
 
  -- Colin Doig <colindoig@gmail.com>  Tue, 19 Mar 2019 21:16:26 +1300
 
-greenthumb (0.11.0+bionic) bionic; urgency=medium
+greenthumb (0.11.0+focal) focal; urgency=medium
 
   * use latest libgreentop
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 08 Nov 2018 20:57:14 +1300
 
-greenthumb (0.10.0+bionic) bionic; urgency=medium
+greenthumb (0.10.0+focal) focal; urgency=medium
 
   * use latest libgreentop
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 08 Nov 2018 19:02:33 +1300
 
-greenthumb (0.9.0+bionic) bionic; urgency=medium
+greenthumb (0.9.0+focal) focal; urgency=medium
 
   * get market profit and loss from listMarketBook instead of listMarketProfitAndLoss - works for asian handicap markets.
 
  -- Colin Doig <colindoig@gmail.com>  Sun, 29 Jul 2018 12:00:23 +1200
 
-greenthumb (0.8.0+bionic) bionic; urgency=medium
+greenthumb (0.8.0+focal) focal; urgency=medium
 
   * use latest greentop
 
  -- Colin Doig <colindoig@gmail.com>  Mon, 09 Jul 2018 20:56:33 +1200
 
-greenthumb (0.7.0+bionic) bionic; urgency=medium
+greenthumb (0.7.0+focal) focal; urgency=medium
 
   * asian handicap markets
 
  -- Colin Doig <colindoig@gmail.com>  Wed, 04 Apr 2018 20:03:25 +1200
 
-greenthumb (0.6.0+bionic) bionic; urgency=medium
+greenthumb (0.6.0+focal) focal; urgency=medium
 
   * refresh menu - prevent nodes from being expanded during menu refresh
 
  -- Colin Doig <colindoig@gmail.com>  Mon, 12 Feb 2018 18:06:13 +1300
 
-greenthumb (0.5.1+bionic) bionic; urgency=medium
+greenthumb (0.5.1+focal) focal; urgency=medium
 
-  * bionic build
+  * focal build
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:51:53 +1300
 
-greenthumb (0.5.0+bionic) bionic; urgency=medium
+greenthumb (0.5.0+focal) focal; urgency=medium
 
   * refresh menu - retrieve the menu in a worker thread and parse in the main thread in order to avoid different threads reading + updating the menu at the same time.
 
  -- Colin Doig <colindoig@gmail.com>  Thu, 01 Feb 2018 20:23:59 +1300
 
-greenthumb (0.4.1+bionic) bionic; urgency=medium
+greenthumb (0.4.1+focal) focal; urgency=medium
 
   * Rebuild for new version of greentop.
 
  -- Colin Doig <colindoig@gmail.com>  Fri, 19 Jan 2018 20:29:13 +1300
 
-greenthumb (0.4.0+bionic) bionic; urgency=medium
+greenthumb (0.4.0+focal) focal; urgency=medium
 
   * Initial release.
 
