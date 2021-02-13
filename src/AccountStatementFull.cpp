@@ -24,26 +24,26 @@ AccountStatementFull::AccountStatementFull(wxWindow* parent, wxWindowID id, cons
     grid->CreateGrid(0, 9);
 
     grid->SetColLabelValue(0, "Date");
-    grid->SetColumnWidth(0, 150);
+    grid->SetColSize(0, 150);
     grid->SetColLabelValue(1, "Description");
-    grid->SetColumnWidth(1, 450);
+    grid->SetColSize(1, 450);
     grid->SetColLabelValue(2, "Back/Lay");
-    grid->SetColumnWidth(2, 75);
+    grid->SetColSize(2, 75);
     grid->SetColLabelValue(3, "Selection");
-    grid->SetColumnWidth(3, 100);
+    grid->SetColSize(3, 100);
     grid->SetColLabelValue(4, "Av. Odds");
-    grid->SetColumnWidth(4, 75);
+    grid->SetColSize(4, 75);
     grid->SetColFormatFloat(4, -1, 2);
     grid->SetColLabelValue(5, "Stake");
-    grid->SetColumnWidth(5, 75);
+    grid->SetColSize(5, 75);
     grid->SetColFormatFloat(5, -1, 2);
     grid->SetColLabelValue(6, "Result");
-    grid->SetColumnWidth(6, 75);
+    grid->SetColSize(6, 75);
     grid->SetColLabelValue(7, "Amount");
-    grid->SetColumnWidth(7, 75);
+    grid->SetColSize(7, 75);
     grid->SetColFormatFloat(7, -1, 2);
     grid->SetColLabelValue(8, "Balance");
-    grid->SetColumnWidth(8, 100);
+    grid->SetColSize(8, 100);
     grid->SetColFormatFloat(8, -1, 2);
 
     grid->HideRowLabels();

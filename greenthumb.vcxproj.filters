@@ -75,9 +75,6 @@
     <ClCompile Include="src\PriceButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RunnerRow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\StakeSpinCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,9 +85,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\db\SchemaUpdater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dialog\CurrentOrders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\dialog\Html.cpp">
@@ -163,6 +157,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\worker\WorkerManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\CurrentOrdersDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\CurrentOrdersPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\MatchedOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\PaginationToolbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\UnmatchedOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widget\market\MultiWinnerRunnerPrices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widget\market\RunnerPrices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widget\market\SingleWinnerRunnerPrices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,9 +260,6 @@
     <ClInclude Include="include\db\SchemaUpdater.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\dialog\CurrentOrders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\dialog\Html.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -315,6 +330,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\worker\WorkerManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dialog\CurrentOrdersDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dialog\CurrentOrdersPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dialog\MatchedOrders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dialog\PaginationToolbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dialog\UnmatchedOrders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\widget\market\MultiWinnerRunnerPrices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\widget\market\RunnerPrices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\widget\market\SingleWinnerRunnerPrices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

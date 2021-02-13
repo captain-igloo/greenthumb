@@ -1,11 +1,6 @@
 /**
  * Copyright 2020 Colin Doig.  Distributed under the MIT license.
  */
-#include <curl/curl.h>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-
 #include <wx/wx.h>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
@@ -16,6 +11,11 @@
 #include <wx/stattext.h>
 #include <wx/wfstream.h>
 #include <wx/url.h>
+
+#include <curl/curl.h>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 #include <greentop/ExchangeApi.h>
 

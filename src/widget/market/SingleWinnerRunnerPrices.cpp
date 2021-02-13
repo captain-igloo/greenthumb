@@ -40,6 +40,7 @@ void SingleWinnerRunnerPrices::UpdateProfitAndLossIfWin() {
             } else {
                 profitAndLossIfWinText->SetForegroundColour(wxColour("RED"));
             }
+            profitAndLossIfWinText->Refresh();
         } else {
             profitAndLossIfWinText->SetLabel("");
         }
@@ -83,6 +84,7 @@ void SingleWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::sport:
     } else {
         pendingProfit->SetLabel("");
     }
+    pendingProfit->Refresh();
 }
 
 }
