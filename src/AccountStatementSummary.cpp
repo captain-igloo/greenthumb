@@ -22,16 +22,16 @@ AccountStatementSummary::AccountStatementSummary(wxWindow* parent, wxWindowID id
     grid->CreateGrid(0, 4);
 
     grid->SetColLabelValue(0, "Date");
-    grid->SetColumnWidth(0, 150);
+    grid->SetColSize(0, 150);
     grid->SetColLabelValue(1, "Description");
-    grid->SetColumnWidth(1, 450);
+    grid->SetColSize(1, 450);
 
     grid->SetColLabelValue(2, "Amount");
-    grid->SetColumnWidth(2, 75);
+    grid->SetColSize(2, 75);
     grid->SetColFormatFloat(2, -1, 2);
 
     grid->SetColLabelValue(3, "Balance");
-    grid->SetColumnWidth(3, 100);
+    grid->SetColSize(3, 100);
     grid->SetColFormatFloat(3, -1, 2);
 
     grid->HideRowLabels();

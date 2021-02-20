@@ -62,6 +62,7 @@ void MultiWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::sport::
             } else {
                 pendingIfWinText->SetForegroundColour(wxColour("RED"));
             }
+            pendingIfWinText->Refresh();
             pendingSeparatorText->SetLabel(", ");
             profitLabel = currencySymbol
                 + wxString::Format("%.2f", std::abs(pendingProfitAndLossIfLose));
@@ -71,6 +72,7 @@ void MultiWinnerRunnerPrices::SetPendingPlaceInstruction(const greentop::sport::
             } else {
                 pendingIfLoseText->SetForegroundColour(wxColour("RED"));
             }
+            pendingIfLoseText->Refresh();
         } else {
             pendingIfWinText->SetLabel("");
             pendingSeparatorText->SetLabel("");
@@ -101,6 +103,7 @@ void MultiWinnerRunnerPrices::SetProfitLabel(wxStaticText* profitText, double pr
     } else {
         profitText->SetForegroundColour(wxColour("RED"));
     }
+    profitText->Refresh();
 }
 
 void MultiWinnerRunnerPrices::UpdateProfitAndLossIfWin() {
