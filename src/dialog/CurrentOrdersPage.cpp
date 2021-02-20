@@ -63,27 +63,30 @@ void CurrentOrdersPage::OnListCurrentOrders(const wxThreadEvent& event) {
         bool showNoOrdersMesssage = true;
 
         for (unsigned i = 0; i < currentOrderSummaryReport.getCurrentOrders().size(); ++i) {
-            std::string betId = currentOrderSummaryReport.getCurrentOrders()[i].getBetId();
+            // matched orders - we are only interested in partially or fully matched orders
+            if (GetOrderProjection() != greentop::sport::OrderProjection::ALL || currentOrderSummaryReport.getCurrentOrders()[i].getSizeMatched() > 0) {
+                std::string betId = currentOrderSummaryReport.getCurrentOrders()[i].getBetId();
 
-            betIdsFound.insert(betId);
-            showNoOrdersMesssage = false;
+                betIdsFound.insert(betId);
+                showNoOrdersMesssage = false;
 
-            if (existingBetIds.find(betId) == existingBetIds.end()) {
-                // new order, add
-                wxWindowID currentOrderId = wxWindow::NewControlId();
-                CurrentOrder* order = CreateOrder();
-                order->SetMarket(market);
-                order->SetCurrentOrderSummary(currentOrderSummaryReport.getCurrentOrders()[i]);
-                GetSizer()->Add(order, 0, wxEXPAND);
+                if (existingBetIds.find(betId) == existingBetIds.end()) {
+                    // new order, add
+                    wxWindowID currentOrderId = wxWindow::NewControlId();
+                    CurrentOrder* order = CreateOrder();
+                    order->SetMarket(market);
+                    order->SetCurrentOrderSummary(currentOrderSummaryReport.getCurrentOrders()[i]);
+                    GetSizer()->Add(order, 0, wxEXPAND);
 
-            } else {
-                // already have this one, update it
-                wxWindowList::iterator it;
-                for (it = GetChildren().begin(); it != GetChildren().end(); ++it) {
-                    CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
-                    if (currentOrder && currentOrder->GetCurrentOrderSummary().getBetId() == betId) {
-                        currentOrder->SetCurrentOrderSummary(currentOrderSummaryReport.getCurrentOrders()[i]);
-                        break;
+                } else {
+                    // already have this one, update it
+                    wxWindowList::iterator it;
+                    for (it = GetChildren().begin(); it != GetChildren().end(); ++it) {
+                        CurrentOrder* currentOrder = dynamic_cast<CurrentOrder*>(*it);
+                        if (currentOrder && currentOrder->GetCurrentOrderSummary().getBetId() == betId) {
+                            currentOrder->SetCurrentOrderSummary(currentOrderSummaryReport.getCurrentOrders()[i]);
+                            break;
+                        }
                     }
                 }
             }

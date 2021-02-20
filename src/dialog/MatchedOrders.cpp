@@ -20,7 +20,7 @@ CurrentOrder* MatchedOrders::CreateOrder() {
 }
 
 greentop::sport::OrderProjection MatchedOrders::GetOrderProjection() const {
-    return greentop::sport::OrderProjection::EXECUTION_COMPLETE;
+    return greentop::sport::OrderProjection::ALL;
 }
 
 }
